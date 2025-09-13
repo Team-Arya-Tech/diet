@@ -1,0 +1,911 @@
+[
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Pregnancy - First Trimester",
+    "Recommended Foods": "Dates, Warm milk with ghee, Ginger tea, Pomegranate, Fresh fruits, Cooked vegetables",
+    "Avoid Foods": "Raw foods, Cold drinks, Spicy food, Alcohol, Caffeine, Raw sprouts",
+    "Reason": "Reduces Vata, prevents nausea, supports fetus growth, strengthens reproductive tissues",
+    "Meal Suggestions": "Breakfast: Warm milk with dates; Lunch: Vegetable khichdi with ghee; Dinner: Light moong dal with rice",
+    "Special Notes": "Eat small frequent meals, avoid fasting, sip ginger tea for morning sickness"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Pregnancy - Second Trimester",
+    "Recommended Foods": "Spinach, Sweet potato, Almonds, Figs, Beetroot, Coconut water, Whole grains",
+    "Avoid Foods": "Processed foods, Excess salt, Raw papaya, Pineapple, Caffeine, Artificial sweeteners",
+    "Reason": "Builds blood, strengthens bones, supports rapid fetal growth, balances Pitta",
+    "Meal Suggestions": "Breakfast: Almond porridge; Lunch: Spinach dal with chapati; Dinner: Sweet potato curry with rice",
+    "Special Notes": "Increase iron-rich foods, stay hydrated with coconut water, avoid overheating foods"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Pregnancy - Third Trimester",
+    "Recommended Foods": "Ghee, Sesame seeds, Warm soups, Cooked grains, Milk products, Easy digestible foods",
+    "Avoid Foods": "Heavy foods, Gas-forming vegetables, Cold beverages, Raw foods, Spicy curries",
+    "Reason": "Prepares body for delivery, lubricates birth canal, reduces Vata, prevents constipation",
+    "Meal Suggestions": "Breakfast: Ghee chapati with warm milk; Lunch: Simple khichdi; Dinner: Light vegetable soup",
+    "Special Notes": "Focus on easily digestible foods, increase ghee intake, avoid gas-forming foods"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Menopause - Early Stage",
+    "Recommended Foods": "Flaxseeds, Soy products, Cooling foods, Cucumber, Milk, Dates, Coconut",
+    "Avoid Foods": "Spicy foods, Hot beverages, Alcohol, Caffeine, Fried foods, Sour foods",
+    "Reason": "Balances hormones, cools Pitta, reduces hot flashes, nourishes tissues",
+    "Meal Suggestions": "Breakfast: Flaxseed smoothie; Lunch: Cucumber raita with rice; Dinner: Soy curry with chapati",
+    "Special Notes": "Include cooling foods, practice early dinner, avoid heating spices"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Menopause - Late Stage",
+    "Recommended Foods": "Shatavari, Ashwagandha, Sesame oil, Warm milk, Ghee, Cooked vegetables, Wholegrains",
+    "Avoid Foods": "Cold foods, Raw salads, Excess sugar, Processed foods, Cold drinks",
+    "Reason": "Strengthens bones, balances Vata, prevents dryness, supports emotional stability",
+    "Meal Suggestions": "Breakfast: Warm sesame porridge; Lunch: Cooked vegetable curry; Dinner: Milk with Shatavari",
+    "Special Notes": "Include warming foods, practice oil massage, maintain regular meal times"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Menstrual Health - Pre-Menstrual",
+    "Recommended Foods": "Dark chocolate, Magnesium-rich foods, Fennel tea, Root vegetables, Warming spices",
+    "Avoid Foods": "Excess salt, Refined sugar, Cold foods, Dairy excess, Processed snacks",
+    "Reason": "Reduces cravings, balances hormones, prevents bloating, supports emotional balance",
+    "Meal Suggestions": "Breakfast: Warm oats with cinnamon; Lunch: Root vegetable curry; Evening: Fennel tea with dates",
+    "Special Notes": "Include magnesium foods, avoid salt excess, practice gentle yoga"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Menstrual Health - During Menstruation",
+    "Recommended Foods": "Iron-rich foods, Spinach, Pomegranate, Ginger tea, Warm soups, Dates, Jaggery",
+    "Avoid Foods": "Cold foods, Raw foods, Yogurt, Ice cream, Cold drinks, Heavy foods",
+    "Reason": "Replenishes lost iron, warms body, reduces cramps, supports flow",
+    "Meal Suggestions": "Breakfast: Ginger tea with dates; Lunch: Spinach dal with jaggery; Dinner: Warm vegetable soup",
+    "Special Notes": "Focus on warming foods, rest adequately, avoid cold and raw foods"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Menstrual Health - Post-Menstrual",
+    "Recommended Foods": "Fresh fruits, Green vegetables, Nuts, Seeds, Light proteins, Rejuvenating foods",
+    "Avoid Foods": "Heavy foods, Excess oil, Fermented foods, Alcohol, Processed foods",
+    "Reason": "Rebuilds energy, replenishes nutrients, balances doshas, supports recovery",
+    "Meal Suggestions": "Breakfast: Fresh fruit bowl with nuts; Lunch: Green vegetable curry; Dinner: Light khichdi",
+    "Special Notes": "Focus on fresh foods, gradually increase activity, include rejuvenating herbs"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Children - Toddlers (1-3 years)",
+    "Recommended Foods": "Warm milk, Cooked fruits, Soft rice, Ghee, Mashed vegetables, Sweet foods",
+    "Avoid Foods": "Spicy foods, Raw foods, Cold drinks, Nuts (choking hazard), Honey before 1 year",
+    "Reason": "Builds tissues, supports growth, easy digestion, strengthens immunity",
+    "Meal Suggestions": "Breakfast: Warm milk with rice; Lunch: Soft khichdi with ghee; Dinner: Mashed vegetables",
+    "Special Notes": "Small frequent meals, ensure food is warm, introduce tastes gradually"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Children - School Age (4-12 years)",
+    "Recommended Foods": "Whole grains, Milk products, Almonds, Dates, Seasonal fruits, Cooked vegetables, Ghee",
+    "Avoid Foods": "Junk food, Cold beverages, Excessive sweets, Processed foods, Spicy foods",
+    "Reason": "Supports brain development, builds strength, enhances memory, maintains energy",
+    "Meal Suggestions": "Breakfast: Almond milk with dates; Lunch: Vegetable pulao; Evening: Homemade snacks",
+    "Special Notes": "Include brain foods, ensure regular meal times, limit processed foods"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Teenagers - Boys (13-18 years)",
+    "Recommended Foods": "Protein-rich foods, Whole grains, Milk, Nuts, Seasonal fruits, Ghee, Meat (if non-veg)",
+    "Avoid Foods": "Junk food, Sodas, Excessive spicy food, Fast food, Energy drinks",
+    "Reason": "Supports rapid growth, builds muscle mass, balances hormones, provides energy",
+    "Meal Suggestions": "Breakfast: Protein-rich porridge; Lunch: Dal-rice with vegetables; Dinner: Wholesome meal",
+    "Special Notes": "Increase protein intake, regular meals important, encourage physical activity"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Teenagers - Girls (13-18 years)",
+    "Recommended Foods": "Iron-rich foods, Green leafy vegetables, Dates, Sesame seeds, Milk, Seasonal fruits",
+    "Avoid Foods": "Junk food, Cold drinks, Excessive dieting, Processed foods, Skipping meals",
+    "Reason": "Supports menstrual health, builds blood, balances hormones, prevents anemia",
+    "Meal Suggestions": "Breakfast: Iron-rich smoothie; Lunch: Spinach dal with chapati; Evening: Sesame laddus",
+    "Special Notes": "Focus on iron foods, regular eating pattern, avoid crash diets"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Elderly - 60-70 years",
+    "Recommended Foods": "Warm soups, Soft cooked foods, Ghee, Milk, Easy-to-digest grains, Cooked vegetables",
+    "Avoid Foods": "Hard-to-digest foods, Cold foods, Raw foods, Heavy meals, Excess salt",
+    "Reason": "Supports weak digestion, prevents constipation, nourishes tissues, balances Vata",
+    "Meal Suggestions": "Breakfast: Warm porridge; Lunch: Soft khichdi; Dinner: Light vegetable soup",
+    "Special Notes": "Focus on easy digestion, eat warm foods, small frequent meals"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Elderly - Above 70 years",
+    "Recommended Foods": "Liquid foods, Warm milk, Soft fruits, Ghee, Light soups, Easily digestible foods",
+    "Avoid Foods": "Hard foods, Cold beverages, Raw foods, Heavy proteins, Gas-forming foods",
+    "Reason": "Extremely gentle on digestion, provides nourishment, prevents Vata aggravation",
+    "Meal Suggestions": "Breakfast: Warm milk with honey; Lunch: Liquid khichdi; Dinner: Vegetable broth",
+    "Special Notes": "Prioritize liquid nutrition, ensure warmth, avoid difficult-to-chew foods"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Software Engineers - Eye Health Focus",
+    "Recommended Foods": "Amla, Carrots, Spinach, Almonds, Ghee, Blueberries, Green tea, Brahmi",
+    "Avoid Foods": "Excess coffee, Junk food, Processed snacks, Sugar-laden drinks, Late-night eating",
+    "Reason": "Supports eye health, reduces strain, improves focus, nourishes nervous system",
+    "Meal Suggestions": "Breakfast: Amla juice with almonds; Lunch: Carrot-spinach curry; Evening: Green tea",
+    "Special Notes": "Take frequent screen breaks, include eye exercises, maintain hydration"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Software Engineers - Stress Management",
+    "Recommended Foods": "Ashwagandha, Brahmi tea, Warm milk, Ghee, Calming herbs, Seasonal fruits",
+    "Avoid Foods": "Excess caffeine, Energy drinks, Processed foods, Late dinners, Alcohol",
+    "Reason": "Reduces stress, calms mind, improves sleep, balances nervous system",
+    "Meal Suggestions": "Breakfast: Calming herbal tea; Lunch: Simple vegetarian meal; Dinner: Warm milk with ghee",
+    "Special Notes": "Practice meditation, maintain work-life balance, early dinner recommended"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Athletes - Endurance Sports",
+    "Recommended Foods": "Complex carbs, Dates, Bananas, Coconut water, Nuts, Energy-dense foods, Ghee",
+    "Avoid Foods": "Processed foods, Excess sugar, Heavy foods before exercise, Cold drinks during exercise",
+    "Reason": "Provides sustained energy, prevents fatigue, supports muscle function, maintains hydration",
+    "Meal Suggestions": "Pre-workout: Dates and nuts; Post-workout: Coconut water; Meals: Balanced with carbs",
+    "Special Notes": "Time meals around training, focus on natural sugars, maintain electrolyte balance"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Athletes - Strength Training",
+    "Recommended Foods": "Protein-rich foods, Milk, Almonds, Ghee, Seasonal fruits, Whole grains, Legumes",
+    "Avoid Foods": "Processed proteins, Artificial supplements, Excess raw foods, Cold foods post-workout",
+    "Reason": "Builds muscle mass, supports recovery, strengthens bones, provides sustained energy",
+    "Meal Suggestions": "Pre-workout: Banana with almonds; Post-workout: Protein-rich meal; Regular: Balanced nutrition",
+    "Special Notes": "Include natural proteins, time protein intake, focus on recovery foods"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Frequent Travelers - Digestive Health",
+    "Recommended Foods": "Ginger, Fennel seeds, Light foods, Easily digestible meals, Herbal teas, Warm water",
+    "Avoid Foods": "Heavy meals, Street food, Cold beverages, Unfamiliar spices, Late-night eating",
+    "Reason": "Maintains digestive fire, prevents travel sickness, balances Vata, supports adaptation",
+    "Meal Suggestions": "Travel: Ginger tea and light snacks; Meals: Simple, familiar foods; Hydration: Warm water",
+    "Special Notes": "Carry digestive aids, maintain meal timing, stay hydrated with warm fluids"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Frequent Travelers - Jet Lag Management",
+    "Recommended Foods": "Warm foods, Regular meal timing, Calming herbs, Light dinners, Hydrating foods",
+    "Avoid Foods": "Alcohol, Excess caffeine, Heavy meals, Irregular eating, Cold foods",
+    "Reason": "Balances circadian rhythm, reduces Vata disturbance, supports sleep cycle",
+    "Meal Suggestions": "Breakfast: Light, warm meal; Lunch: Regular timing; Dinner: Early and light",
+    "Special Notes": "Maintain home meal timing, avoid alcohol on flights, practice relaxation"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Manual Laborers - Energy Support",
+    "Recommended Foods": "Energy-dense foods, Ghee, Nuts, Dates, Seasonal fruits, Hearty meals, Protein-rich foods",
+    "Avoid Foods": "Empty calories, Processed snacks, Excess sugar, Skipping meals, Cold beverages",
+    "Reason": "Provides sustained energy, builds strength, supports muscle function, prevents fatigue",
+    "Meal Suggestions": "Breakfast: Energy-rich porridge; Lunch: Hearty dal-rice; Evening: Nutritious snacks",
+    "Special Notes": "Regular meal timing important, include energy foods, stay hydrated"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Night Shift Workers",
+    "Recommended Foods": "Warm foods, Easy-to-digest meals, Herbal teas, Light proteins, Seasonal fruits",
+    "Avoid Foods": "Heavy dinners, Cold foods at night, Excess caffeine, Processed foods, Irregular eating",
+    "Reason": "Supports disrupted sleep cycle, maintains digestive health, balances Vata disturbance",
+    "Meal Suggestions": "Pre-shift: Light warm meal; Night: Herbal tea and light snacks; Post-shift: Warm breakfast",
+    "Special Notes": "Maintain consistent meal timing, avoid heavy night meals, focus on warm foods"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Diabetes - Blood Sugar Control",
+    "Recommended Foods": "Bitter gourd, Fenugreek seeds, Barley, Amla, Green vegetables, Low-GI foods, Turmeric",
+    "Avoid Foods": "White rice, Sugar, Refined flour, Sweet fruits, Processed foods, Fried snacks",
+    "Reason": "Reduces Kapha, improves insulin sensitivity, controls blood sugar, enhances metabolism",
+    "Meal Suggestions": "Breakfast: Fenugreek water with barley upma; Lunch: Bitter gourd curry; Dinner: Light vegetables",
+    "Special Notes": "Regular meal timing crucial, monitor portions, include bitter tastes"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Diabetes - Weight Management",
+    "Recommended Foods": "High-fiber foods, Millet, Vegetable soups, Green tea, Lean proteins, Bitter vegetables",
+    "Avoid Foods": "Calorie-dense foods, Ghee excess, Nuts excess, Sweet foods, Fruit juices",
+    "Reason": "Reduces Kapha accumulation, improves metabolism, controls appetite, aids weight loss",
+    "Meal Suggestions": "Breakfast: Millet porridge; Lunch: Vegetable soup with salad; Dinner: Light khichdi",
+    "Special Notes": "Control portions, increase fiber, regular physical activity important"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Hypertension - Blood Pressure Control",
+    "Recommended Foods": "Potassium-rich foods, Garlic, Coconut water, Green leafy vegetables, Low-sodium foods",
+    "Avoid Foods": "Excess salt, Processed foods, Pickles, Red meat, Alcohol, Caffeine",
+    "Reason": "Balances Vata and Pitta, reduces blood pressure, supports heart health, calms mind",
+    "Meal Suggestions": "Breakfast: Coconut water with light meal; Lunch: Garlic-based vegetables; Dinner: Light dinner",
+    "Special Notes": "Reduce salt intake, manage stress, include meditation"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Hypertension - Stress-Related",
+    "Recommended Foods": "Calming foods, Brahmi, Ashwagandha, Warm milk, Gentle spices, Meditation-supporting foods",
+    "Avoid Foods": "Stimulants, Spicy foods, Alcohol, Excessive coffee, Stress-inducing foods",
+    "Reason": "Calms nervous system, reduces stress-induced BP, balances Vata, supports mental peace",
+    "Meal Suggestions": "Morning: Brahmi tea; Meals: Calm, soothing foods; Evening: Warm milk with calming herbs",
+    "Special Notes": "Practice stress management, include relaxation techniques, maintain calm environment"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Skin Glow - Anti-Aging",
+    "Recommended Foods": "Antioxidant-rich foods, Amla, Turmeric, Ghee, Almonds, Pomegranate, Coconut water",
+    "Avoid Foods": "Processed foods, Excess sugar, Fried foods, Artificial additives, Alcohol",
+    "Reason": "Provides antioxidants, reduces free radicals, nourishes skin, delays aging process",
+    "Meal Suggestions": "Morning: Amla juice; Meals: Antioxidant-rich vegetables; Evening: Turmeric milk",
+    "Special Notes": "Include collagen-supporting foods, stay hydrated, protect from sun"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Skin Glow - Acne-Prone Skin",
+    "Recommended Foods": "Cooling foods, Cucumber, Coconut water, Green vegetables, Bitter foods, Anti-inflammatory foods",
+    "Avoid Foods": "Oily foods, Dairy excess, Spicy foods, Chocolate, Processed foods, Hot foods",
+    "Reason": "Cools Pitta, reduces inflammation, detoxifies blood, balances oil production",
+    "Meal Suggestions": "Morning: Coconut water; Lunch: Cooling vegetables; Evening: Bitter gourd juice",
+    "Special Notes": "Avoid heating foods, include cooling herbs, maintain skin hygiene"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Skin Glow - Dry Skin",
+    "Recommended Foods": "Hydrating foods, Ghee, Sesame oil, Avocado, Nuts, Milk products, Moisturizing foods",
+    "Avoid Foods": "Dehydrating foods, Excess caffeine, Alcohol, Salty foods, Dry foods",
+    "Reason": "Nourishes skin from within, provides essential fats, reduces Vata dryness, hydrates tissues",
+    "Meal Suggestions": "Morning: Ghee with warm foods; Meals: Include healthy fats; Evening: Milk with almonds",
+    "Special Notes": "Include healthy fats, stay hydrated, practice oil massage"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Digestive Health - Weak Digestion",
+    "Recommended Foods": "Ginger, Cumin, Fennel, Warm foods, Light meals, Digestive spices, Buttermilk",
+    "Avoid Foods": "Cold foods, Raw foods, Heavy meals, Overeating, Difficult-to-digest foods",
+    "Reason": "Strengthens digestive fire, improves Agni, aids digestion, reduces Ama formation",
+    "Meal Suggestions": "Before meals: Ginger tea; Meals: Warm, lightly spiced; After meals: Buttermilk",
+    "Special Notes": "Eat when hungry, avoid overeating, include digestive spices"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Immunity Building - General",
+    "Recommended Foods": "Turmeric, Ginger, Garlic, Seasonal fruits, Whole grains, Ghee, Immune-boosting herbs",
+    "Avoid Foods": "Processed foods, Excess sugar, Cold foods, Junk food, Artificial additives",
+    "Reason": "Builds Ojas, strengthens immunity, provides antioxidants, supports body's defense",
+    "Meal Suggestions": "Morning: Turmeric milk; Meals: Include immune herbs; Evening: Ginger tea",
+    "Special Notes": "Include seasonal foods, avoid immunity-suppressing foods, practice healthy lifestyle"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Young Adults - Exam Stress",
+    "Recommended Foods": "Brain foods, Almonds, Brahmi, Ghee, Milk, Memory-enhancing foods, Stress-reducing herbs",
+    "Avoid Foods": "Junk food, Excess caffeine, Sugar crashes, Irregular eating, Processed snacks",
+    "Reason": "Enhances memory, reduces stress, supports brain function, maintains focus",
+    "Meal Suggestions": "Study time: Brahmi tea with almonds; Meals: Brain-nourishing foods; Night: Warm milk",
+    "Special Notes": "Regular meal timing, include brain foods, manage stress effectively"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "PCOS Management",
+    "Recommended Foods": "Anti-inflammatory foods, Turmeric, Fenugreek, Green tea, Fiber-rich foods, Cinnamon",
+    "Avoid Foods": "Processed foods, Excess sugar, Refined carbs, Trans fats, Inflammatory foods",
+    "Reason": "Balances hormones, reduces inflammation, improves insulin sensitivity, regulates cycles",
+    "Meal Suggestions": "Morning: Fenugreek water; Lunch: Anti-inflammatory curry; Evening: Green tea",
+    "Special Notes": "Focus on hormone-balancing foods, maintain healthy weight, include regular exercise"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Teachers - Voice Care",
+    "Recommended Foods": "Honey, Warm water, Ginger tea, Soothing foods, Throat-caring herbs, Hydrating foods",
+    "Avoid Foods": "Cold drinks, Ice cream, Spicy foods, Dry foods, Throat-irritating foods",
+    "Reason": "Soothes throat, maintains voice quality, prevents dryness, supports vocal cords",
+    "Meal Suggestions": "Morning: Honey with warm water; Teaching breaks: Ginger tea; Evening: Soothing herbs",
+    "Special Notes": "Stay hydrated, avoid throat irritants, practice voice rest"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Joint Health - Arthritis",
+    "Recommended Foods": "Anti-inflammatory foods, Turmeric, Ginger, Warm foods, Ghee, Omega-3 rich foods",
+    "Avoid Foods": "Cold foods, Inflammatory foods, Processed foods, Excess salt, Sour foods",
+    "Reason": "Reduces inflammation, nourishes joints, balances Vata, provides lubrication",
+    "Meal Suggestions": "Morning: Turmeric milk; Meals: Anti-inflammatory spices; Evening: Ward oil massage",
+    "Special Notes": "Include warming foods, practice gentle exercise, avoid joint-stressing activities"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Mental Health - Anxiety",
+    "Recommended Foods": "Calming foods, Ashwagandha, Brahmi, Warm milk, Magnesium-rich foods, Soothing herbs",
+    "Avoid Foods": "Stimulants, Excess caffeine, Sugar spikes, Processed foods, Inflammatory foods",
+    "Reason": "Calms Vata, reduces nervous tension, supports mental peace, balances neurotransmitters",
+    "Meal Suggestions": "Morning: Calming herbal tea; Meals: Grounding foods; Night: Warm milk with herbs",
+    "Special Notes": "Maintain regular eating, include meditation, create calm eating environment"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Mental Health - Depression",
+    "Recommended Foods": "Mood-lifting foods, St. John's Wort, Saffron, Seasonal fruits, Omega-3 foods, Sunlight exposure foods",
+    "Avoid Foods": "Processed foods, Alcohol, Excess sugar, Isolating eating patterns, Heavy foods",
+    "Reason": "Uplifts Sattva, balances neurotransmitters, provides essential nutrients, supports mental clarity",
+    "Meal Suggestions": "Morning: Saffron milk; Meals: Colorful, fresh foods; Evening: Light, uplifting meals",
+    "Special Notes": "Include social eating, focus on fresh foods, maintain consistent meal timing"
+  },
+  {
+    "Category Type": "Seasonal-Based",
+    "Sub-Category": "Summer Health - Cooling",
+    "Recommended Foods": "Cooling foods, Coconut water, Cucumber, Watermelon, Mint, Cooling herbs, Light meals",
+    "Avoid Foods": "Hot foods, Spicy meals, Heavy foods, Alcohol, Heating spices, Fried foods",
+    "Reason": "Cools Pitta, prevents overheating, maintains hydration, balances summer heat",
+    "Meal Suggestions": "Morning: Coconut water; Lunch: Cooling salads; Evening: Light, cool meals",
+    "Special Notes": "Stay hydrated, avoid sun exposure while eating, include cooling herbs"
+  },
+  {
+    "Category Type": "Seasonal-Based",
+    "Sub-Category": "Winter Health - Warming",
+    "Recommended Foods": "Warming foods, Ginger, Cinnamon, Hot soups, Ghee, Seasonal vegetables, Warming spices",
+    "Avoid Foods": "Cold foods, Ice cream, Raw foods, Cold drinks, Cooling herbs, Light meals only",
+    "Reason": "Warms body, strengthens immunity, balances Kapha and Vata, supports circulation",
+    "Meal Suggestions": "Morning: Warm spiced tea; Lunch: Hot, nourishing meals; Evening: Warm soups",
+    "Special Notes": "Include warming spices, eat warm foods, maintain body heat"
+  },
+  {
+    "Category Type": "Seasonal-Based",
+    "Sub-Category": "Monsoon Health - Digestive Care",
+    "Recommended Foods": "Digestive spices, Ginger, Light foods, Warm foods, Easily digestible meals, Immune foods",
+    "Avoid Foods": "Heavy foods, Street food, Raw foods, Leafy vegetables, Cold foods, Difficult-to-digest foods",
+    "Reason": "Maintains digestive strength, prevents infection, balances increased Vata, supports immunity",
+    "Meal Suggestions": "Morning: Ginger tea; Lunch: Light, warm meals; Evening: Digestive herbal tea",
+    "Special Notes": "Avoid street food, include digestive aids, maintain food hygiene"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Healthcare Workers - Immunity",
+    "Recommended Foods": "Immune-boosting foods, Tulsi, Giloy, Vitamin C foods, Garlic, Ginger, Antioxidant foods",
+    "Avoid Foods": "Processed foods, Excess sugar, Immune-suppressing foods, Irregular eating, Junk food",
+    "Reason": "Builds strong immunity, protects from infections, supports body's defense, maintains energy",
+    "Meal Suggestions": "Morning: Immunity-boosting tea; Meals: Include immune herbs; Night: Turmeric milk",
+    "Special Notes": "Regular immune support, maintain hygiene, include protective herbs"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Drivers - Long Hours",
+    "Recommended Foods": "Energy-sustaining foods, Dates, Nuts, Hydrating foods, Light meals, Alertness-maintaining foods",
+    "Avoid Foods": "Heavy meals, Sleepiness-inducing foods, Excess sugar, Dehydrating foods, Large meals",
+    "Reason": "Maintains alertness, prevents fatigue, supports sustained energy, avoids drowsiness",
+    "Meal Suggestions": "Pre-drive: Light energizing meal; During: Nuts and dates; Post: Nourishing meal",
+    "Special Notes": "Avoid heavy meals before driving, stay hydrated, include alertness foods"
+  },
+  {
+    "Category Type": "Life-Stage-Based",
+    "Sub-Category": "New Mothers - Postpartum",
+    "Recommended Foods": "Nourishing foods, Ghee, Warm foods, Galactagogue herbs, Energy-rich foods, Easy-to-digest meals",
+    "Avoid Foods": "Cold foods, Raw foods, Gas-forming foods, Difficult-to-digest foods, Dehydrating foods",
+    "Reason": "Supports recovery, enhances lactation, restores energy, nourishes depleted tissues",
+    "Meal Suggestions": "Morning: Warm nourishing drink; Meals: Rich, warm foods; Evening: Galactagogue herbs",
+    "Special Notes": "Focus on nourishment, include lactation-supporting foods, rest and eat well"
+  },
+  {
+    "Category Type": "Life-Stage-Based",
+    "Sub-Category": "Elderly - Cognitive Health",
+    "Recommended Foods": "Brain foods, Brahmi, Almonds, Ghee, Memory-enhancing herbs, Omega-3 foods, Antioxidants",
+    "Avoid Foods": "Processed foods, Excess sugar, Inflammatory foods, Heavy-to-digest foods, Alcohol",
+    "Reason": "Supports brain function, enhances memory, prevents cognitive decline, nourishes nervous system",
+    "Meal Suggestions": "Morning: Brain-nourishing drink; Meals: Include memory herbs; Evening: Calming foods",
+    "Special Notes": "Include brain foods regularly, maintain mental activity, social eating beneficial"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Fertility Enhancement - Trying to Conceive",
+    "Recommended Foods": "Shatavari, Ashwagandha, Dates, Figs, Almonds, Ghee, Warm milk, Fertility herbs",
+    "Avoid Foods": "Processed foods, Excess caffeine, Alcohol, Trans fats, Cold foods, Stress-inducing foods",
+    "Reason": "Nourishes reproductive tissues, balances hormones, enhances fertility, supports conception",
+    "Meal Suggestions": "Morning: Shatavari with warm milk; Lunch: Nourishing balanced meal; Evening: Fertility-enhancing herbs",
+    "Special Notes": "Include reproductive tonics, maintain healthy weight, reduce stress through diet"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Lactation Support - New Mothers",
+    "Recommended Foods": "Fennel seeds, Dill seeds, Sesame seeds, Almonds, Oats, Warm milk, Galactagogue herbs",
+    "Avoid Foods": "Dehydrating foods, Sage, Peppermint, Alcohol, Cabbage, Parsley, Cold foods",
+    "Reason": "Enhances milk production, nourishes mother, supports healthy lactation, maintains energy",
+    "Meal Suggestions": "Morning: Fennel tea; Meals: Include milk-promoting foods; Evening: Almond milk",
+    "Special Notes": "Stay well-hydrated, include galactagogue herbs, eat nutrient-dense foods"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Uterine Health - Fibroids",
+    "Recommended Foods": "Anti-inflammatory foods, Turmeric, Green vegetables, Fiber-rich foods, Detox foods",
+    "Avoid Foods": "Red meat, Dairy excess, Processed foods, Sugar, Alcohol, Inflammatory foods",
+    "Reason": "Reduces inflammation, balances hormones, supports detoxification, prevents growth",
+    "Meal Suggestions": "Morning: Turmeric tea; Lunch: Anti-inflammatory curry; Dinner: Light detox foods",
+    "Special Notes": "Focus on hormone-balancing foods, include detoxifying herbs, avoid inflammatory foods"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Thyroid Health - Hypothyroid Women",
+    "Recommended Foods": "Iodine-rich foods, Seaweed, Coconut oil, Brazil nuts, Warming spices, Metabolism-boosting foods",
+    "Avoid Foods": "Goitrogenic foods, Raw cruciferous vegetables, Soy excess, Processed foods, Cold foods",
+    "Reason": "Supports thyroid function, boosts metabolism, provides essential nutrients, balances Kapha",
+    "Meal Suggestions": "Morning: Warm coconut oil tea; Lunch: Metabolism-boosting meal; Evening: Warming spices",
+    "Special Notes": "Include iodine sources, avoid goitrogens, focus on warming foods"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Bone Health - Postmenopausal",
+    "Recommended Foods": "Calcium-rich foods, Sesame seeds, Green leafy vegetables, Bone broth, Magnesium foods",
+    "Avoid Foods": "Excess salt, Caffeine, Alcohol, Phosphoric acid drinks, Bone-depleting foods",
+    "Reason": "Strengthens bones, prevents osteoporosis, provides calcium and magnesium, supports bone density",
+    "Meal Suggestions": "Morning: Sesame seed drink; Lunch: Calcium-rich vegetables; Evening: Bone broth",
+    "Special Notes": "Include weight-bearing exercise, adequate calcium intake, avoid bone-depleting substances"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Infants - Weaning (6-12 months)",
+    "Recommended Foods": "Rice porridge, Mashed fruits, Cooked vegetables, Ghee, Mild spices, Soft foods",
+    "Avoid Foods": "Salt, Sugar, Honey, Nuts, Hard foods, Spicy foods, Cow's milk",
+    "Reason": "Gentle introduction to foods, easy digestion, builds immunity, supports growth",
+    "Meal Suggestions": "First foods: Rice porridge; Gradually: Mashed fruits and vegetables; Include: Small amounts of ghee",
+    "Special Notes": "Introduce one food at a time, maintain breast milk, ensure food safety"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Preschoolers - Immune Building (3-5 years)",
+    "Recommended Foods": "Immune-boosting foods, Turmeric milk, Seasonal fruits, Wholesome meals, Ghee, Natural sweets",
+    "Avoid Foods": "Processed snacks, Artificial colors, Excess sugar, Cold foods, Junk food",
+    "Reason": "Builds strong immunity, supports healthy growth, develops good eating habits, prevents illness",
+    "Meal Suggestions": "Morning: Turmeric milk; Meals: Colorful, wholesome foods; Snacks: Natural, homemade",
+    "Special Notes": "Establish healthy eating patterns, make food appealing, involve in food preparation"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Middle Age - Preventive Health (40-60 years)",
+    "Recommended Foods": "Antioxidant foods, Heart-healthy foods, Brain foods, Anti-aging foods, Fiber-rich foods",
+    "Avoid Foods": "Processed foods, Trans fats, Excess sugar, Alcohol excess, Inflammatory foods",
+    "Reason": "Prevents chronic diseases, maintains vitality, supports organ function, slows aging process",
+    "Meal Suggestions": "Morning: Antioxidant-rich smoothie; Lunch: Heart-healthy meal; Dinner: Light, nutritious",
+    "Special Notes": "Focus on prevention, include regular health check-ups, maintain active lifestyle"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Senior Citizens - Medication Interactions (70+ years)",
+    "Recommended Foods": "Medication-compatible foods, Nutrient-dense foods, Easy-to-digest meals, Hydrating foods",
+    "Avoid Foods": "Drug-interfering foods, Grapefruit, Vitamin K excess, Alcohol, Hard-to-digest foods",
+    "Reason": "Ensures medication effectiveness, prevents interactions, maintains nutrition, supports health",
+    "Meal Suggestions": "Coordinate with medication timing, focus on gentle nutrition, avoid problematic combinations",
+    "Special Notes": "Consult healthcare provider, monitor food-drug interactions, maintain nutritional status"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Chefs - Heat Exposure",
+    "Recommended Foods": "Cooling foods, Coconut water, Hydrating foods, Electrolyte-rich foods, Cooling herbs",
+    "Avoid Foods": "Heating foods, Excess spices, Dehydrating foods, Alcohol, Hot beverages",
+    "Reason": "Cools body heat, maintains hydration, balances Pitta aggravation, prevents heat exhaustion",
+    "Meal Suggestions": "Pre-work: Cooling drink; During work: Hydrating snacks; Post-work: Cooling meal",
+    "Special Notes": "Stay hydrated, take cooling breaks, include heat-relieving foods"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Sales Personnel - Social Eating",
+    "Recommended Foods": "Adaptable healthy foods, Portable nutrition, Digestive aids, Energy-sustaining foods",
+    "Avoid Foods": "Heavy business meals, Excess alcohol, Irregular eating, Processed foods",
+    "Reason": "Maintains health during social eating, supports digestion, sustains energy, prevents overeating",
+    "Meal Suggestions": "Business meals: Choose healthier options; Travel: Portable healthy snacks; Regular: Balanced nutrition",
+    "Special Notes": "Plan ahead for business meals, carry healthy snacks, maintain eating discipline"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Artists - Creative Energy",
+    "Recommended Foods": "Brain-inspiring foods, Sattvic foods, Creative-enhancing herbs, Light meals, Fresh foods",
+    "Avoid Foods": "Heavy foods, Tamasic foods, Mental-dulling foods, Processed foods, Alcohol excess",
+    "Reason": "Enhances creativity, maintains mental clarity, supports artistic inspiration, balances Sattva",
+    "Meal Suggestions": "Morning: Inspiring light meal; Creative time: Brain foods; Evening: Sattvic dinner",
+    "Special Notes": "Eat light during creative work, include inspiring foods, maintain mental clarity"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Security Guards - Alertness Maintenance",
+    "Recommended Foods": "Alertness-maintaining foods, Protein snacks, Hydrating foods, Energy-sustaining foods",
+    "Avoid Foods": "Sleep-inducing foods, Heavy meals, Alcohol, Sugar crashes, Drowsiness-causing foods",
+    "Reason": "Maintains alertness, prevents fatigue, supports sustained attention, avoids drowsiness",
+    "Meal Suggestions": "Shift start: Light energizing meal; During: Protein snacks; Break: Balanced nutrition",
+    "Special Notes": "Avoid heavy meals during duty, stay hydrated, include alertness-supporting foods"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Musicians - Vocal Health",
+    "Recommended Foods": "Voice-soothing foods, Honey, Warm water, Throat-caring herbs, Hydrating foods",
+    "Avoid Foods": "Dairy before performance, Cold drinks, Spicy foods, Alcohol, Throat irritants",
+    "Reason": "Maintains vocal quality, soothes throat, prevents hoarseness, supports voice projection",
+    "Meal Suggestions": "Pre-performance: Light, voice-friendly; Post-performance: Soothing foods; Regular: Throat care",
+    "Special Notes": "Avoid dairy before singing, stay hydrated, include voice-caring herbs"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Pilots - Jet Lag and Pressure",
+    "Recommended Foods": "Adapting foods, Light meals, Hydrating foods, Circulation-supporting foods",
+    "Avoid Foods": "Heavy meals, Gas-forming foods, Alcohol, Dehydrating foods, Difficult-to-digest foods",
+    "Reason": "Adapts to altitude changes, maintains circulation, prevents jet lag, supports adjustment",
+    "Meal Suggestions": "Pre-flight: Light, easily digestible; In-flight: Minimal, hydrating; Post-flight: Adjusting foods",
+    "Special Notes": "Eat light before flying, stay hydrated, help body adjust to time zones"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Heart Health - Cholesterol Management",
+    "Recommended Foods": "Cholesterol-lowering foods, Oats, Garlic, Olive oil, Nuts, Fiber-rich foods",
+    "Avoid Foods": "Trans fats, Saturated fats, Processed meats, Fried foods, High-cholesterol foods",
+    "Reason": "Reduces cholesterol, supports heart health, clears arterial blockages, improves circulation",
+    "Meal Suggestions": "Morning: Oats with nuts; Lunch: Heart-healthy meal; Evening: Light, low-fat dinner",
+    "Special Notes": "Include cholesterol-lowering foods, avoid trans fats, maintain healthy weight"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Kidney Health - Stone Prevention",
+    "Recommended Foods": "Hydrating foods, Coconut water, Cranberry juice, Low-oxalate foods, Kidney-supporting herbs",
+    "Avoid Foods": "High-oxalate foods, Excess salt, Processed foods, Dehydrating foods, High-sodium foods",
+    "Reason": "Prevents stone formation, supports kidney function, maintains proper fluid balance, flushes toxins",
+    "Meal Suggestions": "Morning: Coconut water; Throughout day: Adequate hydration; Meals: Low-oxalate foods",
+    "Special Notes": "Stay well-hydrated, avoid high-oxalate foods, monitor sodium intake"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Liver Health - Detoxification",
+    "Recommended Foods": "Liver-detox foods, Turmeric, Milk thistle, Green vegetables, Bitter foods, Cleansing herbs",
+    "Avoid Foods": "Alcohol, Processed foods, Trans fats, Excess medications, Liver-stressing foods",
+    "Reason": "Supports liver detoxification, cleanses toxins, regenerates liver cells, improves liver function",
+    "Meal Suggestions": "Morning: Detox drink; Meals: Include liver-supporting foods; Evening: Light, cleansing meal",
+    "Special Notes": "Avoid liver stressors, include detoxifying foods, support natural cleansing"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Respiratory Health - Asthma Support",
+    "Recommended Foods": "Anti-inflammatory foods, Ginger, Turmeric, Honey, Warm foods, Respiratory herbs",
+    "Avoid Foods": "Cold foods, Dairy excess, Processed foods, Allergenic foods, Mucus-forming foods",
+    "Reason": "Reduces inflammation, clears respiratory passages, prevents mucus formation, supports breathing",
+    "Meal Suggestions": "Morning: Ginger honey tea; Meals: Anti-inflammatory foods; Evening: Warm, light dinner",
+    "Special Notes": "Avoid trigger foods, include respiratory-supporting herbs, maintain warm food temperature"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Sleep Health - Insomnia",
+    "Recommended Foods": "Sleep-promoting foods, Warm milk, Almonds, Tart cherries, Magnesium-rich foods, Calming herbs",
+    "Avoid Foods": "Caffeine, Alcohol, Heavy meals, Spicy foods, Stimulating foods, Late-night eating",
+    "Reason": "Promotes restful sleep, calms nervous system, balances Vata, supports sleep cycle",
+    "Meal Suggestions": "Dinner: Light, early meal; Evening: Calming herbal tea; Bedtime: Warm milk with herbs",
+    "Special Notes": "Avoid stimulants after 2 PM, light dinner 3 hours before bed, create calming routine"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Eye Health - Computer Vision Syndrome",
+    "Recommended Foods": "Eye-nourishing foods, Carrots, Spinach, Blueberries, Almonds, Ghee, Vision-supporting herbs",
+    "Avoid Foods": "Processed foods, Excess sugar, Eye-straining foods, Inflammatory foods, Dehydrating foods",
+    "Reason": "Nourishes eyes, reduces strain, improves vision, prevents eye fatigue, supports eye health",
+    "Meal Suggestions": "Morning: Eye-nourishing smoothie; Lunch: Vision-supporting vegetables; Evening: Eye-caring foods",
+    "Special Notes": "Take regular screen breaks, include eye exercises, maintain proper hydration"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Cancer Support - During Treatment",
+    "Recommended Foods": "Immune-supporting foods, Antioxidant-rich foods, Easy-to-digest meals, Nourishing broths",
+    "Avoid Foods": "Processed foods, Alcohol, Raw foods, Hard-to-digest foods, Inflammatory foods",
+    "Reason": "Supports immunity, provides gentle nutrition, aids recovery, minimizes side effects",
+    "Meal Suggestions": "Small frequent meals, focus on easy digestion, include immune-supporting herbs",
+    "Special Notes": "Work with healthcare team, focus on gentle nutrition, support body's healing"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Autoimmune Support - General",
+    "Recommended Foods": "Anti-inflammatory foods, Turmeric, Omega-3 foods, Healing foods, Immune-modulating herbs",
+    "Avoid Foods": "Inflammatory foods, Processed foods, Sugar, Trans fats, Trigger foods, Allergens",
+    "Reason": "Reduces inflammation, modulates immune response, supports healing, prevents flares",
+    "Meal Suggestions": "Focus on anti-inflammatory meals, avoid trigger foods, include healing herbs",
+    "Special Notes": "Identify personal triggers, maintain anti-inflammatory diet, support immune balance"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Migraine Management",
+    "Recommended Foods": "Migraine-preventing foods, Magnesium-rich foods, Regular meals, Hydrating foods",
+    "Avoid Foods": "Trigger foods, Aged cheeses, Alcohol, Artificial sweeteners, Processed meats, Caffeine withdrawal",
+    "Reason": "Prevents migraines, maintains stable blood sugar, supports nervous system, reduces triggers",
+    "Meal Suggestions": "Regular meal timing, avoid known triggers, include magnesium-rich foods",
+    "Special Notes": "Identify personal triggers, maintain consistent eating schedule, stay hydrated"
+  },
+  {
+    "Category Type": "Fitness-Based",
+    "Sub-Category": "Bodybuilders - Muscle Gain",
+    "Recommended Foods": "High-protein foods, Lean meats, Dairy, Legumes, Nuts, Complex carbs, Muscle-building foods",
+    "Avoid Foods": "Processed proteins, Excess sugar, Inflammatory foods, Alcohol, Empty calories",
+    "Reason": "Builds muscle mass, supports protein synthesis, provides sustained energy, aids recovery",
+    "Meal Suggestions": "Pre-workout: Complex carbs; Post-workout: Protein-rich meal; Regular: Balanced high-protein",
+    "Special Notes": "Time protein intake, include natural sources, support recovery with proper nutrition"
+  },
+  {
+    "Category Type": "Fitness-Based",
+    "Sub-Category": "Yoga Practitioners - Sattvic Diet",
+    "Recommended Foods": "Sattvic foods, Fresh fruits, Vegetables, Whole grains, Nuts, Dairy, Pure foods",
+    "Avoid Foods": "Tamasic foods, Meat, Onion, Garlic, Fermented foods, Stimulants, Processed foods",
+    "Reason": "Promotes mental clarity, supports spiritual practice, maintains purity, enhances meditation",
+    "Meal Suggestions": "Light, pure meals, avoid heavy foods before practice, include consciousness-elevating foods",
+    "Special Notes": "Eat lightly before practice, focus on pure foods, support spiritual development"
+  },
+  {
+    "Category Type": "Fitness-Based",
+    "Sub-Category": "Runners - Endurance Support",
+    "Recommended Foods": "Endurance foods, Complex carbs, Electrolyte foods, Energy-sustaining foods, Recovery foods",
+    "Avoid Foods": "Simple sugars only, Dehydrating foods, Heavy proteins before running, Gas-forming foods",
+    "Reason": "Provides sustained energy, maintains electrolyte balance, supports endurance, aids recovery",
+    "Meal Suggestions": "Pre-run: Easy-to-digest carbs; During: Electrolytes; Post-run: Recovery meal",
+    "Special Notes": "Proper hydration crucial, time carbohydrate intake, support recovery nutrition"
+  },
+  {
+    "Category Type": "Environmental-Based",
+    "Sub-Category": "Urban Pollution - Detox Support",
+    "Recommended Foods": "Detoxifying foods, Green vegetables, Antioxidants, Cleansing herbs, Purifying foods",
+    "Avoid Foods": "Processed foods, Added chemicals, Pollutant-containing foods, Inflammatory foods",
+    "Reason": "Supports detoxification, neutralizes pollutants, cleanses system, protects from environmental toxins",
+    "Meal Suggestions": "Morning: Detoxifying drink; Meals: Include cleansing foods; Evening: Purifying herbs",
+    "Special Notes": "Support body's natural detox, include antioxidant-rich foods, avoid additional toxins"
+  },
+  {
+    "Category Type": "Environmental-Based",
+    "Sub-Category": "High Altitude - Adaptation",
+    "Recommended Foods": "Iron-rich foods, High-energy foods, Hydrating foods, Oxygen-supporting foods",
+    "Avoid Foods": "Alcohol, Heavy meals, Dehydrating foods, Gas-forming foods, Difficult-to-digest foods",
+    "Reason": "Supports oxygen transport, aids altitude adaptation, prevents altitude sickness, maintains energy",
+    "Meal Suggestions": "Light, easily digestible meals, focus on iron and energy, stay well-hydrated",
+    "Special Notes": "Allow adaptation time, stay hydrated, avoid alcohol at altitude"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Endometriosis Management",
+    "Recommended Foods": "Anti-inflammatory foods, Turmeric, Ginger, Leafy greens, Omega-3 rich foods, Antioxidants",
+    "Avoid Foods": "Red meat, Caffeine, Alcohol, Trans fats, Processed foods, Sugar, Dairy excess",
+    "Reason": "Reduces inflammation, balances hormones, decreases pain, supports healing",
+    "Meal Suggestions": "Morning: Anti-inflammatory smoothie; Lunch: Turmeric-based curry; Dinner: Light healing meal",
+    "Special Notes": "Focus on anti-inflammatory diet, avoid hormone-disrupting foods, include pain-reducing herbs"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Ovarian Cyst Management",
+    "Recommended Foods": "Hormone-balancing foods, Flaxseeds, Green tea, Cruciferous vegetables, Anti-inflammatory foods",
+    "Avoid Foods": "Processed foods, Sugar, Trans fats, Excess dairy, Refined carbs, Inflammatory foods",
+    "Reason": "Balances hormones, reduces cyst formation, supports ovarian health, decreases inflammation",
+    "Meal Suggestions": "Morning: Flaxseed smoothie; Lunch: Cruciferous vegetable curry; Evening: Green tea",
+    "Special Notes": "Include hormone-balancing foods, avoid processed foods, support natural hormone regulation"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Vaginal Health - pH Balance",
+    "Recommended Foods": "Probiotic foods, Yogurt, Cranberry juice, Garlic, Coconut oil, pH-balancing foods",
+    "Avoid Foods": "Sugar excess, Processed foods, Antibiotics unnecessary, Douching products, Tight clothing diet impact",
+    "Reason": "Maintains healthy pH, supports beneficial bacteria, prevents infections, promotes vaginal health",
+    "Meal Suggestions": "Morning: Probiotic yogurt; Meals: Include garlic; Evening: Unsweetened cranberry juice",
+    "Special Notes": "Include natural probiotics, avoid sugar excess, maintain healthy bacterial balance"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Teenagers - Acne Management",
+    "Recommended Foods": "Anti-inflammatory foods, Zinc-rich foods, Omega-3 foods, Antioxidants, Low-glycemic foods",
+    "Avoid Foods": "High-glycemic foods, Dairy excess, Processed foods, Sugar, Fried foods, Fast food",
+    "Reason": "Reduces inflammation, balances hormones, clears skin, prevents acne formation",
+    "Meal Suggestions": "Morning: Low-glycemic breakfast; Lunch: Anti-inflammatory meal; Evening: Zinc-rich foods",
+    "Special Notes": "Avoid high-glycemic foods, include skin-clearing nutrients, maintain consistent skincare routine"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "College Students - Budget Nutrition",
+    "Recommended Foods": "Affordable nutritious foods, Lentils, Rice, Seasonal vegetables, Eggs, Milk, Basic spices",
+    "Avoid Foods": "Expensive processed foods, Fast food dependency, Skipping meals, Energy drinks, Junk snacks",
+    "Reason": "Provides essential nutrition affordably, supports brain function, maintains energy, builds health habits",
+    "Meal Suggestions": "Breakfast: Simple nutritious meal; Lunch: Lentil-rice combination; Dinner: Seasonal vegetables",
+    "Special Notes": "Learn basic cooking, buy seasonal produce, focus on nutrient-dense affordable foods"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "New Parents - Energy Management",
+    "Recommended Foods": "Energy-sustaining foods, Quick nutritious meals, Protein-rich snacks, Hydrating foods, Iron-rich foods",
+    "Avoid Foods": "Energy crashes, Skipping meals, Caffeine dependency, Processed convenience foods, Sugar highs",
+    "Reason": "Maintains steady energy, supports sleep-deprived state, provides quick nutrition, prevents fatigue",
+    "Meal Suggestions": "Quick energizing breakfast, protein-rich snacks, easy-to-prepare nutritious meals",
+    "Special Notes": "Prepare meals in advance, focus on steady energy foods, include help from family"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Surgeons - Long Surgery Days",
+    "Recommended Foods": "Sustained energy foods, Protein snacks, Hydrating foods, Brain foods, Light meals",
+    "Avoid Foods": "Heavy meals, Sugar crashes, Dehydrating foods, Gas-forming foods, Drowsiness-inducing foods",
+    "Reason": "Maintains focus, provides sustained energy, prevents fatigue, supports concentration",
+    "Meal Suggestions": "Pre-surgery: Light energizing meal; During breaks: Protein snacks; Post-surgery: Nourishing meal",
+    "Special Notes": "Plan nutrition around surgery schedule, include brain-supporting foods, stay hydrated"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Farmers - Physical Labor",
+    "Recommended Foods": "High-energy foods, Seasonal local foods, Electrolyte-replacing foods, Hearty meals, Natural foods",
+    "Avoid Foods": "Processed foods, Dehydrating foods, Empty calories, Expensive supplements, Artificial foods",
+    "Reason": "Provides energy for physical work, replaces lost electrolytes, supports endurance, uses available resources",
+    "Meal Suggestions": "Early morning: Energy-rich meal; Midday: Hearty lunch; Evening: Nourishing dinner",
+    "Special Notes": "Use seasonal local produce, focus on natural energy sources, maintain hydration"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Retail Workers - Standing Long Hours",
+    "Recommended Foods": "Circulation-supporting foods, Anti-inflammatory foods, Energy-sustaining foods, Comfortable digestion foods",
+    "Avoid Foods": "Heavy meals, Gas-forming foods, Swelling-inducing foods, Energy-crashing foods, Uncomfortable foods",
+    "Reason": "Supports circulation, reduces leg fatigue, maintains energy, prevents discomfort",
+    "Meal Suggestions": "Pre-shift: Light energizing meal; Breaks: Circulation-supporting snacks; Post-shift: Anti-inflammatory meal",
+    "Special Notes": "Include foods that support circulation, avoid heavy meals during shifts, focus on comfort"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Social Workers - Emotional Resilience",
+    "Recommended Foods": "Stress-reducing foods, Calming herbs, Comfort foods, Nutritionally dense foods, Mood-supporting foods",
+    "Avoid Foods": "Stress-inducing foods, Caffeine excess, Sugar crashes, Inflammatory foods, Emotional eating triggers",
+    "Reason": "Supports emotional balance, reduces stress impact, maintains mental health, provides comfort",
+    "Meal Suggestions": "Morning: Calming start; Meals: Stress-reducing foods; Evening: Comfort foods",
+    "Special Notes": "Include stress-managing foods, avoid emotional eating patterns, support mental health"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "IBS - Irritable Bowel Syndrome",
+    "Recommended Foods": "Low-FODMAP foods, Easily digestible foods, Soothing foods, Probiotic foods, Gentle spices",
+    "Avoid Foods": "High-FODMAP foods, Trigger foods, Spicy foods, Gas-forming foods, Difficult-to-digest foods",
+    "Reason": "Soothes digestive system, reduces symptoms, supports gut health, prevents flares",
+    "Meal Suggestions": "Focus on gentle, easily digestible meals, identify and avoid personal triggers",
+    "Special Notes": "Work with healthcare provider, keep food diary, avoid known triggers"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Fibromyalgia - Pain Management",
+    "Recommended Foods": "Anti-inflammatory foods, Magnesium-rich foods, Pain-reducing foods, Energy-supporting foods",
+    "Avoid Foods": "Inflammatory foods, Sugar, Processed foods, Food additives, Pain-triggering foods",
+    "Reason": "Reduces inflammation, manages pain, supports energy, improves quality of life",
+    "Meal Suggestions": "Focus on anti-inflammatory meals, include pain-managing nutrients, avoid trigger foods",
+    "Special Notes": "Work with healthcare team, focus on gentle nutrition, support pain management"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Chronic Fatigue - Energy Support",
+    "Recommended Foods": "Energy-supporting foods, B-vitamin rich foods, Iron-rich foods, Adaptogenic herbs, Gentle nutrition",
+    "Avoid Foods": "Energy-draining foods, Sugar crashes, Processed foods, Caffeine dependency, Heavy meals",
+    "Reason": "Supports natural energy, prevents crashes, nourishes adrenals, maintains steady energy",
+    "Meal Suggestions": "Small frequent meals, focus on steady energy foods, avoid energy crashes",
+    "Special Notes": "Work with healthcare provider, focus on gentle energy support, avoid overexertion"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "ADHD - Focus Support",
+    "Recommended Foods": "Brain-supporting foods, Protein-rich foods, Complex carbs, Omega-3 foods, Focus-enhancing nutrients",
+    "Avoid Foods": "Sugar spikes, Artificial additives, Food colorings, Processed foods, Attention-disrupting foods",
+    "Reason": "Supports brain function, maintains focus, stabilizes mood, enhances concentration",
+    "Meal Suggestions": "Protein-rich breakfast, steady energy meals, avoid sugar spikes and crashes",
+    "Special Notes": "Work with healthcare team, avoid artificial additives, support natural focus"
+  },
+  {
+    "Category Type": "Lifestyle-Based",
+    "Sub-Category": "Vegetarians - Protein Adequacy",
+    "Recommended Foods": "Plant proteins, Legumes, Nuts, Seeds, Quinoa, Complete protein combinations, B12 sources",
+    "Avoid Foods": "Protein deficiency, Incomplete amino acids, Processed vegetarian foods, Nutrient gaps",
+    "Reason": "Ensures adequate protein, provides complete amino acids, prevents deficiencies, supports health",
+    "Meal Suggestions": "Combine complementary proteins, include variety of plant proteins, monitor B12 levels",
+    "Special Notes": "Focus on protein combining, include B12 supplementation, ensure nutrient adequacy"
+  },
+  {
+    "Category Type": "Lifestyle-Based",
+    "Sub-Category": "Vegans - Nutrient Completeness",
+    "Recommended Foods": "Fortified foods, B12 sources, Iron-rich plants, Calcium alternatives, Omega-3 plant sources, Protein variety",
+    "Avoid Foods": "Nutrient deficiencies, Processed vegan foods, Inadequate protein, Missing nutrients",
+    "Reason": "Prevents deficiencies, ensures complete nutrition, supports healthy vegan lifestyle",
+    "Meal Suggestions": "Include fortified foods, focus on nutrient-dense meals, supplement where necessary",
+    "Special Notes": "Monitor nutrient levels, include supplements as needed, focus on whole foods"
+  },
+  {
+    "Category Type": "Lifestyle-Based",
+    "Sub-Category": "Intermittent Fasters - Feeding Windows",
+    "Recommended Foods": "Nutrient-dense foods, Protein-rich foods, Healthy fats, Complex carbs, Hydrating foods",
+    "Avoid Foods": "Empty calories, Processed foods, Sugar spikes, Nutrient-poor foods, Binge eating",
+    "Reason": "Maximizes nutrition in eating window, supports fasting benefits, maintains energy, prevents deficiencies",
+    "Meal Suggestions": "Focus on nutrient density, include complete meals, avoid empty calories",
+    "Special Notes": "Quality over quantity, ensure adequate nutrition, listen to body signals"
+  },
+  {
+    "Category Type": "Recovery-Based",
+    "Sub-Category": "Post-Surgery Recovery",
+    "Recommended Foods": "Healing foods, Protein for tissue repair, Anti-inflammatory foods, Easy-to-digest meals, Immune-supporting foods",
+    "Avoid Foods": "Inflammatory foods, Difficult-to-digest foods, Alcohol, Processed foods, Foods that interfere with healing",
+    "Reason": "Supports healing, provides building blocks for repair, reduces inflammation, supports recovery",
+    "Meal Suggestions": "Focus on healing nutrition, easy-to-digest meals, protein for tissue repair",
+    "Special Notes": "Work with healthcare team, focus on gentle healing nutrition, support body's recovery"
+  },
+  {
+    "Category Type": "Recovery-Based",
+    "Sub-Category": "Addiction Recovery - Nutritional Healing",
+    "Recommended Foods": "Nutrient-dense foods, Craving-reducing foods, Mood-stabilizing foods, Healing foods, Comfort foods",
+    "Avoid Foods": "Trigger foods, Sugar crashes, Processed foods, Empty calories, Mood-disrupting foods",
+    "Reason": "Supports recovery, reduces cravings, stabilizes mood, heals nutritional deficiencies",
+    "Meal Suggestions": "Focus on nutrient density, include mood-stabilizing foods, avoid trigger foods",
+    "Special Notes": "Work with recovery team, focus on healing nutrition, support mental health through food"
+  },
+  {
+    "Category Type": "Climate-Based",
+    "Sub-Category": "Tropical Climate - Heat Management",
+    "Recommended Foods": "Cooling foods, Coconut products, Hydrating fruits, Light meals, Heat-relieving foods",
+    "Avoid Foods": "Heating foods, Heavy meals, Spicy foods, Dehydrating foods, Heat-producing foods",
+    "Reason": "Cools body temperature, maintains hydration, prevents heat exhaustion, balances tropical climate effects",
+    "Meal Suggestions": "Light cooling breakfast, hydrating lunch, minimal cooking dinner",
+    "Special Notes": "Focus on cooling foods, stay hydrated, avoid heat-producing meals"
+  },
+  {
+    "Category Type": "Climate-Based",
+    "Sub-Category": "Cold Climate - Warming Support",
+    "Recommended Foods": "Warming foods, Hot beverages, Hearty meals, Warming spices, Heat-generating foods",
+    "Avoid Foods": "Cold foods, Raw foods, Cooling foods, Light meals only, Heat-dissipating foods",
+    "Reason": "Maintains body warmth, supports circulation, prevents cold-related issues, balances cold climate",
+    "Meal Suggestions": "Warming breakfast, hearty hot lunch, warm comfort dinner",
+    "Special Notes": "Include warming spices, focus on hot foods, maintain body temperature"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Gallbladder Health - Stone Prevention",
+    "Recommended Foods": "Low-fat foods, Fiber-rich foods, Beets, Artichokes, Dandelion, Turmeric, Lemon water",
+    "Avoid Foods": "High-fat foods, Fried foods, Processed foods, Saturated fats, Rapid weight loss diets",
+    "Reason": "Supports bile flow, prevents stone formation, reduces inflammation, supports liver-gallbladder function",
+    "Meal Suggestions": "Morning: Lemon water; Lunch: Fiber-rich low-fat meal; Dinner: Light vegetable-based meal",
+    "Special Notes": "Include bile-supporting foods, avoid high-fat meals, maintain steady weight"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Osteoporosis Prevention",
+    "Recommended Foods": "Calcium-rich foods, Vitamin D foods, Magnesium sources, Bone-building foods, Green vegetables",
+    "Avoid Foods": "Bone-depleting foods, Excess caffeine, Alcohol, High-sodium foods, Phosphoric acid drinks",
+    "Reason": "Builds bone density, provides bone-building nutrients, prevents bone loss, supports skeletal health",
+    "Meal Suggestions": "Morning: Calcium-rich breakfast; Lunch: Bone-supporting meal; Evening: Magnesium-rich foods",
+    "Special Notes": "Include weight-bearing exercise, adequate calcium and vitamin D, limit bone-depleting substances"
+  },
+  {
+    "Category Type": "Women-Specific",
+    "Sub-Category": "Perimenopause - Hormonal Transition",
+    "Recommended Foods": "Phytoestrogen foods, Soy products, Flaxseeds, Cooling foods, Hormone-balancing herbs",
+    "Avoid Foods": "Heating foods, Alcohol, Caffeine excess, Spicy foods, Hormone-disrupting foods",
+    "Reason": "Eases hormonal transition, reduces symptoms, balances changing hormones, supports adaptation",
+    "Meal Suggestions": "Morning: Phytoestrogen-rich smoothie; Lunch: Cooling balanced meal; Evening: Calming herbs",
+    "Special Notes": "Support hormonal transition, include natural phytoestrogens, manage symptoms naturally"
+  },
+  {
+    "Category Type": "Age-Specific",
+    "Sub-Category": "Seniors - Medication Management Nutrition",
+    "Recommended Foods": "Medication-compatible foods, Nutrient-dense foods, Easy absorption foods, Gentle nutrition",
+    "Avoid Foods": "Drug-interfering foods, Grapefruit with certain meds, Excessive fiber with some drugs, Alcohol",
+    "Reason": "Supports medication effectiveness, prevents interactions, maintains nutrition despite medications",
+    "Meal Suggestions": "Coordinate timing with medications, focus on gentle nutrition, avoid problematic combinations",
+    "Special Notes": "Work closely with healthcare team, understand food-medication interactions, monitor nutritional status"
+  },
+  {
+    "Category Type": "Occupation-Based",
+    "Sub-Category": "Emergency Responders - High Stress",
+    "Recommended Foods": "Stress-fighting foods, Quick energy foods, Adaptogenic herbs, Portable nutrition, Recovery foods",
+    "Avoid Foods": "Stress-increasing foods, Caffeine dependency, Sugar crashes, Heavy meals during shifts",
+    "Reason": "Manages acute stress, provides quick energy, supports recovery, maintains performance under pressure",
+    "Meal Suggestions": "Pre-shift: Stress-fighting meal; During: Quick energy snacks; Post-shift: Recovery nutrition",
+    "Special Notes": "Focus on stress management through nutrition, include adaptogenic herbs, support recovery"
+  },
+  {
+    "Category Type": "Condition-Based",
+    "Sub-Category": "Chronic Pain - Natural Management",
+    "Recommended Foods": "Anti-inflammatory foods, Pain-reducing foods, Turmeric, Ginger, Omega-3 foods, Magnesium sources",
+    "Avoid Foods": "Inflammatory foods, Pain-triggering foods, Processed foods, Sugar excess, Trans fats",
+    "Reason": "Reduces inflammation, manages pain naturally, supports healing, improves quality of life",
+    "Meal Suggestions": "Focus on anti-inflammatory meals, include pain-reducing spices, avoid inflammatory foods",
+    "Special Notes": "Work with healthcare team, use food as medicine, support natural pain management"
+  },
+  {
+    "Category Type": "Fitness-Based",
+    "Sub-Category": "Cyclists - Long Distance",
+    "Recommended Foods": "Endurance carbs, Electrolyte foods, Energy-dense foods, Recovery foods, Hydrating foods",
+    "Avoid Foods": "Gas-forming foods before rides, Dehydrating foods, Heavy proteins during riding, Sugar-only foods",
+    "Reason": "Provides sustained energy, maintains electrolyte balance, supports endurance, aids recovery",
+    "Meal Suggestions": "Pre-ride: Easy-to-digest carbs; During: Electrolytes and quick energy; Post-ride: Recovery meal",
+    "Special Notes": "Focus on endurance nutrition, proper hydration strategy, time nutrient intake around rides"
+  }
+]
