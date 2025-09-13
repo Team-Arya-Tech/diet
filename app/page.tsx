@@ -1,216 +1,353 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Users, BookOpen, MessageCircle, Utensils, Languages, Activity } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Navigation, QuickActionButton } from "@/components/navigation"
+import { 
+  Users, 
+  BookOpen, 
+  Utensils, 
+  TrendingUp, 
+  Plus, 
+  Calendar,
+  Activity,
+  FileText,
+  ChefHat,
+  UserPlus,
+  Zap,
+  BarChart3
+} from "lucide-react"
 import Link from "next/link"
+import { 
+  getDashboardStats, 
+  getRecentPatients, 
+  initializeSampleData,
+  type DashboardStats,
+  type PatientSummary 
+} from "@/lib/database"
 
-export default function HomePage() {
-  const [language, setLanguage] = useState<"en" | "hi">("en")
+export default function DashboardPage() {
+  const [stats, setStats] = useState<DashboardStats>({
+    totalPatients: 0,
+    activePatients: 0,
+    activeDietPlans: 0,
+    totalFoods: 0,
+    totalRecipes: 0,
+    weeklyGrowth: 0,
+    monthlyConsultations: 0,
+    averageAdherence: 0
+  })
+  const [recentPatients, setRecentPatients] = useState<PatientSummary[]>([])
 
-  const content = {
-    en: {
-      title: "Ayurvedic Diet Management System",
-      subtitle: "Comprehensive patient management and personalized diet planning",
-      features: [
-        {
-          icon: Users,
-          title: "Patient Management",
-          description: "Complete patient profiles with constitution analysis, lifestyle tracking, and medical history",
-          href: "/patients",
-        },
-        {
-          icon: Utensils,
-          title: "Food Database",
-          description: "Extensive Ayurvedic food database with dosha effects, tastes, and therapeutic properties",
-          href: "/foods",
-        },
-        {
-          icon: BookOpen,
-          title: "Diet Plans",
-          description: "Generate personalized diet plans based on constitution, conditions, and lifestyle",
-          href: "/diet-plans",
-        },
-        {
-          icon: MessageCircle,
-          title: "AI Assistant",
-          description: "Intelligent chatbot for Ayurvedic diet guidance and recommendations",
-          href: "/chat",
-        },
-      ],
-      stats: [
-        { label: "Food Items", value: "500+" },
-        { label: "Categories", value: "100+" },
-        { label: "Conditions", value: "50+" },
-        { label: "Languages", value: "2" },
-      ],
+  useEffect(() => {
+    // Initialize sample data if needed
+    initializeSampleData()
+    
+    // Load dashboard data
+    setStats(getDashboardStats())
+    setRecentPatients(getRecentPatients(3))
+  }, [])
+
+  const statCards = [
+    {
+      title: "Total Patients",
+      value: stats.totalPatients,
+      icon: Users,
+      color: "bg-blue-500",
+      change: `+${stats.weeklyGrowth}%`,
+      changeLabel: "This week"
     },
-    hi: {
-      title: "आयुर्वेदिक आहार प्रबंधन प्रणाली",
-      subtitle: "व्यापक रोगी प्रबंधन और व्यक्तिगत आहार योजना",
-      features: [
-        {
-          icon: Users,
-          title: "रोगी प्रबंधन",
-          description: "संविधान विश्लेषण, जीवनशैली ट्रैकिंग और चिकित्सा इतिहास के साथ पूर्ण रोगी प्रोफाइल",
-          href: "/patients",
-        },
-        {
-          icon: Utensils,
-          title: "भोजन डेटाबेस",
-          description: "दोष प्रभाव, स्वाद और चिकित्सीय गुणों के साथ व्यापक आयुर्वेदिक भोजन डेटाबेस",
-          href: "/foods",
-        },
-        {
-          icon: BookOpen,
-          title: "आहार योजनाएं",
-          description: "संविधान, स्थितियों और जीवनशैली के आधार पर व्यक्तिगत आहार योजना बनाएं",
-          href: "/diet-plans",
-        },
-        {
-          icon: MessageCircle,
-          title: "AI सहायक",
-          description: "आयुर्वेदिक आहार मार्गदर्शन और सिफारिशों के लिए बुद्धिमान चैटबॉट",
-          href: "/chat",
-        },
-      ],
-      stats: [
-        { label: "भोजन आइटम", value: "500+" },
-        { label: "श्रेणियां", value: "100+" },
-        { label: "स्थितियां", value: "50+" },
-        { label: "भाषाएं", value: "2" },
-      ],
+    {
+      title: "Active Diet Charts",
+      value: stats.activeDietPlans,
+      icon: FileText,
+      color: "bg-green-500",
+      change: "+8%",
+      changeLabel: "This week"
     },
-  }
+    {
+      title: "Recipe Collection",
+      value: stats.totalRecipes || 0,
+      icon: BookOpen,
+      color: "bg-orange-500",
+      change: "Traditional",
+      changeLabel: "Ayurvedic recipes"
+    },
+    {
+      title: "Food Database Items",
+      value: `${stats.totalFoods}+`,
+      icon: Utensils,
+      color: "bg-cyan-500",
+      change: "8,000+",
+      changeLabel: "Total items"
+    }
+  ]
 
-  const currentContent = content[language]
+  const quickActions = [
+    {
+      title: "Add New Patient",
+      description: "Register a new patient and assess their Prakriti",
+      icon: UserPlus,
+      href: "/patients/new",
+      color: "bg-blue-50 hover:bg-blue-100 border-blue-200"
+    },
+    {
+      title: "Create Diet Chart",
+      description: "Design personalized Ayurvedic meal plans",
+      icon: ChefHat,
+      href: "/diet-plans/create",
+      color: "bg-green-50 hover:bg-green-100 border-green-200"
+    },
+    {
+      title: "Browse Recipes",
+      description: "Explore Ayurvedic recipes and create new ones",
+      icon: BookOpen,
+      href: "/recipes",
+      color: "bg-orange-50 hover:bg-orange-100 border-orange-200"
+    },
+    {
+      title: "Add Food Item",
+      description: "Expand database with new food items",
+      icon: Plus,
+      href: "/foods",
+      color: "bg-cyan-50 hover:bg-cyan-100 border-cyan-200"
+    },
+    {
+      title: "View Reports",
+      description: "Analyze patient progress and system analytics",
+      icon: BarChart3,
+      href: "/reports",
+      color: "bg-purple-50 hover:bg-purple-100 border-purple-200"
+    }
+  ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Activity className="h-8 w-8 text-primary" />
-              <h1 className="text-2xl font-bold text-primary">AyurDiet</h1>
+      <header className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
+            <div className="flex items-center">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-teal-100 rounded-lg">
+                  <Activity className="h-8 w-8 text-teal-600" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900">Ayurvedic Diet Management</h1>
+                  <p className="text-sm text-gray-500">Harmonizing modern nutrition with ancient wisdom for optimal health</p>
+                </div>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="flex items-center space-x-2"
-              >
-                <Languages className="h-4 w-4" />
-                <span>{language === "en" ? "हिंदी" : "English"}</span>
-              </Button>
+              <div className="flex items-center space-x-2 bg-green-50 px-3 py-2 rounded-full">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-sm font-medium text-green-700">Ayurvedic Practitioner</span>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-medium text-gray-900">Holistic Health & Wellness</p>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className={`text-5xl font-bold mb-6 text-balance ${language === "hi" ? "font-devanagari" : ""}`}>
-            {currentContent.title}
-          </h1>
-          <p
-            className={`text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty ${language === "hi" ? "font-devanagari" : ""}`}
-          >
-            {currentContent.subtitle}
-          </p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Management Navigation */}
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">MANAGEMENT</h2>
+          <Navigation />
+        </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 max-w-2xl mx-auto">
-            {currentContent.stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl font-bold text-primary">{stat.value}</div>
-                <div className={`text-sm text-muted-foreground ${language === "hi" ? "font-devanagari" : ""}`}>
-                  {stat.label}
-                </div>
-              </div>
-            ))}
+        {/* Ayurvedic Principles Section */}
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">AYURVEDIC PRINCIPLES</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white p-4 rounded-lg border">
+              <h3 className="font-medium text-gray-900 mb-2">Six Tastes (Rasa)</h3>
+              <p className="text-sm text-gray-600">Sweet • Sour • Salt • Pungent • Bitter • Astringent</p>
+            </div>
+            <div className="bg-white p-4 rounded-lg border">
+              <h3 className="font-medium text-gray-900 mb-2">Constitutional Types</h3>
+              <p className="text-sm text-gray-600">Vata • Pitta • Kapha</p>
+            </div>
           </div>
         </div>
-      </section>
 
-      {/* Features Grid */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {currentContent.features.map((feature, index) => (
-              <Link key={index} href={feature.href}>
-                <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer group">
-                  <CardHeader className="text-center">
-                    <div className="mx-auto mb-4 p-3 bg-primary/10 rounded-full w-fit group-hover:bg-primary/20 transition-colors">
-                      <feature.icon className="h-8 w-8 text-primary" />
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {statCards.map((stat, index) => (
+            <Card key={index} className="border-0 shadow-sm">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">{stat.title}</p>
+                    <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+                    <div className="flex items-center space-x-1 mt-2">
+                      <span className="text-sm font-medium text-green-600">{stat.change}</span>
+                      <span className="text-sm text-gray-500">{stat.changeLabel}</span>
                     </div>
-                    <CardTitle className={`text-lg ${language === "hi" ? "font-devanagari" : ""}`}>
-                      {feature.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription
-                      className={`text-center text-pretty ${language === "hi" ? "font-devanagari" : ""}`}
-                    >
-                      {feature.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+                  </div>
+                  <div className={`p-3 ${stat.color} rounded-full`}>
+                    <stat.icon className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Recent Patients */}
+          <div className="lg:col-span-2">
+            <Card className="border-0 shadow-sm">
+              <CardHeader className="pb-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-lg font-semibold">Recent Patients</CardTitle>
+                    <CardDescription className="text-sm text-gray-500">Latest patient registrations</CardDescription>
+                  </div>
+                  <Users className="h-5 w-5 text-gray-400" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentPatients.map((patient) => (
+                    <div key={patient.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                      <div className="flex items-center space-x-4">
+                        <Avatar className="h-10 w-10">
+                          <AvatarFallback className="bg-blue-100 text-blue-700">
+                            {patient.name.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <div className="flex items-center space-x-2">
+                            <p className="font-medium text-gray-900">{patient.name}</p>
+                            <Badge variant="secondary" className="text-xs">
+                              {patient.constitution}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center space-x-4 mt-1">
+                            <span className="text-sm text-gray-500">{patient.age} years</span>
+                            <span className="text-sm text-gray-500">Female</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <Badge 
+                          variant={patient.status === "active" ? "default" : "secondary"}
+                          className="mb-1"
+                        >
+                          {patient.constitution}
+                        </Badge>
+                        <p className="text-xs text-gray-500">
+                          {patient.activeDietPlan ? "Active plan" : "No active plan"}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 pt-4 border-t">
+                  <Link href="/patients" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                    View all patients →
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Quick Actions */}
+          <div>
+            <Card className="border-0 shadow-sm mb-6">
+              <CardHeader className="pb-4">
+                <div className="flex items-center space-x-2">
+                  <Zap className="h-5 w-5 text-yellow-500" />
+                  <CardTitle className="text-lg font-semibold">Quick Actions</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <QuickActionButton
+                  href="/patients/new"
+                  icon={UserPlus}
+                  title="Add New Patient"
+                  description="Register a new patient and assess their Prakriti"
+                  colorClass="bg-blue-50 hover:bg-blue-100 border-blue-200"
+                />
+                <QuickActionButton
+                  href="/diet-plans/create"
+                  icon={ChefHat}
+                  title="Create Diet Chart"
+                  description="Design personalized Ayurvedic meal plans"
+                  colorClass="bg-green-50 hover:bg-green-100 border-green-200"
+                />
+                <QuickActionButton
+                  href="/recipes"
+                  icon={BookOpen}
+                  title="Browse Recipes"
+                  description="Explore Ayurvedic recipes and create new ones"
+                  colorClass="bg-orange-50 hover:bg-orange-100 border-orange-200"
+                />
+                <QuickActionButton
+                  href="/recipes/ai-generator"
+                  icon={Zap}
+                  title="AI Recipe Generator"
+                  description="Generate personalized recipes using AI"
+                  colorClass="bg-purple-50 hover:bg-purple-100 border-purple-200"
+                />
+                <QuickActionButton
+                  href="/foods"
+                  icon={Plus}
+                  title="Add Food Item"
+                  description="Expand database with new food items"
+                  colorClass="bg-cyan-50 hover:bg-cyan-100 border-cyan-200"
+                />
+              </CardContent>
+            </Card>
+
+            {/* Practitioner Info */}
+            <Card className="border-0 shadow-sm">
+              <CardHeader className="pb-4">
+                <div className="flex items-center space-x-2">
+                  <BookOpen className="h-5 w-5 text-orange-500" />
+                  <CardTitle className="text-lg font-semibold">Recipe Highlights</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <QuickActionButton
+                  href="/recipes"
+                  icon={BookOpen}
+                  title="Browse Recipes"
+                  description={`${stats.totalRecipes || 0}+ traditional Ayurvedic recipes`}
+                  colorClass="bg-orange-50 hover:bg-orange-100 border-orange-200"
+                />
+                <QuickActionButton
+                  href="/recipes/ai-generator"
+                  icon={Zap}
+                  title="AI Recipe Generator"
+                  description="Create personalized recipes with AI"
+                  colorClass="bg-purple-50 hover:bg-purple-100 border-purple-200"
+                />
+              </CardContent>
+            </Card>
+
+            {/* Practitioner Info */}
+            <Card className="border-0 shadow-sm">
+              <CardContent className="p-6 text-center">
+                <div className="flex items-center justify-center mb-4">
+                  <div className="p-3 bg-teal-100 rounded-full">
+                    <Activity className="h-6 w-6 text-teal-600" />
+                  </div>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Ayurvedic Practitioner</h3>
+                <p className="text-sm text-gray-600">Holistic Health & Wellness</p>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </section>
-
-      {/* Quick Actions */}
-      <section className="py-16 bg-white/50">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className={`text-3xl font-bold mb-8 ${language === "hi" ? "font-devanagari" : ""}`}>
-            {language === "en" ? "Quick Actions" : "त्वरित कार्य"}
-          </h2>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/patients/new">
-              <Button size="lg" className="flex items-center space-x-2">
-                <Users className="h-5 w-5" />
-                <span className={language === "hi" ? "font-devanagari" : ""}>
-                  {language === "en" ? "Add New Patient" : "नया रोगी जोड़ें"}
-                </span>
-              </Button>
-            </Link>
-            <Link href="/foods">
-              <Button variant="outline" size="lg" className="flex items-center space-x-2 bg-transparent">
-                <Utensils className="h-5 w-5" />
-                <span className={language === "hi" ? "font-devanagari" : ""}>
-                  {language === "en" ? "Browse Foods" : "भोजन ब्राउज़ करें"}
-                </span>
-              </Button>
-            </Link>
-            <Link href="/chat">
-              <Button variant="outline" size="lg" className="flex items-center space-x-2 bg-transparent">
-                <MessageCircle className="h-5 w-5" />
-                <span className={language === "hi" ? "font-devanagari" : ""}>
-                  {language === "en" ? "Ask AI Assistant" : "AI सहायक से पूछें"}
-                </span>
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-primary text-primary-foreground py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p className={language === "hi" ? "font-devanagari" : ""}>
-            {language === "en"
-              ? "© 2024 Ayurvedic Diet Management System. Built with traditional wisdom and modern technology."
-              : "© 2024 आयुर्वेदिक आहार प्रबंधन प्रणाली। पारंपरिक ज्ञान और आधुनिक तकनीक के साथ निर्मित।"}
-          </p>
-        </div>
-      </footer>
+      </div>
     </div>
   )
 }

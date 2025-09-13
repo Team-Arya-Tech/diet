@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -18,15 +18,20 @@ import {
   Moon,
   Zap,
   Clock,
+  Sparkles,
 } from "lucide-react"
 import Link from "next/link"
-import { type Patient, getPatientById } from "@/lib/database"
+import { type Patient, getPatientById, generateIntelligentDietPlan, saveDietPlan } from "@/lib/database"
+import { generateAIDietChart } from "@/lib/ai-diet-generator"
 
 export default function PatientDetailPage() {
   const params = useParams()
+  const router = useRouter()
   const [patient, setPatient] = useState<Patient | null>(null)
   const [language, setLanguage] = useState<"en" | "hi">("en")
   const [loading, setLoading] = useState(true)
+  const [generating, setGenerating] = useState(false)
+  const [generatingAI, setGeneratingAI] = useState(false)
 
   useEffect(() => {
     if (params.id) {
@@ -35,6 +40,53 @@ export default function PatientDetailPage() {
       setLoading(false)
     }
   }, [params.id])
+
+  const handleGenerateDietPlan = async () => {
+    if (!patient) return
+    
+    setGenerating(true)
+    try {
+      const newDietPlan = generateIntelligentDietPlan(patient)
+      if (newDietPlan) {
+        saveDietPlan(newDietPlan)
+        // Redirect to the new diet plan
+        router.push(`/diet-plans/${newDietPlan.id}`)
+      } else {
+        alert("Unable to generate diet plan. Please check patient profile completeness.")
+      }
+    } catch (error) {
+      console.error("Error generating diet plan:", error)
+      alert("Error generating diet plan. Please try again.")
+    } finally {
+      setGenerating(false)
+    }
+  }
+
+  const handleGenerateAIDietPlan = async () => {
+    if (!patient) return
+    
+    setGeneratingAI(true)
+    try {
+      const aiDietPlan = await generateAIDietChart(patient, {
+        duration: 7,
+        focusArea: patient.currentConditions.length > 0 ? patient.currentConditions[0] : 'General wellness',
+        dietaryStyle: 'Traditional Ayurvedic'
+      })
+      
+      if (aiDietPlan) {
+        saveDietPlan(aiDietPlan)
+        // Redirect to the new AI-generated diet plan
+        router.push(`/diet-plans/${aiDietPlan.id}`)
+      } else {
+        alert("Unable to generate AI diet plan. Please check your internet connection and try again.")
+      }
+    } catch (error) {
+      console.error("Error generating AI diet plan:", error)
+      alert("Error generating AI diet plan. Please try again.")
+    } finally {
+      setGeneratingAI(false)
+    }
+  }
 
   const getConstitutionColor = (constitution: string) => {
     switch (constitution) {
@@ -61,6 +113,8 @@ export default function PatientDetailPage() {
     en: {
       title: "Patient Details",
       edit: "Edit Patient",
+      generateDietPlan: "Generate AI Diet Plan",
+      generateAIDietPlan: "Generate Advanced AI Plan",
       personalInfo: "Personal Information",
       constitution: "Ayurvedic Constitution",
       healthInfo: "Health Information",
@@ -90,6 +144,8 @@ export default function PatientDetailPage() {
     hi: {
       title: "रोगी विवरण",
       edit: "रोगी संपादित करें",
+      generateDietPlan: "AI आहार योजना बनाएं",
+      generateAIDietPlan: "उन्नत AI योजना बनाएं",
       personalInfo: "व्यक्तिगत जानकारी",
       constitution: "आयुर्वेदिक संविधान",
       healthInfo: "स्वास्थ्य जानकारी",
@@ -183,12 +239,34 @@ export default function PatientDetailPage() {
                 </Button>
               </Link>
             </div>
-            <Link href={`/patients/${patient.id}/edit`}>
-              <Button className="flex items-center space-x-2">
-                <Edit className="h-4 w-4" />
-                <span className={language === "hi" ? "font-devanagari" : ""}>{currentContent.edit}</span>
+            <div className="flex items-center space-x-3">
+              <Button
+                onClick={handleGenerateAIDietPlan}
+                disabled={generatingAI}
+                className="flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span className={language === "hi" ? "font-devanagari" : ""}>
+                  {generatingAI ? "Generating AI Plan..." : currentContent.generateAIDietPlan}
+                </span>
               </Button>
-            </Link>
+              <Button
+                onClick={handleGenerateDietPlan}
+                disabled={generating}
+                className="flex items-center space-x-2 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span className={language === "hi" ? "font-devanagari" : ""}>
+                  {generating ? "Generating..." : currentContent.generateDietPlan}
+                </span>
+              </Button>
+              <Link href={`/patients/${patient.id}/edit`}>
+                <Button className="flex items-center space-x-2">
+                  <Edit className="h-4 w-4" />
+                  <span className={language === "hi" ? "font-devanagari" : ""}>{currentContent.edit}</span>
+                </Button>
+              </Link>
+            </div>
           </div>
 
           <div className="flex items-start justify-between">

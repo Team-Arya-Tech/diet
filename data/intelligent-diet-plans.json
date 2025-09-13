@@ -1,0 +1,232 @@
+[
+  {
+    "id": "vata_weight_gain",
+    "constitution": "vata",
+    "conditions": ["underweight", "anxiety", "insomnia"],
+    "ageRange": [18, 65],
+    "season": "winter",
+    "planName": "Vata Nourishing & Grounding Plan",
+    "description": "A warming, nourishing diet to ground Vata energy and promote healthy weight gain",
+    "duration": 30,
+    "targetCalories": 2200,
+    "objectives": ["weight gain", "anxiety relief", "improved sleep"],
+    "dailyMeals": {
+      "breakfast": {
+        "foods": ["Warm oatmeal with ghee", "Almonds soaked overnight", "Warm milk with dates", "Banana"],
+        "timing": "7:00-8:00 AM",
+        "ayurvedicNotes": "Warm, sweet, and grounding foods to start the day"
+      },
+      "midMorning": {
+        "foods": ["Herbal tea with ginger", "2-3 dates"],
+        "timing": "10:00 AM",
+        "ayurvedicNotes": "Light snack to maintain energy"
+      },
+      "lunch": {
+        "foods": ["Basmati rice", "Moong dal with ghee", "Steamed vegetables", "Buttermilk"],
+        "timing": "12:00-1:00 PM",
+        "ayurvedicNotes": "Main meal with all 6 tastes, emphasis on sweet and sour"
+      },
+      "midAfternoon": {
+        "foods": ["Warm milk with cardamom", "2-3 soaked figs"],
+        "timing": "4:00 PM",
+        "ayurvedicNotes": "Nourishing snack to prevent energy dips"
+      },
+      "dinner": {
+        "foods": ["Khichdi with vegetables", "Ghee", "Warm herbal tea"],
+        "timing": "7:00-8:00 PM",
+        "ayurvedicNotes": "Light, warm, easily digestible dinner"
+      }
+    },
+    "restrictions": ["cold drinks", "raw foods", "excess bitter foods", "caffeine after 4 PM"],
+    "lifestyle": {
+      "sleepTime": "10:00 PM",
+      "wakeTime": "6:00 AM",
+      "exercise": "Gentle yoga, walking",
+      "meditation": "10 minutes daily"
+    }
+  },
+  {
+    "id": "pitta_cooling",
+    "constitution": "pitta",
+    "conditions": ["acidity", "hypertension", "anger"],
+    "ageRange": [25, 55],
+    "season": "summer",
+    "planName": "Pitta Cooling & Balancing Plan",
+    "description": "A cooling, calming diet to reduce Pitta heat and promote emotional balance",
+    "duration": 21,
+    "targetCalories": 2000,
+    "objectives": ["reduce acidity", "lower blood pressure", "improve mood"],
+    "dailyMeals": {
+      "breakfast": {
+        "foods": ["Fresh fruit salad", "Coconut water", "Whole grain toast", "Fresh mint tea"],
+        "timing": "7:00-8:00 AM",
+        "ayurvedicNotes": "Cool, sweet foods to start peacefully"
+      },
+      "midMorning": {
+        "foods": ["Fresh cucumber juice", "Few almonds"],
+        "timing": "10:30 AM",
+        "ayurvedicNotes": "Cooling and hydrating snack"
+      },
+      "lunch": {
+        "foods": ["Basmati rice", "Green moong dal", "Bottle gourd curry", "Fresh coriander chutney"],
+        "timing": "12:30-1:30 PM",
+        "ayurvedicNotes": "Cooling vegetables and herbs, avoid spicy foods"
+      },
+      "midAfternoon": {
+        "foods": ["Rose water", "Fresh grapes or sweet fruits"],
+        "timing": "4:00 PM",
+        "ayurvedicNotes": "Natural sugars and cooling herbs"
+      },
+      "dinner": {
+        "foods": ["Light vegetable soup", "Chapati with ghee", "Steamed vegetables"],
+        "timing": "7:30-8:30 PM",
+        "ayurvedicNotes": "Light, easy to digest, avoid heating spices"
+      }
+    },
+    "restrictions": ["spicy foods", "sour foods", "alcohol", "fried foods", "too much salt"],
+    "lifestyle": {
+      "sleepTime": "10:30 PM",
+      "wakeTime": "6:30 AM",
+      "exercise": "Swimming, moderate yoga",
+      "meditation": "15 minutes daily, preferably in cool environment"
+    }
+  },
+  {
+    "id": "kapha_weight_loss",
+    "constitution": "kapha",
+    "conditions": ["obesity", "diabetes", "lethargy"],
+    "ageRange": [30, 60],
+    "season": "spring",
+    "planName": "Kapha Energizing & Weight Loss Plan",
+    "description": "A light, spicy diet to stimulate metabolism and reduce Kapha accumulation",
+    "duration": 45,
+    "targetCalories": 1600,
+    "objectives": ["weight loss", "diabetes control", "increase energy"],
+    "dailyMeals": {
+      "breakfast": {
+        "foods": ["Herbal tea with ginger", "Sprouted moong", "Bitter gourd juice", "Light fruits like apple"],
+        "timing": "7:00-8:00 AM",
+        "ayurvedicNotes": "Light, bitter, and pungent tastes to stimulate digestion"
+      },
+      "midMorning": {
+        "foods": ["Green tea", "Few roasted seeds"],
+        "timing": "10:00 AM",
+        "ayurvedicNotes": "Metabolism boosting beverages"
+      },
+      "lunch": {
+        "foods": ["Barley or millet", "Spiced lentils", "Leafy green vegetables", "Turmeric water"],
+        "timing": "12:00-1:00 PM",
+        "ayurvedicNotes": "Warm spices, light grains, minimal oil"
+      },
+      "midAfternoon": {
+        "foods": ["Herbal tea", "Small portion of nuts"],
+        "timing": "3:30 PM",
+        "ayurvedicNotes": "Light snack to prevent overeating at dinner"
+      },
+      "dinner": {
+        "foods": ["Vegetable soup", "Small portion quinoa", "Steamed vegetables with spices"],
+        "timing": "7:00-8:00 PM",
+        "ayurvedicNotes": "Very light dinner, focus on vegetables and spices"
+      }
+    },
+    "restrictions": ["dairy products", "sweet foods", "cold drinks", "heavy oils", "refined carbs"],
+    "lifestyle": {
+      "sleepTime": "10:00 PM",
+      "wakeTime": "5:30 AM",
+      "exercise": "Vigorous exercise, running, strength training",
+      "meditation": "Active meditation, walking meditation"
+    }
+  },
+  {
+    "id": "digestive_health",
+    "constitution": "any",
+    "conditions": ["indigestion", "bloating", "irregular bowel movements"],
+    "ageRange": [20, 70],
+    "season": "any",
+    "planName": "Digestive Fire Enhancement Plan",
+    "description": "A plan focused on strengthening digestive fire (Agni) and improving gut health",
+    "duration": 14,
+    "targetCalories": 1800,
+    "objectives": ["improve digestion", "reduce bloating", "regular bowel movements"],
+    "dailyMeals": {
+      "breakfast": {
+        "foods": ["Warm water with lemon", "Ginger tea", "Light porridge", "Fennel seeds"],
+        "timing": "7:30-8:30 AM",
+        "ayurvedicNotes": "Start with warm liquids to kindle digestive fire"
+      },
+      "midMorning": {
+        "foods": ["Cumin water", "Light fruits"],
+        "timing": "10:30 AM",
+        "ayurvedicNotes": "Digestive spices and easy fruits"
+      },
+      "lunch": {
+        "foods": ["Freshly cooked rice", "Well-spiced dal", "Cooked vegetables", "Digestive tea"],
+        "timing": "12:30-1:30 PM",
+        "ayurvedicNotes": "Warm, well-spiced, freshly prepared meal"
+      },
+      "midAfternoon": {
+        "foods": ["Warm herbal tea", "Few dates"],
+        "timing": "4:00 PM",
+        "ayurvedicNotes": "Light, warm snack"
+      },
+      "dinner": {
+        "foods": ["Light khichdi", "Steamed vegetables", "Ginger pickle"],
+        "timing": "7:00-8:00 PM",
+        "ayurvedicNotes": "Easy to digest, warm, with digestive spices"
+      }
+    },
+    "restrictions": ["cold foods", "raw foods", "heavy proteins at night", "overeating"],
+    "lifestyle": {
+      "sleepTime": "10:00 PM",
+      "wakeTime": "6:00 AM",
+      "exercise": "Gentle yoga, walking after meals",
+      "meditation": "Breathing exercises before meals"
+    }
+  },
+  {
+    "id": "immunity_boost",
+    "constitution": "any",
+    "conditions": ["frequent colds", "low immunity", "fatigue"],
+    "ageRange": [18, 65],
+    "season": "monsoon",
+    "planName": "Immunity Strengthening Plan",
+    "description": "A plan to boost natural immunity and increase overall vitality using Ayurvedic principles",
+    "duration": 21,
+    "targetCalories": 2100,
+    "objectives": ["boost immunity", "increase energy", "prevent infections"],
+    "dailyMeals": {
+      "breakfast": {
+        "foods": ["Golden milk", "Soaked almonds", "Honey", "Fresh seasonal fruits"],
+        "timing": "7:00-8:00 AM",
+        "ayurvedicNotes": "Immunity-boosting spices and natural vitamins"
+      },
+      "midMorning": {
+        "foods": ["Tulsi tea", "Amla juice", "Few walnuts"],
+        "timing": "10:00 AM",
+        "ayurvedicNotes": "Vitamin C rich foods and immune herbs"
+      },
+      "lunch": {
+        "foods": ["Brown rice", "Yellow dal with turmeric", "Seasonal vegetables", "Ginger pickle"],
+        "timing": "12:30-1:30 PM",
+        "ayurvedicNotes": "Anti-inflammatory spices and complete nutrition"
+      },
+      "midAfternoon": {
+        "foods": ["Herbal tea with holy basil", "Few dates"],
+        "timing": "4:00 PM",
+        "ayurvedicNotes": "Adaptogenic herbs for stress resistance"
+      },
+      "dinner": {
+        "foods": ["Vegetable soup with black pepper", "Chapati", "Steamed vegetables"],
+        "timing": "7:30-8:30 PM",
+        "ayurvedicNotes": "Warming spices and easy digestion"
+      }
+    },
+    "restrictions": ["processed foods", "excess sugar", "cold drinks", "stale food"],
+    "lifestyle": {
+      "sleepTime": "10:00 PM",
+      "wakeTime": "6:00 AM",
+      "exercise": "Regular moderate exercise, pranayama",
+      "meditation": "20 minutes daily, stress management"
+    }
+  }
+]

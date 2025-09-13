@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter, Noto_Sans_Devanagari } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
+import { TranslationProvider } from "@/components/translation-provider"
 import "./globals.css"
 
 const inter = Inter({
@@ -29,7 +30,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable} ${notoSansDevanagari.variable}`}>
-        <Suspense fallback={null}>{children}</Suspense>
+        <TranslationProvider>
+          <Suspense fallback={null}>{children}</Suspense>
+        </TranslationProvider>
         <Analytics />
       </body>
     </html>

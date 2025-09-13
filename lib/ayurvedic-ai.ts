@@ -1,6 +1,6 @@
-// AI assistant for Ayurvedic diet guidance using provided data
-import { type AyurvedicFood, type FoodCategory, getAllFoods } from "./ayurvedic-data"
-import type { Patient } from "./database"
+// AI assistant for Ayurvedic diet guidance using OpenAI GPT
+import { getAllFoods, getAllCategories } from "./ayurvedic-data"
+import type { Patient, AyurvedicFood, FoodCategory } from "./database"
 
 export interface ChatMessage {
   id: string
@@ -16,17 +16,49 @@ export interface AyurvedicContext {
   patients?: Patient[]
 }
 
-// Generate AI response based on Ayurvedic knowledge
+// Generate AI response using OpenAI API
 export const generateAyurvedicResponse = async (
   userMessage: string,
   context: AyurvedicContext,
   language: "en" | "hi" = "en",
+  patientId?: string
 ): Promise<string> => {
-  const lowerMessage = userMessage.toLowerCase()
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: userMessage,
+        language,
+        patientId,
+        context,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to get AI response');
+    }
+
+    const data = await response.json();
+    return data.response;
+  } catch (error) {
+    console.error('Error calling OpenAI chat API:', error);
+    
+    // Fallback to basic rule-based response if OpenAI fails
+    return getFallbackResponse(userMessage, context, language);
+  }
+}
+
+// Fallback response system in case OpenAI API fails
+const getFallbackResponse = (message: string, context: AyurvedicContext, language: "en" | "hi"): string => {
+  const lowerMessage = message.toLowerCase()
 
   // Food-related queries
   if (lowerMessage.includes("food") || lowerMessage.includes("eat") || lowerMessage.includes("diet")) {
-    return handleFoodQuery(userMessage, context, language)
+    return handleFoodQuery(message, context, language)
   }
 
   // Constitution-related queries
@@ -37,23 +69,13 @@ export const generateAyurvedicResponse = async (
     lowerMessage.includes("constitution") ||
     lowerMessage.includes("dosha")
   ) {
-    return handleConstitutionQuery(userMessage, context, language)
+    return handleConstitutionQuery(message, context, language)
   }
 
-  // Condition-related queries
-  if (
-    lowerMessage.includes("diabetes") ||
-    lowerMessage.includes("hypertension") ||
-    lowerMessage.includes("obesity") ||
-    lowerMessage.includes("digestion") ||
-    lowerMessage.includes("immunity") ||
-    lowerMessage.includes("stress")
-  ) {
-    return handleConditionQuery(userMessage, context, language)
-  }
-
-  // General Ayurvedic guidance
-  return handleGeneralQuery(userMessage, context, language)
+  // Default response
+  return language === "en"
+    ? "I apologize, but I'm experiencing technical difficulties. Please try asking about specific Ayurvedic foods, constitution types, or dietary recommendations."
+    : "मुझे खेद है, लेकिन मुझे तकनीकी कठिनाइयों का सामना हो रहा है। कृपया विशिष्ट आयुर्वेदिक खाद्य पदार्थों, संविधान प्रकारों, या आहार सिफारिशों के बारे में पूछने का प्रयास करें।"
 }
 
 // Handle food-related queries

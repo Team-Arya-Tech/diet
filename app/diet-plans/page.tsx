@@ -189,19 +189,68 @@ export default function DietPlansPage() {
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <p className="text-muted-foreground">Breakfast</p>
-                        <p className="font-medium">{plan.meals.breakfast.length} items</p>
+                        <p className="font-medium">
+                          {(() => {
+                            if (plan.dailyMeals && Object.keys(plan.dailyMeals).length > 0) {
+                              // Count breakfast items across all days
+                              const breakfastCount = Object.values(plan.dailyMeals).reduce((count, dayMeals) => {
+                                return count + (dayMeals.breakfast?.recipes?.length || 0)
+                              }, 0)
+                              return Math.ceil(breakfastCount / Object.keys(plan.dailyMeals).length)
+                            } else if ((plan as any).meals?.breakfast) {
+                              return (plan as any).meals.breakfast.length
+                            }
+                            return 0
+                          })()} items
+                        </p>
                       </div>
                       <div>
                         <p className="text-muted-foreground">Lunch</p>
-                        <p className="font-medium">{plan.meals.lunch.length} items</p>
+                        <p className="font-medium">
+                          {(() => {
+                            if (plan.dailyMeals && Object.keys(plan.dailyMeals).length > 0) {
+                              const lunchCount = Object.values(plan.dailyMeals).reduce((count, dayMeals) => {
+                                return count + (dayMeals.lunch?.recipes?.length || 0)
+                              }, 0)
+                              return Math.ceil(lunchCount / Object.keys(plan.dailyMeals).length)
+                            } else if ((plan as any).meals?.lunch) {
+                              return (plan as any).meals.lunch.length
+                            }
+                            return 0
+                          })()} items
+                        </p>
                       </div>
                       <div>
                         <p className="text-muted-foreground">Dinner</p>
-                        <p className="font-medium">{plan.meals.dinner.length} items</p>
+                        <p className="font-medium">
+                          {(() => {
+                            if (plan.dailyMeals && Object.keys(plan.dailyMeals).length > 0) {
+                              const dinnerCount = Object.values(plan.dailyMeals).reduce((count, dayMeals) => {
+                                return count + (dayMeals.dinner?.recipes?.length || 0)
+                              }, 0)
+                              return Math.ceil(dinnerCount / Object.keys(plan.dailyMeals).length)
+                            } else if ((plan as any).meals?.dinner) {
+                              return (plan as any).meals.dinner.length
+                            }
+                            return 0
+                          })()} items
+                        </p>
                       </div>
                       <div>
                         <p className="text-muted-foreground">Snacks</p>
-                        <p className="font-medium">{plan.meals.snacks.length} items</p>
+                        <p className="font-medium">
+                          {(() => {
+                            if (plan.dailyMeals && Object.keys(plan.dailyMeals).length > 0) {
+                              const snackCount = Object.values(plan.dailyMeals).reduce((count, dayMeals) => {
+                                return count + (dayMeals.midMorning?.recipes?.length || 0) + (dayMeals.midAfternoon?.recipes?.length || 0)
+                              }, 0)
+                              return Math.ceil(snackCount / Object.keys(plan.dailyMeals).length)
+                            } else if ((plan as any).meals?.snacks) {
+                              return (plan as any).meals.snacks.length
+                            }
+                            return 0
+                          })()} items
+                        </p>
                       </div>
                     </div>
 

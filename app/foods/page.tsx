@@ -19,7 +19,7 @@ import {
   CheckCircle,
 } from "lucide-react"
 import Link from "next/link"
-import { type AyurvedicFood, getAllFoods, searchFoods } from "@/lib/ayurvedic-data"
+import { type AyurvedicFood, getAyurvedicFoods, searchFoods } from "@/lib/database"
 
 export default function FoodsPage() {
   const [foods, setFoods] = useState<AyurvedicFood[]>([])
@@ -41,7 +41,7 @@ export default function FoodsPage() {
   }, [searchTerm, selectedDosha, selectedTaste, selectedCondition, foods])
 
   const loadFoods = () => {
-    const allFoods = getAllFoods()
+    const allFoods = getAyurvedicFoods()
     setFoods(allFoods)
     setFilteredFoods(allFoods)
     setLoading(false)
@@ -50,9 +50,16 @@ export default function FoodsPage() {
   const applyFilters = () => {
     let filtered = foods
 
-    // Apply search filter
+    // Apply text search
     if (searchTerm) {
-      filtered = searchFoods(searchTerm)
+      const searchLower = searchTerm.toLowerCase()
+      filtered = filtered.filter((food) =>
+        food.Food.toLowerCase().includes(searchLower) ||
+        food.Rasa.toLowerCase().includes(searchLower) ||
+        food["Dosha Effect"].toLowerCase().includes(searchLower) ||
+        food.Pathya.toLowerCase().includes(searchLower) ||
+        food.Apathya.toLowerCase().includes(searchLower)
+      )
     }
 
     // Apply dosha filter

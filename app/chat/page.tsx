@@ -6,7 +6,8 @@ import { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Activity, Languages, Send, Bot, User, Loader2 } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Activity, Languages, Send, Bot, User, Loader2, UserCheck } from "lucide-react"
 import Link from "next/link"
 import { type ChatMessage, generateAyurvedicResponse, type AyurvedicContext } from "@/lib/ayurvedic-ai"
 import { getAllFoods, getAllCategories } from "@/lib/ayurvedic-data"
@@ -17,6 +18,7 @@ export default function ChatPage() {
   const [inputMessage, setInputMessage] = useState("")
   const [language, setLanguage] = useState<"en" | "hi">("en")
   const [isTyping, setIsTyping] = useState(false)
+  const [selectedPatientId, setSelectedPatientId] = useState<string | undefined>(undefined)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const ayurvedicContext: AyurvedicContext = {
@@ -32,8 +34,8 @@ export default function ChatPage() {
       role: "assistant",
       content:
         language === "en"
-          ? "Namaste! I'm your Ayurvedic diet assistant. I can help you with food recommendations, constitution guidance, and dietary advice based on traditional Ayurvedic principles. How can I assist you today?"
-          : "नमस्ते! मैं आपका आयुर्वेदिक आहार सहायक हूं। मैं पारंपरिक आयुर्वेदिक सिद्धांतों के आधार पर भोजन की सिफारिशें, संविधान मार्गदर्शन, और आहार सलाह में आपकी मदद कर सकता हूं। आज मैं आपकी कैसे सहायता कर सकता हूं?",
+          ? "🙏 Namaste! I'm your AI-powered Ayurvedic diet assistant, enhanced with OpenAI technology. I can provide personalized food recommendations, constitution guidance, and dietary advice based on traditional Ayurvedic principles. Select a patient for personalized consultation or ask me general questions. How can I assist you today?"
+          : "🙏 नमस्ते! मैं आपका AI-संचालित आयुर्वेदिक आहार सहायक हूं, जो OpenAI तकनीक से बेहतर बनाया गया है। मैं पारंपरिक आयुर्वेदिक सिद्धांतों के आधार पर व्यक्तिगत भोजन की सिफारिशें, संविधान मार्गदर्शन, और आहार सलाह प्रदान कर सकता हूं। व्यक्तिगत सलाह के लिए एक रोगी चुनें या मुझसे सामान्य प्रश्न पूछें। आज मैं आपकी कैसे सहायता कर सकता हूं?",
       timestamp: new Date(),
       language,
     }
@@ -65,7 +67,8 @@ export default function ChatPage() {
     setIsTyping(true)
 
     try {
-      const response = await generateAyurvedicResponse(inputMessage, ayurvedicContext, language)
+      const patientId = selectedPatientId === "general" ? undefined : selectedPatientId
+      const response = await generateAyurvedicResponse(inputMessage, ayurvedicContext, language, patientId)
 
       const assistantMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -172,14 +175,47 @@ export default function ChatPage() {
           <h1 className={`text-4xl font-bold mb-2 ${language === "hi" ? "font-devanagari" : ""}`}>
             {currentContent.title}
           </h1>
-          <p className={`text-muted-foreground text-lg ${language === "hi" ? "font-devanagari" : ""}`}>
+          <p className={`text-muted-foreground text-lg mb-2 ${language === "hi" ? "font-devanagari" : ""}`}>
             {currentContent.subtitle}
           </p>
+          <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className={language === "hi" ? "font-devanagari" : ""}>
+              {language === "en" ? "Powered by OpenAI GPT-4" : "OpenAI GPT-4 द्वारा संचालित"}
+            </span>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Quick Questions Sidebar */}
           <div className="lg:col-span-1">
+            {/* Patient Selection */}
+            <Card className="mb-4">
+              <CardHeader>
+                <CardTitle className={`text-lg flex items-center space-x-2 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  <UserCheck className="h-5 w-5" />
+                  <span>{language === "en" ? "Select Patient" : "रोगी चुनें"}</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Select value={selectedPatientId} onValueChange={setSelectedPatientId}>
+                  <SelectTrigger className={language === "hi" ? "font-devanagari" : ""}>
+                    <SelectValue placeholder={language === "en" ? "Choose patient..." : "रोगी चुनें..."} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="general" className={language === "hi" ? "font-devanagari" : ""}>
+                      {language === "en" ? "General Consultation" : "सामान्य सलाह"}
+                    </SelectItem>
+                    {ayurvedicContext.patients?.map((patient) => (
+                      <SelectItem key={patient.id} value={patient.id} className={language === "hi" ? "font-devanagari" : ""}>
+                        {patient.name} ({patient.constitution})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </CardContent>
+            </Card>
+
             <Card className="sticky top-4">
               <CardHeader>
                 <CardTitle className={`text-lg ${language === "hi" ? "font-devanagari" : ""}`}>
