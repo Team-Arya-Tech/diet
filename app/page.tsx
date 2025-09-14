@@ -196,8 +196,9 @@ export default function DashboardPage() {
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Recent Patients */}
-          <div className="lg:col-span-2">
+          {/* Recent Patients and Practitioner Info */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Recent Patients */}
             <Card className="border-0 shadow-xl shadow-blue-500/10 bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-2xl">
                 <div className="flex items-center justify-between">
@@ -272,11 +273,41 @@ export default function DashboardPage() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Practitioner Info - Horizontal Layout in Bottom Left */}
+            <Card className="border-0 shadow-xl shadow-teal-500/10 bg-white/80 backdrop-blur-sm">
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-6">
+                  <div className="flex-shrink-0">
+                    <div className="p-4 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-2xl shadow-xl">
+                      <Activity className="h-8 w-8 text-white" />
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-gray-900">Ayurvedic Practitioner</h3>
+                    <p className="text-sm text-gray-600 mb-3">Holistic Health & Wellness Specialist</p>
+                    <div className="flex items-center space-x-2 text-xs text-gray-500">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                      <span>System Online & Operational</span>
+                    </div>
+                  </div>
+                  <div className="flex space-x-4">
+                    <div className="text-center bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200 min-w-[80px]">
+                      <p className="text-2xl font-bold text-blue-600">{stats.totalPatients}</p>
+                      <p className="text-xs text-blue-700 font-medium uppercase tracking-wide">Patients</p>
+                    </div>
+                    <div className="text-center bg-gradient-to-br from-emerald-50 to-green-50 p-4 rounded-xl border border-emerald-200 min-w-[80px]">
+                      <p className="text-2xl font-bold text-emerald-600">{stats.activeDietPlans}</p>
+                      <p className="text-xs text-emerald-700 font-medium uppercase tracking-wide">Plans</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
-          {/* Quick Actions & Practitioner Info */}
-          <div className="space-y-8">
-            {/* Quick Actions */}
+          {/* Quick Actions */}
+          <div>
             <Card className="border-0 shadow-xl shadow-purple-500/10 bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-t-2xl">
                 <div className="flex items-center space-x-3">
@@ -322,35 +353,6 @@ export default function DashboardPage() {
                   description="Get personalized Ayurvedic recommendations"
                   colorClass="bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-green-200 hover:border-green-300 hover:shadow-lg hover:shadow-green-500/20"
                 />
-              </CardContent>
-            </Card>
-
-            {/* Practitioner Info */}
-            <Card className="border-0 shadow-xl shadow-teal-500/10 bg-white/80 backdrop-blur-sm">
-              <CardContent className="p-8 text-center">
-                <div className="flex items-center justify-center mb-6">
-                  <div className="p-4 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-2xl shadow-xl">
-                    <Activity className="h-8 w-8 text-white" />
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Ayurvedic Practitioner</h3>
-                <p className="text-sm text-gray-600 mb-6">Holistic Health & Wellness Specialist</p>
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
-                    <p className="text-2xl font-bold text-blue-600">{stats.totalPatients}</p>
-                    <p className="text-xs text-blue-700 font-medium uppercase tracking-wide">Total Patients</p>
-                  </div>
-                  <div className="bg-gradient-to-br from-emerald-50 to-green-50 p-4 rounded-xl border border-emerald-200">
-                    <p className="text-2xl font-bold text-emerald-600">{stats.activeDietPlans}</p>
-                    <p className="text-xs text-emerald-700 font-medium uppercase tracking-wide">Active Plans</p>
-                  </div>
-                </div>
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <div className="flex items-center justify-center space-x-2 text-xs text-gray-500">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <span>System Online & Operational</span>
-                  </div>
-                </div>
               </CardContent>
             </Card>
           </div>
