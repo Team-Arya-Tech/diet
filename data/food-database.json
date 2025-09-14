@@ -1,0 +1,860 @@
+[
+  {
+    "id": "food-001",
+    "name": "Oatmeal with Almonds",
+    "category": "breakfast",
+    "cuisine": "western",
+    "description": "Wholesome oats cooked with milk and topped with almonds",
+    "ingredients": ["Rolled oats", "Milk", "Almonds", "Honey", "Cinnamon"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "astringent"],
+      "virya": "cooling",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "balancing", 
+        "kapha": "neutral"
+      },
+      "constitution": ["vata", "pitta"],
+      "season": ["summer", "spring"],
+      "timeOfDay": ["morning"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 350,
+      "protein": 12,
+      "carbohydrates": 45,
+      "fat": 14,
+      "fiber": 8,
+      "sugar": 12,
+      "sodium": 150,
+      "potassium": 400,
+      "calcium": 200,
+      "iron": 3,
+      "vitamins": {
+        "vitaminE": 8,
+        "vitaminB1": 0.4,
+        "vitaminB6": 0.2
+      }
+    },
+    "servingSize": "1 bowl (250g)",
+    "prepTime": 10,
+    "difficulty": "easy",
+    "tags": ["vegetarian", "high-fiber", "heart-healthy", "brain-food"],
+    "mealSuitability": ["breakfast", "snack"]
+  },
+  {
+    "id": "food-002", 
+    "name": "Dal with Rice",
+    "category": "lunch",
+    "cuisine": "indian",
+    "description": "Traditional Indian lentil curry served with steamed rice",
+    "ingredients": ["Moong dal", "Turmeric", "Cumin", "Ginger", "Basmati rice", "Ghee"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "astringent"],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "neutral",
+        "kapha": "balancing"
+      },
+      "constitution": ["vata", "kapha", "tridoshic"],
+      "season": ["winter", "monsoon"],
+      "timeOfDay": ["noon", "evening"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 320,
+      "protein": 14,
+      "carbohydrates": 58,
+      "fat": 4,
+      "fiber": 6,
+      "sugar": 2,
+      "sodium": 200,
+      "potassium": 350,
+      "calcium": 50,
+      "iron": 4,
+      "vitamins": {
+        "folate": 180,
+        "vitaminB1": 0.3,
+        "vitaminB6": 0.2
+      }
+    },
+    "servingSize": "1 plate (300g)",
+    "prepTime": 30,
+    "difficulty": "medium",
+    "tags": ["vegetarian", "protein-rich", "comfort-food", "traditional"],
+    "mealSuitability": ["lunch", "dinner"]
+  },
+  {
+    "id": "food-003",
+    "name": "Quinoa Salad Bowl",
+    "category": "lunch",
+    "cuisine": "western",
+    "description": "Nutritious quinoa bowl with mixed vegetables and herbs",
+    "ingredients": ["Quinoa", "Cucumber", "Tomatoes", "Bell peppers", "Olive oil", "Lemon", "Herbs"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "sour", "astringent"],
+      "virya": "cooling",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "neutral",
+        "pitta": "balancing",
+        "kapha": "balancing"
+      },
+      "constitution": ["pitta", "kapha"],
+      "season": ["summer", "spring"],
+      "timeOfDay": ["noon", "evening"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 280,
+      "protein": 10,
+      "carbohydrates": 35,
+      "fat": 12,
+      "fiber": 7,
+      "sugar": 8,
+      "sodium": 180,
+      "potassium": 450,
+      "calcium": 80,
+      "iron": 3,
+      "vitamins": {
+        "vitaminC": 45,
+        "vitaminK": 120,
+        "folate": 90
+      }
+    },
+    "servingSize": "1 bowl (250g)",
+    "prepTime": 20,
+    "difficulty": "easy",
+    "tags": ["vegetarian", "gluten-free", "detox", "fresh"],
+    "mealSuitability": ["lunch", "dinner"]
+  },
+  {
+    "id": "food-004",
+    "name": "Chapati with Vegetable Curry",
+    "category": "dinner",
+    "cuisine": "indian",
+    "description": "Whole wheat flatbread with mixed vegetable curry",
+    "ingredients": ["Whole wheat flour", "Mixed vegetables", "Spices", "Ginger", "Garlic", "Oil"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "pungent"],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "neutral",
+        "kapha": "balancing"
+      },
+      "constitution": ["vata", "kapha"],
+      "season": ["winter", "monsoon"],
+      "timeOfDay": ["evening"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 300,
+      "protein": 8,
+      "carbohydrates": 52,
+      "fat": 6,
+      "fiber": 9,
+      "sugar": 5,
+      "sodium": 220,
+      "potassium": 380,
+      "calcium": 70,
+      "iron": 4,
+      "vitamins": {
+        "vitaminA": 800,
+        "vitaminC": 25,
+        "folate": 60
+      }
+    },
+    "servingSize": "2 chapatis + curry (280g)",
+    "prepTime": 35,
+    "difficulty": "medium",
+    "tags": ["vegetarian", "high-fiber", "traditional", "wholesome"],
+    "mealSuitability": ["lunch", "dinner"]
+  },
+  {
+    "id": "food-005",
+    "name": "Greek Yogurt Parfait",
+    "category": "snack",
+    "cuisine": "western",
+    "description": "Layered yogurt with fruits and granola",
+    "ingredients": ["Greek yogurt", "Berries", "Granola", "Honey", "Nuts"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "sour"],
+      "virya": "cooling",
+      "vipaka": "sour",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "aggravating",
+        "kapha": "aggravating"
+      },
+      "constitution": ["vata"],
+      "season": ["summer"],
+      "timeOfDay": ["morning", "afternoon"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 220,
+      "protein": 15,
+      "carbohydrates": 28,
+      "fat": 6,
+      "fiber": 4,
+      "sugar": 20,
+      "sodium": 80,
+      "potassium": 300,
+      "calcium": 200,
+      "iron": 1,
+      "vitamins": {
+        "vitaminC": 15,
+        "vitaminB12": 1.2,
+        "riboflavin": 0.4
+      }
+    },
+    "servingSize": "1 cup (200g)",
+    "prepTime": 5,
+    "difficulty": "easy",
+    "tags": ["vegetarian", "probiotic", "protein-rich", "quick"],
+    "mealSuitability": ["breakfast", "snack"]
+  },
+  {
+    "id": "food-006",
+    "name": "Masala Chai with Biscuits",
+    "category": "snack",
+    "cuisine": "indian",
+    "description": "Spiced tea with traditional biscuits",
+    "ingredients": ["Black tea", "Milk", "Ginger", "Cardamom", "Cinnamon", "Wheat biscuits"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "pungent", "bitter"],
+      "virya": "heating",
+      "vipaka": "pungent",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "aggravating",
+        "kapha": "balancing"
+      },
+      "constitution": ["vata", "kapha"],
+      "season": ["winter", "monsoon"],
+      "timeOfDay": ["morning", "evening"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 180,
+      "protein": 6,
+      "carbohydrates": 30,
+      "fat": 5,
+      "fiber": 2,
+      "sugar": 15,
+      "sodium": 120,
+      "potassium": 200,
+      "calcium": 150,
+      "iron": 2,
+      "vitamins": {
+        "vitaminB12": 0.5,
+        "riboflavin": 0.3
+      }
+    },
+    "servingSize": "1 cup + 2 biscuits (150g)",
+    "prepTime": 8,
+    "difficulty": "easy",
+    "tags": ["vegetarian", "warming", "traditional", "comfort"],
+    "mealSuitability": ["snack"]
+  },
+  {
+    "id": "food-007",
+    "name": "Grilled Chicken Salad",
+    "category": "lunch",
+    "cuisine": "western",
+    "description": "Protein-rich grilled chicken with fresh vegetables",
+    "ingredients": ["Chicken breast", "Mixed greens", "Cherry tomatoes", "Cucumber", "Olive oil", "Herbs"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "astringent"],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "aggravating",
+        "kapha": "balancing"
+      },
+      "constitution": ["vata", "kapha"],
+      "season": ["winter", "spring"],
+      "timeOfDay": ["noon"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 320,
+      "protein": 35,
+      "carbohydrates": 8,
+      "fat": 16,
+      "fiber": 4,
+      "sugar": 6,
+      "sodium": 300,
+      "potassium": 500,
+      "calcium": 60,
+      "iron": 3,
+      "vitamins": {
+        "vitaminA": 400,
+        "vitaminC": 20,
+        "niacin": 12
+      }
+    },
+    "servingSize": "1 plate (300g)",
+    "prepTime": 25,
+    "difficulty": "medium",
+    "tags": ["non-vegetarian", "high-protein", "low-carb", "lean"],
+    "mealSuitability": ["lunch", "dinner"]
+  },
+  {
+    "id": "food-008",
+    "name": "Khichdi with Ghee",
+    "category": "dinner",
+    "cuisine": "indian",
+    "description": "Comfort food made with rice, lentils and clarified butter",
+    "ingredients": ["Rice", "Moong dal", "Turmeric", "Ginger", "Ghee", "Salt"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet"],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "neutral",
+        "kapha": "neutral"
+      },
+      "constitution": ["vata", "pitta", "kapha", "tridoshic"],
+      "season": ["all"],
+      "timeOfDay": ["evening", "night"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 280,
+      "protein": 10,
+      "carbohydrates": 45,
+      "fat": 8,
+      "fiber": 5,
+      "sugar": 2,
+      "sodium": 180,
+      "potassium": 280,
+      "calcium": 40,
+      "iron": 3,
+      "vitamins": {
+        "vitaminA": 100,
+        "folate": 120,
+        "vitaminB1": 0.2
+      }
+    },
+    "servingSize": "1 bowl (250g)",
+    "prepTime": 25,
+    "difficulty": "easy",
+    "tags": ["vegetarian", "comfort-food", "digestive", "healing"],
+    "mealSuitability": ["lunch", "dinner"]
+  },
+  {
+    "id": "food-009",
+    "name": "Avocado Toast",
+    "category": "breakfast",
+    "cuisine": "western",
+    "description": "Whole grain toast topped with mashed avocado and seasonings",
+    "ingredients": ["Whole grain bread", "Avocado", "Lemon juice", "Salt", "Pepper", "Olive oil"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "astringent"],
+      "virya": "cooling",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "balancing",
+        "kapha": "aggravating"
+      },
+      "constitution": ["vata", "pitta"],
+      "season": ["summer", "spring"],
+      "timeOfDay": ["morning", "afternoon"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 300,
+      "protein": 8,
+      "carbohydrates": 25,
+      "fat": 20,
+      "fiber": 12,
+      "sugar": 3,
+      "sodium": 200,
+      "potassium": 600,
+      "calcium": 50,
+      "iron": 2,
+      "vitamins": {
+        "vitaminK": 25,
+        "folate": 80,
+        "vitaminE": 3
+      }
+    },
+    "servingSize": "2 slices (200g)",
+    "prepTime": 5,
+    "difficulty": "easy",
+    "tags": ["vegetarian", "healthy-fats", "high-fiber", "trendy"],
+    "mealSuitability": ["breakfast", "snack"]
+  },
+  {
+    "id": "food-010",
+    "name": "Samosa with Chutney",
+    "category": "snack",
+    "cuisine": "indian",
+    "description": "Crispy fried pastry with spiced potato filling",
+    "ingredients": ["Refined flour", "Potatoes", "Peas", "Spices", "Oil", "Mint chutney"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "pungent", "salty"],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "neutral",
+        "pitta": "aggravating",
+        "kapha": "aggravating"
+      },
+      "constitution": ["vata"],
+      "season": ["winter"],
+      "timeOfDay": ["afternoon", "evening"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 350,
+      "protein": 6,
+      "carbohydrates": 35,
+      "fat": 20,
+      "fiber": 4,
+      "sugar": 3,
+      "sodium": 400,
+      "potassium": 250,
+      "calcium": 30,
+      "iron": 2,
+      "vitamins": {
+        "vitaminC": 12,
+        "vitaminB6": 0.2
+      }
+    },
+    "servingSize": "2 pieces with chutney (150g)",
+    "prepTime": 45,
+    "difficulty": "hard",
+    "tags": ["vegetarian", "fried", "traditional", "festive"],
+    "mealSuitability": ["snack"]
+  },
+  {
+    "id": "food-011",
+    "name": "Smoothie Bowl",
+    "category": "breakfast",
+    "cuisine": "western",
+    "description": "Thick fruit smoothie topped with nuts and seeds",
+    "ingredients": ["Banana", "Berries", "Yogurt", "Almond milk", "Granola", "Chia seeds"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "sour"],
+      "virya": "cooling",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "balancing",
+        "kapha": "aggravating"
+      },
+      "constitution": ["vata", "pitta"],
+      "season": ["summer"],
+      "timeOfDay": ["morning"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 380,
+      "protein": 12,
+      "carbohydrates": 55,
+      "fat": 14,
+      "fiber": 10,
+      "sugar": 35,
+      "sodium": 100,
+      "potassium": 600,
+      "calcium": 180,
+      "iron": 3,
+      "vitamins": {
+        "vitaminC": 30,
+        "vitaminB6": 0.5,
+        "vitaminE": 4
+      }
+    },
+    "servingSize": "1 bowl (300g)",
+    "prepTime": 10,
+    "difficulty": "easy",
+    "tags": ["vegetarian", "antioxidant-rich", "refreshing", "nutrient-dense"],
+    "mealSuitability": ["breakfast", "snack"]
+  },
+  {
+    "id": "food-012",
+    "name": "Rajma Chawal",
+    "category": "lunch",
+    "cuisine": "indian",
+    "description": "Kidney bean curry served with steamed rice",
+    "ingredients": ["Kidney beans", "Onions", "Tomatoes", "Ginger", "Garlic", "Spices", "Rice"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "astringent"],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "neutral",
+        "kapha": "balancing"
+      },
+      "constitution": ["vata", "kapha"],
+      "season": ["winter", "monsoon"],
+      "timeOfDay": ["noon"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 340,
+      "protein": 16,
+      "carbohydrates": 58,
+      "fat": 5,
+      "fiber": 12,
+      "sugar": 4,
+      "sodium": 250,
+      "potassium": 450,
+      "calcium": 80,
+      "iron": 5,
+      "vitamins": {
+        "folate": 200,
+        "vitaminB1": 0.3,
+        "vitaminB6": 0.3
+      }
+    },
+    "servingSize": "1 plate (350g)",
+    "prepTime": 40,
+    "difficulty": "medium",
+    "tags": ["vegetarian", "protein-rich", "high-fiber", "comfort-food"],
+    "mealSuitability": ["lunch", "dinner"]
+  },
+  {
+    "id": "food-013",
+    "name": "Caesar Salad",
+    "category": "lunch",
+    "cuisine": "western",
+    "description": "Classic salad with romaine lettuce, croutons and parmesan",
+    "ingredients": ["Romaine lettuce", "Croutons", "Parmesan cheese", "Caesar dressing", "Anchovies"],
+    "ayurvedicProperties": {
+      "rasa": ["bitter", "salty", "sour"],
+      "virya": "cooling",
+      "vipaka": "pungent",
+      "doshaEffect": {
+        "vata": "aggravating",
+        "pitta": "balancing",
+        "kapha": "balancing"
+      },
+      "constitution": ["pitta", "kapha"],
+      "season": ["summer"],
+      "timeOfDay": ["noon"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 250,
+      "protein": 8,
+      "carbohydrates": 15,
+      "fat": 18,
+      "fiber": 3,
+      "sugar": 4,
+      "sodium": 600,
+      "potassium": 300,
+      "calcium": 150,
+      "iron": 2,
+      "vitamins": {
+        "vitaminA": 1200,
+        "vitaminK": 80,
+        "folate": 60
+      }
+    },
+    "servingSize": "1 bowl (200g)",
+    "prepTime": 15,
+    "difficulty": "easy",
+    "tags": ["vegetarian-option", "classic", "fresh", "light"],
+    "mealSuitability": ["lunch", "dinner"]
+  },
+  {
+    "id": "food-014",
+    "name": "Poha with Peanuts",
+    "category": "breakfast",
+    "cuisine": "indian",
+    "description": "Flattened rice dish with peanuts and vegetables",
+    "ingredients": ["Poha", "Peanuts", "Onions", "Green chilies", "Turmeric", "Mustard seeds", "Curry leaves"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "pungent"],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "neutral",
+        "kapha": "balancing"
+      },
+      "constitution": ["vata", "kapha"],
+      "season": ["winter", "monsoon"],
+      "timeOfDay": ["morning"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 260,
+      "protein": 8,
+      "carbohydrates": 40,
+      "fat": 8,
+      "fiber": 5,
+      "sugar": 3,
+      "sodium": 200,
+      "potassium": 250,
+      "calcium": 30,
+      "iron": 3,
+      "vitamins": {
+        "vitaminB1": 0.4,
+        "niacin": 3,
+        "vitaminE": 2
+      }
+    },
+    "servingSize": "1 plate (200g)",
+    "prepTime": 15,
+    "difficulty": "easy",
+    "tags": ["vegetarian", "gluten-free", "quick", "traditional"],
+    "mealSuitability": ["breakfast", "snack"]
+  },
+  {
+    "id": "food-015",
+    "name": "Pasta Primavera",
+    "category": "dinner",
+    "cuisine": "western",
+    "description": "Pasta with fresh seasonal vegetables in light sauce",
+    "ingredients": ["Pasta", "Zucchini", "Bell peppers", "Cherry tomatoes", "Olive oil", "Herbs", "Parmesan"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "sour"],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "neutral",
+        "pitta": "neutral",
+        "kapha": "aggravating"
+      },
+      "constitution": ["vata", "pitta"],
+      "season": ["spring", "summer"],
+      "timeOfDay": ["evening"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 320,
+      "protein": 12,
+      "carbohydrates": 55,
+      "fat": 8,
+      "fiber": 6,
+      "sugar": 8,
+      "sodium": 300,
+      "potassium": 400,
+      "calcium": 120,
+      "iron": 3,
+      "vitamins": {
+        "vitaminC": 35,
+        "vitaminA": 600,
+        "folate": 80
+      }
+    },
+    "servingSize": "1 plate (300g)",
+    "prepTime": 25,
+    "difficulty": "medium",
+    "tags": ["vegetarian", "colorful", "fresh", "mediterranean"],
+    "mealSuitability": ["lunch", "dinner"]
+  },
+  {
+    "id": "food-016",
+    "name": "Lassi with Almonds",
+    "category": "snack",
+    "cuisine": "indian",
+    "description": "Yogurt-based drink with almonds and cardamom",
+    "ingredients": ["Yogurt", "Almonds", "Cardamom", "Sugar", "Rose water", "Ice"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "sour"],
+      "virya": "cooling",
+      "vipaka": "sour",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "aggravating",
+        "kapha": "aggravating"
+      },
+      "constitution": ["vata"],
+      "season": ["summer"],
+      "timeOfDay": ["afternoon"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 180,
+      "protein": 8,
+      "carbohydrates": 20,
+      "fat": 8,
+      "fiber": 2,
+      "sugar": 18,
+      "sodium": 80,
+      "potassium": 250,
+      "calcium": 180,
+      "iron": 1,
+      "vitamins": {
+        "vitaminB12": 0.8,
+        "riboflavin": 0.3,
+        "vitaminE": 2
+      }
+    },
+    "servingSize": "1 glass (250ml)",
+    "prepTime": 5,
+    "difficulty": "easy",
+    "tags": ["vegetarian", "cooling", "probiotic", "refreshing"],
+    "mealSuitability": ["snack"]
+  },
+  {
+    "id": "food-017",
+    "name": "Salmon with Quinoa",
+    "category": "dinner",
+    "cuisine": "western",
+    "description": "Grilled salmon served with quinoa and vegetables",
+    "ingredients": ["Salmon fillet", "Quinoa", "Broccoli", "Asparagus", "Lemon", "Olive oil", "Herbs"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "salty"],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "aggravating",
+        "kapha": "balancing"
+      },
+      "constitution": ["vata", "kapha"],
+      "season": ["winter", "spring"],
+      "timeOfDay": ["evening"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 420,
+      "protein": 35,
+      "carbohydrates": 30,
+      "fat": 20,
+      "fiber": 8,
+      "sugar": 6,
+      "sodium": 250,
+      "potassium": 650,
+      "calcium": 100,
+      "iron": 4,
+      "vitamins": {
+        "vitaminD": 400,
+        "omega3": 1500,
+        "vitaminB12": 2.4
+      }
+    },
+    "servingSize": "1 fillet + quinoa (350g)",
+    "prepTime": 30,
+    "difficulty": "medium",
+    "tags": ["non-vegetarian", "omega-3-rich", "high-protein", "heart-healthy"],
+    "mealSuitability": ["lunch", "dinner"]
+  },
+  {
+    "id": "food-018",
+    "name": "Idli Sambar",
+    "category": "breakfast",
+    "cuisine": "indian",
+    "description": "Steamed rice cakes with lentil soup",
+    "ingredients": ["Rice", "Urad dal", "Toor dal", "Vegetables", "Tamarind", "Sambar powder", "Curry leaves"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "sour", "pungent"],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "neutral",
+        "kapha": "balancing"
+      },
+      "constitution": ["vata", "kapha", "tridoshic"],
+      "season": ["winter", "monsoon"],
+      "timeOfDay": ["morning"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 300,
+      "protein": 12,
+      "carbohydrates": 55,
+      "fat": 4,
+      "fiber": 8,
+      "sugar": 5,
+      "sodium": 250,
+      "potassium": 350,
+      "calcium": 60,
+      "iron": 4,
+      "vitamins": {
+        "folate": 150,
+        "vitaminB1": 0.3,
+        "vitaminC": 15
+      }
+    },
+    "servingSize": "3 idlis + sambar (300g)",
+    "prepTime": 20,
+    "difficulty": "medium",
+    "tags": ["vegetarian", "fermented", "digestive", "south-indian"],
+    "mealSuitability": ["breakfast", "dinner"]
+  },
+  {
+    "id": "food-019",
+    "name": "Trail Mix",
+    "category": "snack",
+    "cuisine": "western",
+    "description": "Mixed nuts, dried fruits and seeds",
+    "ingredients": ["Almonds", "Walnuts", "Dried fruits", "Pumpkin seeds", "Dark chocolate chips"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "astringent"],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "neutral",
+        "kapha": "aggravating"
+      },
+      "constitution": ["vata"],
+      "season": ["winter", "autumn"],
+      "timeOfDay": ["morning", "afternoon"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 200,
+      "protein": 6,
+      "carbohydrates": 15,
+      "fat": 15,
+      "fiber": 4,
+      "sugar": 10,
+      "sodium": 5,
+      "potassium": 250,
+      "calcium": 40,
+      "iron": 2,
+      "vitamins": {
+        "vitaminE": 5,
+        "magnesium": 80,
+        "zinc": 1
+      }
+    },
+    "servingSize": "1/4 cup (30g)",
+    "prepTime": 0,
+    "difficulty": "easy",
+    "tags": ["vegetarian", "portable", "energy-boost", "brain-food"],
+    "mealSuitability": ["snack"]
+  },
+  {
+    "id": "food-020",
+    "name": "Biryani",
+    "category": "lunch",
+    "cuisine": "indian",
+    "description": "Fragrant rice dish with vegetables or meat and spices",
+    "ingredients": ["Basmati rice", "Vegetables/Meat", "Yogurt", "Saffron", "Whole spices", "Ghee", "Herbs"],
+    "ayurvedicProperties": {
+      "rasa": ["sweet", "pungent", "salty"],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balancing",
+        "pitta": "aggravating",
+        "kapha": "neutral"
+      },
+      "constitution": ["vata"],
+      "season": ["winter"],
+      "timeOfDay": ["noon"]
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 450,
+      "protein": 15,
+      "carbohydrates": 65,
+      "fat": 15,
+      "fiber": 4,
+      "sugar": 6,
+      "sodium": 400,
+      "potassium": 300,
+      "calcium": 80,
+      "iron": 3,
+      "vitamins": {
+        "vitaminB1": 0.3,
+        "niacin": 4,
+        "vitaminB6": 0.3
+      }
+    },
+    "servingSize": "1 plate (350g)",
+    "prepTime": 60,
+    "difficulty": "hard",
+    "tags": ["vegetarian-option", "festive", "aromatic", "traditional"],
+    "mealSuitability": ["lunch", "dinner"]
+  }
+]

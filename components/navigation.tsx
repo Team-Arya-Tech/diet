@@ -43,6 +43,12 @@ export function Navigation({ className = "" }: NavigationProps) {
     },
     {
       name: "Diet Charts",
+      href: "/diet-charts",
+      icon: ChefHat,
+      current: pathname.startsWith("/diet-charts")
+    },
+    {
+      name: "Diet Plans",
       href: "/diet-plans",
       icon: FileText,
       current: pathname.startsWith("/diet-plans")
