@@ -18,7 +18,8 @@ import {
   ChefHat,
   UserPlus,
   Zap,
-  BarChart3
+  BarChart3,
+  Leaf
 } from "lucide-react"
 import Link from "next/link"
 import { 
@@ -114,6 +115,13 @@ export default function DashboardPage() {
       icon: Plus,
       href: "/foods",
       color: "bg-cyan-50 hover:bg-cyan-100 border-cyan-200"
+    },
+    {
+      title: "Category Recommendations",
+      description: "Get personalized Ayurvedic category recommendations",
+      icon: Leaf,
+      href: "/category-recommendations",
+      color: "bg-emerald-50 hover:bg-emerald-100 border-emerald-200"
     },
     {
       title: "View Reports",
@@ -296,6 +304,13 @@ export default function DashboardPage() {
                   title="AI Recipe Generator"
                   description="Generate personalized recipes using AI"
                   colorClass="bg-purple-50 hover:bg-purple-100 border-purple-200"
+                />
+                <QuickActionButton
+                  href="/category-recommendations"
+                  icon={Leaf}
+                  title="Category Recommendations"
+                  description="Get personalized Ayurvedic recommendations"
+                  colorClass="bg-emerald-50 hover:bg-emerald-100 border-emerald-200"
                 />
                 <QuickActionButton
                   href="/foods"
