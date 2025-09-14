@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Calendar, Plus, Search, Download, Sparkles, Filter, Clock, Users, User, UserPlus } from "lucide-react"
+import { LanguageSwitcher } from "@/components/language-switcher"
+import { useTranslation } from "@/components/translation-provider"
 import { 
   searchFoodItems, 
   getFoodsByMealType, 
@@ -214,6 +216,7 @@ export default function DietChartsPage() {
           <p className="text-muted-foreground">Create personalized diet plans with AI assistance</p>
         </div>
         <div className="flex gap-2">
+          <LanguageSwitcher />
           <Button variant="outline" onClick={() => setShowFilters(!showFilters)}>
             <Filter className="h-4 w-4 mr-2" />
             Filters

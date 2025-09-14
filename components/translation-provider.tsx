@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
-import { translateText } from "@/lib/translation"
+import { translateWithCache } from "@/lib/translation"
 
 interface TranslationContextType {
   language: "en" | "hi"
@@ -46,7 +46,7 @@ export const TranslationProvider = ({ children }: TranslationProviderProps) => {
 
     setIsTranslating(true)
     try {
-      const translated = await translateText(text, language, context as any)
+      const translated = await translateWithCache(text, language, context)
       return translated
     } catch (error) {
       console.error("Translation error:", error)

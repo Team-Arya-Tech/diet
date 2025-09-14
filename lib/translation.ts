@@ -157,7 +157,7 @@ ayurvedicTranslations.forEach((entry) => {
   hiToEnMap.set(entry.hi, entry.en)
 })
 
-// Enhanced translation function with context awareness
+// Enhanced translation function with API integration
 export const translateText = async (
   text: string,
   targetLang: "hi" | "en",
@@ -165,7 +165,7 @@ export const translateText = async (
 ): Promise<string> => {
   if (!text) return text
 
-  // For simple word translations, use our dictionary
+  // For simple word translations, use our dictionary first
   const sourceMap = targetLang === "hi" ? enToHiMap : hiToEnMap
   const lowerText = text.toLowerCase()
 
@@ -187,9 +187,247 @@ export const translateText = async (
     return translatedText
   }
 
-  // For complex sentences, return original text with a note
-  // In a real implementation, this would call a translation API
-  return text
+  // For complex sentences, try API translation
+  try {
+    return await translateWithAPI(text, targetLang, context)
+  } catch (error) {
+    console.warn("API translation failed, returning original text:", error)
+    return text
+  }
+}
+
+// API translation function using multiple services
+const translateWithAPI = async (
+  text: string,
+  targetLang: "hi" | "en",
+  context?: string
+): Promise<string> => {
+  // Try different translation APIs in order of preference
+  
+  // 1. Try OpenAI GPT (best for context-aware medical translations)
+  try {
+    return await openAITranslate(text, targetLang, context)
+  } catch (error) {
+    console.warn("OpenAI translation failed:", error)
+  }
+
+  // 2. Try Google Translate API
+  try {
+    return await googleTranslate(text, targetLang)
+  } catch (error) {
+    console.warn("Google Translate failed:", error)
+  }
+
+  // 3. Try Microsoft Translator API
+  try {
+    return await microsoftTranslate(text, targetLang)
+  } catch (error) {
+    console.warn("Microsoft Translator failed:", error)
+  }
+
+  // 4. Try LibreTranslate (free/open source)
+  try {
+    return await libreTranslate(text, targetLang)
+  } catch (error) {
+    console.warn("LibreTranslate failed:", error)
+  }
+
+  // 5. Try MyMemory Translation API (free)
+  try {
+    return await myMemoryTranslate(text, targetLang)
+  } catch (error) {
+    console.warn("MyMemory Translate failed:", error)
+  }
+
+  // If all APIs fail, return original text
+  throw new Error("All translation APIs failed")
+}
+
+// OpenAI GPT translation implementation (best for context-aware medical translations)
+const openAITranslate = async (text: string, targetLang: "hi" | "en", context?: string): Promise<string> => {
+  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY || process.env.OPENAI_API_KEY
+  if (!apiKey) throw new Error("OpenAI API key not configured")
+
+  const sourceLang = targetLang === "hi" ? "English" : "Hindi"
+  const targetLanguage = targetLang === "hi" ? "Hindi" : "English"
+  
+  // Create context-specific prompts for better translations
+  const contextPrompts = {
+    medical: `You are an expert medical translator specializing in Ayurvedic medicine. Translate the following ${sourceLang} text to ${targetLanguage}. Maintain medical accuracy and use appropriate Ayurvedic terminology. If there are Sanskrit terms, provide both the transliteration and meaning.`,
+    food: `You are a nutrition and culinary translator. Translate the following ${sourceLang} text about food and nutrition to ${targetLanguage}. Keep food names authentic and explain any cultural food terms.`,
+    constitution: `You are an Ayurvedic constitution expert. Translate the following ${sourceLang} text about body constitution (prakriti/vikriti) to ${targetLanguage}. Maintain the traditional Ayurvedic terminology while making it understandable.`,
+    ui: `Translate this user interface text from ${sourceLang} to ${targetLanguage}. Keep it concise and user-friendly.`,
+    general: `Translate the following ${sourceLang} text to ${targetLanguage}. Maintain the original meaning and tone.`
+  }
+
+  const systemPrompt = contextPrompts[context as keyof typeof contextPrompts] || contextPrompts.general
+
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini", // More cost-effective for translations
+      messages: [
+        {
+          role: "system",
+          content: `${systemPrompt}\n\nIMPORTANT: Return ONLY the translated text, no explanations or additional content.`
+        },
+        {
+          role: "user",
+          content: text
+        }
+      ],
+      max_tokens: 500,
+      temperature: 0.3, // Lower temperature for more consistent translations
+    }),
+  })
+
+  if (!response.ok) {
+    throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`)
+  }
+
+  const data = await response.json()
+  
+  if (data.choices && data.choices[0] && data.choices[0].message) {
+    return data.choices[0].message.content.trim()
+  } else {
+    throw new Error("Invalid response from OpenAI API")
+  }
+}
+
+// Google Translate API implementation
+const googleTranslate = async (text: string, targetLang: "hi" | "en"): Promise<string> => {
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY
+  if (!apiKey) throw new Error("Google Translate API key not configured")
+
+  const response = await fetch(
+    `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        q: text,
+        source: targetLang === "hi" ? "en" : "hi",
+        target: targetLang,
+        format: "text",
+      }),
+    }
+  )
+
+  if (!response.ok) throw new Error("Google Translate API request failed")
+
+  const data = await response.json()
+  return data.data.translations[0].translatedText
+}
+
+// Microsoft Translator API implementation
+const microsoftTranslate = async (text: string, targetLang: "hi" | "en"): Promise<string> => {
+  const apiKey = process.env.NEXT_PUBLIC_AZURE_TRANSLATOR_KEY
+  const region = process.env.NEXT_PUBLIC_AZURE_TRANSLATOR_REGION || "global"
+  
+  if (!apiKey) throw new Error("Azure Translator API key not configured")
+
+  const response = await fetch(
+    `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${targetLang}`,
+    {
+      method: "POST",
+      headers: {
+        "Ocp-Apim-Subscription-Key": apiKey,
+        "Ocp-Apim-Subscription-Region": region,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify([{ text }]),
+    }
+  )
+
+  if (!response.ok) throw new Error("Microsoft Translator API request failed")
+
+  const data = await response.json()
+  return data[0].translations[0].text
+}
+
+// LibreTranslate API implementation (free/open source)
+const libreTranslate = async (text: string, targetLang: "hi" | "en"): Promise<string> => {
+  const apiUrl = process.env.NEXT_PUBLIC_LIBRETRANSLATE_URL || "https://libretranslate.de"
+  const apiKey = process.env.NEXT_PUBLIC_LIBRETRANSLATE_API_KEY
+
+  const body: any = {
+    q: text,
+    source: targetLang === "hi" ? "en" : "hi",
+    target: targetLang,
+    format: "text",
+  }
+
+  if (apiKey) {
+    body.api_key = apiKey
+  }
+
+  const response = await fetch(`${apiUrl}/translate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (!response.ok) throw new Error("LibreTranslate API request failed")
+
+  const data = await response.json()
+  return data.translatedText
+}
+
+// MyMemory Translation API (free with limits)
+const myMemoryTranslate = async (text: string, targetLang: "hi" | "en"): Promise<string> => {
+  const sourceLang = targetLang === "hi" ? "en" : "hi"
+  const email = process.env.NEXT_PUBLIC_MYMEMORY_EMAIL || "test@example.com"
+
+  const response = await fetch(
+    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${sourceLang}|${targetLang}&de=${email}`,
+    {
+      method: "GET",
+    }
+  )
+
+  if (!response.ok) throw new Error("MyMemory API request failed")
+
+  const data = await response.json()
+  
+  if (data.responseStatus === 200) {
+    return data.responseData.translatedText
+  } else {
+    throw new Error("MyMemory translation failed")
+  }
+}
+
+// Cached translation to avoid repeated API calls
+const translationCache = new Map<string, string>()
+
+const getCacheKey = (text: string, targetLang: string, context?: string): string => {
+  return `${text}_${targetLang}_${context || 'default'}`
+}
+
+export const translateWithCache = async (
+  text: string,
+  targetLang: "hi" | "en",
+  context?: string
+): Promise<string> => {
+  const cacheKey = getCacheKey(text, targetLang, context)
+  
+  // Check cache first
+  if (translationCache.has(cacheKey)) {
+    return translationCache.get(cacheKey)!
+  }
+
+  // Translate and cache result
+  const translated = await translateText(text, targetLang, context as any)
+  translationCache.set(cacheKey, translated)
+  
+  return translated
 }
 
 // Translate Ayurvedic food properties
@@ -236,12 +474,14 @@ export const isHindiText = (text: string): boolean => {
 }
 
 // Format text for display in specific language
-export const formatTextForLanguage = (text: string, language: "en" | "hi"): string => {
+export const formatTextForLanguage = async (text: string, language: "en" | "hi"): Promise<string> => {
   if (language === "hi" && !isHindiText(text)) {
     // If displaying in Hindi but text is English, try to translate
-    return translateText(text, "hi")
-      .then((result) => result)
-      .catch(() => text)
+    try {
+      return await translateText(text, "hi")
+    } catch {
+      return text
+    }
   }
   return text
 }

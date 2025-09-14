@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Navigation, QuickActionButton } from "@/components/navigation"
+import { LanguageSwitcher } from "@/components/language-switcher"
 import { 
   Users, 
   BookOpen, 
@@ -87,51 +88,6 @@ export default function DashboardPage() {
     }
   ]
 
-  const quickActions = [
-    {
-      title: "Add New Patient",
-      description: "Register a new patient and assess their Prakriti",
-      icon: UserPlus,
-      href: "/patients/new",
-      color: "bg-blue-50 hover:bg-blue-100 border-blue-200"
-    },
-    {
-      title: "Create Diet Chart",
-      description: "Design personalized Ayurvedic meal plans",
-      icon: ChefHat,
-      href: "/diet-plans/create",
-      color: "bg-green-50 hover:bg-green-100 border-green-200"
-    },
-    {
-      title: "Browse Recipes",
-      description: "Explore Ayurvedic recipes and create new ones",
-      icon: BookOpen,
-      href: "/recipes",
-      color: "bg-orange-50 hover:bg-orange-100 border-orange-200"
-    },
-    {
-      title: "Add Food Item",
-      description: "Expand database with new food items",
-      icon: Plus,
-      href: "/foods",
-      color: "bg-cyan-50 hover:bg-cyan-100 border-cyan-200"
-    },
-    {
-      title: "Category Recommendations",
-      description: "Get personalized Ayurvedic category recommendations",
-      icon: Leaf,
-      href: "/category-recommendations",
-      color: "bg-emerald-50 hover:bg-emerald-100 border-emerald-200"
-    },
-    {
-      title: "View Reports",
-      description: "Analyze patient progress and system analytics",
-      icon: BarChart3,
-      href: "/reports",
-      color: "bg-purple-50 hover:bg-purple-100 border-purple-200"
-    }
-  ]
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -150,6 +106,7 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <LanguageSwitcher />
               <div className="flex items-center space-x-2 bg-green-50 px-3 py-2 rounded-full">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <span className="text-sm font-medium text-green-700">Ayurvedic Practitioner</span>
@@ -285,7 +242,7 @@ export default function DashboardPage() {
                   colorClass="bg-blue-50 hover:bg-blue-100 border-blue-200"
                 />
                 <QuickActionButton
-                  href="/diet-chart"
+                  href="/diet-charts"
                   icon={ChefHat}
                   title="Diet Chart Builder"
                   description="Build comprehensive diet charts with AI assistance"
@@ -299,18 +256,11 @@ export default function DashboardPage() {
                   colorClass="bg-emerald-50 hover:bg-emerald-100 border-emerald-200"
                 />
                 <QuickActionButton
-                  href="/recipes"
-                  icon={BookOpen}
-                  title="Browse Recipes"
-                  description="Explore Ayurvedic recipes and create new ones"
-                  colorClass="bg-orange-50 hover:bg-orange-100 border-orange-200"
-                />
-                <QuickActionButton
-                  href="/recipes/ai-generator"
-                  icon={Zap}
-                  title="AI Recipe Generator"
-                  description="Generate personalized recipes using AI"
-                  colorClass="bg-purple-50 hover:bg-purple-100 border-purple-200"
+                  href="/foods"
+                  icon={Plus}
+                  title="Manage Food Database"
+                  description="Add and manage food items in the database"
+                  colorClass="bg-cyan-50 hover:bg-cyan-100 border-cyan-200"
                 />
                 <QuickActionButton
                   href="/category-recommendations"
@@ -318,39 +268,6 @@ export default function DashboardPage() {
                   title="Category Recommendations"
                   description="Get personalized Ayurvedic recommendations"
                   colorClass="bg-emerald-50 hover:bg-emerald-100 border-emerald-200"
-                />
-                <QuickActionButton
-                  href="/foods"
-                  icon={Plus}
-                  title="Add Food Item"
-                  description="Expand database with new food items"
-                  colorClass="bg-cyan-50 hover:bg-cyan-100 border-cyan-200"
-                />
-              </CardContent>
-            </Card>
-
-            {/* Practitioner Info */}
-            <Card className="border-0 shadow-sm">
-              <CardHeader className="pb-4">
-                <div className="flex items-center space-x-2">
-                  <BookOpen className="h-5 w-5 text-orange-500" />
-                  <CardTitle className="text-lg font-semibold">Recipe Highlights</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <QuickActionButton
-                  href="/recipes"
-                  icon={BookOpen}
-                  title="Browse Recipes"
-                  description={`${stats.totalRecipes || 0}+ traditional Ayurvedic recipes`}
-                  colorClass="bg-orange-50 hover:bg-orange-100 border-orange-200"
-                />
-                <QuickActionButton
-                  href="/recipes/ai-generator"
-                  icon={Zap}
-                  title="AI Recipe Generator"
-                  description="Create personalized recipes with AI"
-                  colorClass="bg-purple-50 hover:bg-purple-100 border-purple-200"
                 />
               </CardContent>
             </Card>
@@ -365,6 +282,18 @@ export default function DashboardPage() {
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Ayurvedic Practitioner</h3>
                 <p className="text-sm text-gray-600">Holistic Health & Wellness</p>
+                <div className="mt-4 pt-4 border-t">
+                  <div className="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                      <p className="text-lg font-semibold text-gray-900">{stats.totalPatients}</p>
+                      <p className="text-xs text-gray-500">Patients</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold text-gray-900">{stats.activeDietPlans}</p>
+                      <p className="text-xs text-gray-500">Active Plans</p>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>

@@ -43,12 +43,6 @@ export function Navigation({ className = "" }: NavigationProps) {
     },
     {
       name: "Diet Charts",
-      href: "/diet-charts",
-      icon: ChefHat,
-      current: pathname.startsWith("/diet-charts")
-    },
-    {
-      name: "Diet Plans",
       href: "/diet-plans",
       icon: FileText,
       current: pathname.startsWith("/diet-plans")
@@ -56,26 +50,28 @@ export function Navigation({ className = "" }: NavigationProps) {
   ]
 
   return (
-    <nav className={`space-y-2 ${className}`}>
-      {navItems.map((item) => {
-        const Icon = item.icon
-        return (
-          <Link
-            key={item.name}
-            href={item.href}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
-              item.current
-                ? "bg-blue-50 text-blue-700"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-            }`}
-          >
-            <div className={`p-1 ${item.current ? "bg-blue-100" : ""} rounded`}>
-              <Icon className="h-4 w-4" />
-            </div>
-            <span className={item.current ? "font-medium" : ""}>{item.name}</span>
-          </Link>
-        )
-      })}
+    <nav className={`${className}`}>
+      <div className="flex flex-wrap gap-3">
+        {navItems.map((item) => {
+          const Icon = item.icon
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                item.current
+                  ? "bg-blue-50 text-blue-700 border border-blue-200"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200"
+              }`}
+            >
+              <div className={`p-1 ${item.current ? "bg-blue-100" : ""} rounded`}>
+                <Icon className="h-4 w-4" />
+              </div>
+              <span className={`text-sm ${item.current ? "font-medium" : ""}`}>{item.name}</span>
+            </Link>
+          )
+        })}
+      </div>
     </nav>
   )
 }
