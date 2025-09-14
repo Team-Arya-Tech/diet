@@ -24,7 +24,22 @@ import {
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useTranslation } from "@/components/translation-provider"
-import { generateAIRecipe, type AIGeneratedMeal } from "@/lib/ai-diet-generator"
+type AIGeneratedMeal = {
+  name: string;
+  ingredients: string[];
+  cookingMethod: string;
+  ayurvedicBenefits: string;
+  nutritionalInfo: {
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+    fiber: number;
+  };
+  cookingTime: string;
+  difficulty: "easy" | "medium" | "hard";
+  servings: number;
+};
 import { saveRecipe, type Recipe } from "@/lib/recipe-database"
 
 export default function AIRecipeGeneratorPage() {
@@ -58,42 +73,28 @@ export default function AIRecipeGeneratorPage() {
 
   const handleGenerate = async () => {
     if (!formData.constitution || !formData.mealType) {
-      alert("Please select at least constitution and meal type")
-      return
+      alert("Please select at least constitution and meal type");
+      return;
     }
-
-    console.log("Starting AI recipe generation...")
-    setGenerating(true)
+    setGenerating(true);
     try {
-      const preferences = {
-        mealType: formData.mealType,
-        constitution: formData.constitution,
-        dietaryRestrictions: formData.dietary.split(",").map(i => i.trim()).filter(Boolean),
-        availableIngredients: formData.ingredients.split(",").map(i => i.trim()).filter(Boolean),
-        cookingTime: formData.cookingTime || "30 minutes",
-        difficulty: formData.difficulty || "medium",
-        healthGoals: formData.healthGoals.split(",").map(i => i.trim()).filter(Boolean),
-      }
-
-      console.log("Calling generateAIRecipe with preferences:", preferences)
-      const recipe = await generateAIRecipe(preferences)
-      console.log("Received recipe from AI:", recipe)
-      
-      if (recipe) {
-        console.log("Setting generated recipe state")
-        setGeneratedRecipe(recipe)
+      const res = await fetch("/api/ai-generator", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.recipe) {
+      setGeneratedRecipe(data.recipe); // adapt depending on your format
       } else {
-        console.error("AI recipe generation returned null")
-        alert("Failed to generate recipe. Please try again.")
+        alert("Failed to generate recipe. Please try again.");
       }
-    } catch (error) {
-      console.error("Error generating recipe:", error)
-      alert(`Error generating recipe: ${error instanceof Error ? error.message : 'Unknown error'}. Please check your internet connection and try again.`)
+    } catch (error: any) {
+      alert(`Error generating recipe: ${error.message}`);
     } finally {
-      console.log("Setting generating to false")
-      setGenerating(false)
+      setGenerating(false);
     }
-  }
+  };
 
   const handleSaveRecipe = () => {
     if (generatedRecipe) {
