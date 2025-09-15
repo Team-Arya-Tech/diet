@@ -14,7 +14,6 @@ import {
   searchFoodItems, 
   getFoodsByMealType, 
   generateAIDietChart,
-  exportDietChartToPDF,
   exportDietChartToCSV,
   exportDietChartToJSON,
   saveDietChart,
@@ -26,6 +25,9 @@ import {
   type MealPlan,
   type DietChartFilters
 } from "@/lib/food-database"
+import { exportDietChartToPDF } from "@/lib/pdf-export"
+import { getPatients, getDietPlans } from "@/lib/database"
+import type { Patient, DietPlan } from "@/lib/database"
 
 export default function DietChartPage() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -42,8 +44,9 @@ export default function DietChartPage() {
   const [filters, setFilters] = useState<DietChartFilters>({})
   const [showFilters, setShowFilters] = useState(false)
   const [activeTab, setActiveTab] = useState("builder")
+  const [selectedPatientId, setSelectedPatientId] = useState<string>("")
 
-  // Load food items and saved charts
+  // Load food items, saved charts, and patients
   useEffect(() => {
     const foods = searchFoodItems("", filters)
     setFoodItems(foods)
@@ -146,6 +149,119 @@ export default function DietChartPage() {
       setSavedCharts(prev => [...prev, simpleDietChart as any])
     }
   }
+  const handlePDFExport = async () => {
+    try {
+      const patients = getPatients()
+      const dietPlans = getDietPlans()
+      
+      let patient: Patient | undefined
+      let dietPlan: DietPlan | undefined
+
+      if (selectedPatientId) {
+        patient = patients.find(p => p.id === selectedPatientId)
+        dietPlan = dietPlans.find(plan => plan.patientId === selectedPatientId && plan.isActive)
+      }
+
+      // If no patient selected, create a mock patient for demonstration
+      if (!patient) {
+        patient = {
+          id: "demo-patient",
+          name: "Demo Patient",
+          age: 35,
+          gender: "female",
+          weight: 65,
+          height: 162,
+          bmi: 24.8,
+          constitution: "pitta-kapha",
+          currentConditions: ["General wellness"],
+          dietaryRestrictions: ["Vegetarian"],
+          allergies: [],
+          lifestyle: {
+            activityLevel: "moderate",
+            sleepHours: 7,
+            stressLevel: "low",
+            waterIntake: 2.5,
+            mealTiming: "Regular",
+            bowelMovements: "regular",
+            exerciseRoutine: "Yoga 3x week"
+          },
+          medicalHistory: [],
+          occupation: "Professional",
+          contactInfo: {
+            phone: "+91-XXXX-XXXXXX",
+            email: "demo@example.com"
+          },
+          assessmentDate: new Date(),
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      }
+
+      // If no diet plan, create one from current selections
+      if (!dietPlan) {
+        dietPlan = {
+          id: "demo-plan",
+          patientId: patient.id,
+          planName: "Custom Diet Chart",
+          description: "Personalized diet chart created with selected foods",
+          duration: 7,
+          startDate: new Date(),
+          targetCalories: dailyTotals.calories,
+          objectives: ["Balanced nutrition", "Ayurvedic wellness"],
+          dailyMeals: {
+            1: {
+              breakfast: {
+                recipes: selectedFoods.breakfast.map(f => f.name),
+                notes: "Start your day with nutritious breakfast"
+              },
+              lunch: {
+                recipes: selectedFoods.lunch.map(f => f.name),
+                notes: "Main meal with balanced nutrition"
+              },
+              dinner: {
+                recipes: selectedFoods.dinner.map(f => f.name),
+                notes: "Light dinner for better digestion"
+              }
+            }
+          },
+          restrictions: ["Avoid overeating", "Maintain meal timing"],
+          recommendations: [
+            "Drink warm water throughout the day",
+            "Practice mindful eating",
+            "Follow constitutional guidelines"
+          ],
+          ayurvedicGuidelines: {
+            constitutionFocus: `This plan is designed for ${patient.constitution} constitution`,
+            seasonalAdaptations: ["Adjust foods based on current season"],
+            lifestyleRecommendations: ["Regular exercise", "Adequate sleep", "Stress management"],
+            herbs: ["Ginger", "Turmeric", "Cumin"]
+          },
+          progress: {
+            adherence: 85,
+            weightChange: 0,
+            symptomsImprovement: [],
+            notes: [`Plan created on ${new Date().toLocaleDateString()}`]
+          },
+          createdBy: "Diet Chart Builder",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          isActive: true
+        }
+      }
+
+      await exportDietChartToPDF(patient, dietPlan, {
+        includeNutritionalAnalysis: true,
+        includeAyurvedicGuidelines: true,
+        includeProgressCharts: true,
+        includeRecommendations: true,
+        language: 'en'
+      })
+
+    } catch (error) {
+      console.error("Error exporting PDF:", error)
+      alert("Error generating PDF. Please try again.")
+    }
+  }
 
   // Calculate daily totals
   const calculateDailyTotals = () => {
@@ -163,6 +279,19 @@ export default function DietChartPage() {
           <p className="text-muted-foreground">Create personalized diet plans with AI assistance</p>
         </div>
         <div className="flex gap-2">
+          <Select value={selectedPatientId} onValueChange={setSelectedPatientId}>
+            <SelectTrigger className="w-48">
+              <SelectValue placeholder="Select Patient" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Demo Patient</SelectItem>
+              {getPatients().map((patient) => (
+                <SelectItem key={patient.id} value={patient.id}>
+                  {patient.name} ({patient.constitution})
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Button variant="outline" onClick={() => setShowFilters(!showFilters)}>
             <Filter className="h-4 w-4 mr-2" />
             Filters
@@ -404,7 +533,7 @@ export default function DietChartPage() {
                   Save Diet Chart
                 </Button>
                 <div className="grid grid-cols-3 gap-2">
-                  <Button variant="outline" size="sm" onClick={() => exportDietChartToPDF(currentDietChart!)}>
+                  <Button variant="outline" size="sm" onClick={handlePDFExport}>
                     PDF
                   </Button>
                   <Button variant="outline" size="sm" onClick={() => exportDietChartToCSV(currentDietChart!)}>

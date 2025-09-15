@@ -1,6 +1,6 @@
 // Diet plan generation logic based on Ayurvedic principles
-import { type Patient, type DietPlan, generateId } from "./database"
-import { type AyurvedicFood, type FoodCategory, getAllFoods, getRecommendationsForProfile } from "./ayurvedic-data"
+import { type Patient, type DietPlan, type AyurvedicFood, type FoodCategory, generateId } from "./database"
+import { getAllFoods, getRecommendationsForProfile } from "./ayurvedic-data"
 
 export interface DietPlanOptions {
   duration: number // days
@@ -27,16 +27,37 @@ export interface DietPlanRecommendation {
 export const generateDietPlan = (patient: Patient, options: DietPlanOptions): DietPlan => {
   const recommendations = getPersonalizedRecommendations(patient, options)
   const mealPlan = generateMealPlan(patient, recommendations, options)
+  const startDate = new Date()
 
   return {
     id: generateId(),
     patientId: patient.id,
     planName: `${patient.constitution.toUpperCase()} Diet Plan - ${new Date().toLocaleDateString()}`,
+    description: `Personalized Ayurvedic diet plan for ${patient.constitution} constitution`,
     duration: options.duration,
-    meals: mealPlan,
+    startDate: startDate,
+    endDate: new Date(startDate.getTime() + options.duration * 24 * 60 * 60 * 1000),
+    targetCalories: calculateTargetCalories(patient),
+    objectives: options.focusAreas,
+    dailyMeals: convertMealPlanFormat(mealPlan, options.duration),
     restrictions: generateRestrictions(patient, recommendations),
     recommendations: generateGeneralRecommendations(patient, recommendations),
+    ayurvedicGuidelines: {
+      constitutionFocus: patient.constitution,
+      seasonalAdaptations: getSeasonalAdaptations(patient.constitution),
+      lifestyleRecommendations: generateLifestyleRecommendations(patient),
+      herbs: getRecommendedHerbs(patient.constitution, patient.currentConditions)
+    },
+    progress: {
+      adherence: 0,
+      weightChange: 0,
+      symptomsImprovement: [],
+      notes: []
+    },
+    createdBy: 'AI Generator',
     createdAt: new Date(),
+    updatedAt: new Date(),
+    isActive: true
   }
 }
 
@@ -315,4 +336,148 @@ export const getSeasonalRecommendations = (season: "spring" | "summer" | "monsoo
     default:
       return []
   }
+}
+
+// Calculate target calories based on patient profile
+const calculateTargetCalories = (patient: Patient): number => {
+  // Basic metabolic rate calculation
+  let bmr: number
+  if (patient.gender === "male") {
+    bmr = 88.362 + (13.397 * patient.weight) + (4.799 * patient.height) - (5.677 * patient.age)
+  } else {
+    bmr = 447.593 + (9.247 * patient.weight) + (3.098 * patient.height) - (4.330 * patient.age)
+  }
+
+  // Activity factor
+  const activityFactors = {
+    "sedentary": 1.2,
+    "moderate": 1.375,
+    "active": 1.55,
+    "very-active": 1.725
+  }
+
+  return Math.round(bmr * activityFactors[patient.lifestyle.activityLevel])
+}
+
+// Get seasonal adaptations based on constitution
+const getSeasonalAdaptations = (constitution: string): string[] => {
+  const currentMonth = new Date().getMonth()
+  let season: "spring" | "summer" | "monsoon" | "autumn" | "winter"
+  
+  if (currentMonth >= 2 && currentMonth <= 4) season = "spring"
+  else if (currentMonth >= 5 && currentMonth <= 7) season = "summer"
+  else if (currentMonth >= 8 && currentMonth <= 9) season = "monsoon"
+  else if (currentMonth >= 10 && currentMonth <= 11) season = "autumn"
+  else season = "winter"
+
+  const baseRecommendations = getSeasonalRecommendations(season)
+  
+  // Add constitution-specific adaptations
+  switch (constitution) {
+    case "vata":
+      return [...baseRecommendations, "Favor warm, oily, and grounding foods", "Maintain regular meal times"]
+    case "pitta":
+      return [...baseRecommendations, "Favor cooling and sweet foods", "Avoid excessive heat and spice"]
+    case "kapha":
+      return [...baseRecommendations, "Favor light, warm, and spicy foods", "Avoid heavy and cold foods"]
+    default:
+      return baseRecommendations
+  }
+}
+
+// Generate lifestyle recommendations
+const generateLifestyleRecommendations = (patient: Patient): string[] => {
+  const recommendations = [
+    "Maintain regular meal timings",
+    "Eat in a calm and peaceful environment",
+    "Chew food thoroughly",
+    "Avoid eating when emotionally disturbed"
+  ]
+
+  // Add constitution-specific recommendations
+  switch (patient.constitution) {
+    case "vata":
+      recommendations.push("Prefer warm foods and drinks", "Establish regular routines")
+      break
+    case "pitta":
+      recommendations.push("Avoid eating when angry or stressed", "Prefer moderate temperatures")
+      break
+    case "kapha":
+      recommendations.push("Eat lighter meals", "Increase physical activity after meals")
+      break
+  }
+
+  // Add activity-level specific recommendations
+  if (patient.lifestyle.activityLevel === "sedentary") {
+    recommendations.push("Take short walks after meals", "Increase overall physical activity")
+  }
+
+  return recommendations
+}
+
+// Get recommended herbs based on constitution and conditions
+const getRecommendedHerbs = (constitution: string, conditions: string[]): string[] => {
+  const herbs: string[] = []
+
+  // Constitution-based herbs
+  switch (constitution) {
+    case "vata":
+      herbs.push("Ashwagandha", "Brahmi", "Jatamansi")
+      break
+    case "pitta":
+      herbs.push("Amalaki", "Shatavari", "Brahmi")
+      break
+    case "kapha":
+      herbs.push("Trikatu", "Guggulu", "Punarnava")
+      break
+  }
+
+  // Condition-specific herbs
+  conditions.forEach(condition => {
+    const lowerCondition = condition.toLowerCase()
+    if (lowerCondition.includes("diabetes")) {
+      herbs.push("Karela", "Methi", "Jamun")
+    } else if (lowerCondition.includes("hypertension")) {
+      herbs.push("Arjuna", "Punarnava", "Jatamansi")
+    } else if (lowerCondition.includes("digestion")) {
+      herbs.push("Hingvastak", "Trikatu", "Ajwain")
+    }
+  })
+
+  return [...new Set(herbs)] // Remove duplicates
+}
+
+// Convert GeneratedMealPlan to DietPlan.dailyMeals format
+const convertMealPlanFormat = (mealPlan: GeneratedMealPlan, duration: number): { [day: number]: any } => {
+  const dailyMeals: { [day: number]: any } = {}
+  
+  for (let day = 1; day <= duration; day++) {
+    dailyMeals[day] = {
+      breakfast: {
+        recipes: mealPlan.breakfast,
+        alternatives: [],
+        notes: "Ayurvedic breakfast recommendations"
+      },
+      lunch: {
+        recipes: mealPlan.lunch,
+        alternatives: [],
+        notes: "Main meal of the day - largest portion"
+      },
+      dinner: {
+        recipes: mealPlan.dinner,
+        alternatives: [],
+        notes: "Light and early dinner recommended"
+      }
+    }
+    
+    if (mealPlan.snacks.length > 0) {
+      dailyMeals[day].midAfternoon = {
+        recipes: mealPlan.snacks,
+        alternatives: [],
+        notes: "Light and nutritious snacks"
+      }
+    }
+  }
+  
+  return dailyMeals
 }

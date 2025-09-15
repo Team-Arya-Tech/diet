@@ -361,6 +361,11 @@ export const generateId = (): string => {
 
 // Export diet chart to different formats
 export const exportDietChartToPDF = (chart: DietChart): void => {
+  if (!chart) {
+    console.error('Cannot export: Diet chart is null or undefined')
+    return
+  }
+  
   const content = generatePDFContent(chart)
   const blob = new Blob([content], { type: 'text/plain' })
   const url = URL.createObjectURL(blob)
@@ -372,6 +377,11 @@ export const exportDietChartToPDF = (chart: DietChart): void => {
 }
 
 export const exportDietChartToCSV = (chart: DietChart): void => {
+  if (!chart) {
+    console.error('Cannot export: Diet chart is null or undefined')
+    return
+  }
+  
   let csv = "Day,Meal,Food Item,Calories,Protein(g),Carbs(g),Fat(g),Fiber(g)\n"
   
   chart.weeklyPlan.forEach(day => {
@@ -394,6 +404,11 @@ export const exportDietChartToCSV = (chart: DietChart): void => {
 }
 
 export const exportDietChartToJSON = (chart: DietChart): void => {
+  if (!chart) {
+    console.error('Cannot export: Diet chart is null or undefined')
+    return
+  }
+  
   const json = JSON.stringify(chart, null, 2)
   const blob = new Blob([json], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
@@ -406,6 +421,10 @@ export const exportDietChartToJSON = (chart: DietChart): void => {
 
 // Generate PDF content
 const generatePDFContent = (chart: DietChart): string => {
+  if (!chart) {
+    throw new Error('Diet chart cannot be null or undefined')
+  }
+  
   let content = `AYURVEDIC DIET CHART
 Chart Name: ${chart.name}
 Description: ${chart.description}
@@ -443,9 +462,91 @@ ${chart.ayurvedicGuidelines.map(guideline => `• ${guideline}`).join('\n')}
 
 // AI diet chart generation (mock for now)
 export const generateAIDietChart = async (request: AIChartRequest): Promise<DietChart> => {
-  // Import the AI service dynamically to avoid SSR issues
-  const { generateAIDietChartWithOpenAI } = await import('./ai-diet-service')
-  return generateAIDietChartWithOpenAI(request)
+  // This would integrate with your AI service
+  // For now, return a mock chart based on the request
+  
+  const foods = getAllFoodItems()
+  const compatibleFoods = foods.filter(food => 
+    food.ayurvedicProperties.constitution.includes(request.patientProfile.constitution) ||
+    food.ayurvedicProperties.constitution.includes("tridoshic")
+  )
+
+  const weeklyPlan: WeeklyMealPlan[] = []
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+  for (let i = 0; i < request.duration && i < 7; i++) {
+    const breakfastFoods = compatibleFoods.filter(f => f.mealSuitability.includes("breakfast"))
+    const lunchFoods = compatibleFoods.filter(f => f.mealSuitability.includes("lunch"))
+    const dinnerFoods = compatibleFoods.filter(f => f.mealSuitability.includes("dinner"))
+    const snackFoods = compatibleFoods.filter(f => f.mealSuitability.includes("snack"))
+
+    const dayPlan: WeeklyMealPlan = {
+      day: i + 1,
+      dayName: days[i],
+      meals: {
+        breakfast: createMealPlan(breakfastFoods.slice(0, 2)),
+        lunch: createMealPlan(lunchFoods.slice(0, 2)),
+        dinner: createMealPlan(dinnerFoods.slice(0, 2)),
+        snacks: createMealPlan(snackFoods.slice(0, 1))
+      },
+      dailyCalories: 0,
+      dailyNutrition: {
+        calories: 0,
+        protein: 0,
+        carbohydrates: 0,
+        fat: 0,
+        fiber: 0,
+        sugar: 0,
+        sodium: 0,
+        potassium: 0,
+        calcium: 0,
+        iron: 0,
+        vitamins: {}
+      }
+    }
+
+    // Calculate daily totals
+    const allMeals = [dayPlan.meals.breakfast, dayPlan.meals.lunch, dayPlan.meals.dinner, dayPlan.meals.snacks]
+    dayPlan.dailyCalories = allMeals.reduce((sum, meal) => sum + meal.totalCalories, 0)
+    
+    weeklyPlan.push(dayPlan)
+  }
+
+  const chart: DietChart = {
+    id: generateId(),
+    name: `AI Generated Diet Chart - ${request.patientProfile.constitution}`,
+    description: `Personalized diet plan for ${request.patientProfile.constitution} constitution`,
+    patientId: "ai-patient",
+    startDate: new Date(),
+    endDate: new Date(Date.now() + request.duration * 24 * 60 * 60 * 1000),
+    weeklyPlan,
+    totalCalories: request.patientProfile.targetCalories,
+    nutritionalSummary: {
+      calories: request.patientProfile.targetCalories,
+      protein: Math.round(request.patientProfile.targetCalories * 0.15 / 4),
+      carbohydrates: Math.round(request.patientProfile.targetCalories * 0.55 / 4),
+      fat: Math.round(request.patientProfile.targetCalories * 0.30 / 9),
+      fiber: 25,
+      sugar: 50,
+      sodium: 2300,
+      potassium: 3500,
+      calcium: 1000,
+      iron: 15,
+      vitamins: {}
+    },
+    ayurvedicGuidelines: [
+      `Suitable for ${request.patientProfile.constitution} constitution`,
+      "Eat meals at regular times",
+      "Chew food slowly and mindfully",
+      "Drink warm water throughout the day",
+      "Avoid overeating"
+    ],
+    createdAt: new Date(),
+    createdBy: "AI System",
+    isAIGenerated: true
+  }
+
+  return chart
 }
 
 // Helper function to create meal plan
@@ -456,7 +557,7 @@ const createMealPlan = (foods: FoodItem[]): MealPlan => {
     quantity: 1,
     unit: "serving",
     calories: food.nutritionalInfo.caloriesPerServing,
-    ayurvedicScore: 85
+    ayurvedicScore: 0.8 // Mock score
   }))
 
   const totalCalories = selectedFoods.reduce((sum, food) => sum + food.calories, 0)

@@ -25,6 +25,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { getPatients, getDietPlans, getConsultations, getDashboardStats } from "@/lib/database"
+import { exportDietChartToPDF, exportProgressReportToPDF } from "@/lib/pdf-export"
 import type { Patient, DietPlan, Consultation } from "@/lib/database"
 
 interface PatientProgressReport {
@@ -172,13 +173,81 @@ export default function ReportsPage() {
     })
   }
 
-  const exportReport = (format: "pdf" | "csv") => {
-    // Mock export functionality
-    const filename = `ayurvedic-diet-report-${new Date().toISOString().split('T')[0]}.${format}`
-    console.log(`Exporting report as ${filename}`)
+  const exportReport = async (format: "pdf" | "csv") => {
+    try {
+      if (format === "pdf") {
+        // Export comprehensive progress report
+        const patients = getPatients()
+        const dietPlans = getDietPlans()
+        
+        if (selectedPatient === "all") {
+          // Export overall progress report
+          await exportProgressReportToPDF(patients, dietPlans, timeRange)
+        } else {
+          // Export specific patient diet chart
+          const patient = patients.find(p => p.id === selectedPatient)
+          const dietPlan = dietPlans.find(plan => plan.patientId === selectedPatient && plan.isActive)
+          
+          if (patient && dietPlan) {
+            await exportDietChartToPDF(patient, dietPlan, {
+              includeNutritionalAnalysis: true,
+              includeAyurvedicGuidelines: true,
+              includeProgressCharts: true,
+              includeRecommendations: true,
+              language: language
+            })
+          } else {
+            alert("No active diet plan found for selected patient")
+          }
+        }
+      } else if (format === "csv") {
+        // Generate CSV export
+        const filename = `ayurvedic-diet-report-${new Date().toISOString().split('T')[0]}.csv`
+        
+        const csvContent = generateCSVReport()
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+        const link = document.createElement('a')
+        
+        if (link.download !== undefined) {
+          const url = URL.createObjectURL(blob)
+          link.setAttribute('href', url)
+          link.setAttribute('download', filename)
+          link.style.visibility = 'hidden'
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+        }
+      }
+    } catch (error) {
+      console.error("Error exporting report:", error)
+      alert("Error generating report. Please try again.")
+    }
+  }
+
+  const generateCSVReport = (): string => {
+    const patients = getPatients()
+    const dietPlans = getDietPlans()
     
-    // In a real implementation, this would generate and download the file
-    alert(`Report exported as ${filename}`)
+    let csvContent = "Patient Name,Constitution,Age,Current Conditions,Diet Plan,Plan Status,Adherence,Weight Change,Last Updated\n"
+    
+    patients.forEach(patient => {
+      const activePlan = dietPlans.find(plan => plan.patientId === patient.id && plan.isActive)
+      const row = [
+        patient.name,
+        patient.constitution,
+        patient.age.toString(),
+        patient.currentConditions.join('; '),
+        activePlan?.planName || 'No active plan',
+        activePlan ? 'Active' : 'Inactive',
+        activePlan ? `${activePlan.progress.adherence}%` : 'N/A',
+        activePlan ? `${activePlan.progress.weightChange} kg` : 'N/A',
+        patient.updatedAt.toLocaleDateString()
+      ].map(field => `"${field.replace(/"/g, '""')}"`)
+      
+      csvContent += row.join(',') + '\n'
+    })
+    
+    return csvContent
   }
 
   const content = {

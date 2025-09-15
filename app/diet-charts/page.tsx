@@ -182,21 +182,19 @@ export default function DietChartsPage() {
     }
     
     if (Object.values(selectedFoods).some(meals => meals.length > 0)) {
-      const chartName = `${selectedPatient.name} - Diet Chart ${new Date().toLocaleDateString()}`
-      // Create a simple diet chart structure
-      const simpleDietChart = {
-        name: chartName,
-        patientId: selectedPatient.id,
-        patientName: selectedPatient.name,
-        selectedFoods,
-        totalCalories: dailyTotals.calories,
-        targetCalories: calculateTargetCalories(selectedPatient),
-        constitution: selectedPatient.constitution,
-        createdAt: new Date()
-      }
-      // In a real app, you'd save this to a database
-      console.log("Saving diet chart:", simpleDietChart)
-      setSavedCharts(prev => [...prev, simpleDietChart as any])
+      // Create a proper DietChart object
+      const dietChart = createDietChartFromSelectedFoods(selectedPatient, selectedFoods)
+      
+      // Set as current diet chart to enable export buttons
+      setCurrentDietChart(dietChart)
+      
+      // Save to saved charts list
+      setSavedCharts(prev => [...prev, dietChart])
+      
+      console.log("Saving diet chart:", dietChart)
+      alert("Diet chart saved successfully! Export buttons are now enabled.")
+    } else {
+      alert("Please add some foods to the diet chart before saving.")
     }
   }
 
@@ -206,7 +204,98 @@ export default function DietChartsPage() {
     return calculateNutritionalSummary(allFoods)
   }
 
+  // Create a proper DietChart object from manually selected foods
+  const createDietChartFromSelectedFoods = (patient: Patient, foods: typeof selectedFoods): DietChart => {
+    const chartName = `${patient.name} - Diet Chart ${new Date().toLocaleDateString()}`
+    const chartId = `chart_${Date.now()}`
+    
+    // Helper function to create MealPlan from selected foods
+    const createMealPlan = (mealFoods: SelectedFood[]): MealPlan => {
+      const totalCalories = mealFoods.reduce((sum, food) => sum + (food.calories || 0), 0)
+      const nutritionSummary = calculateNutritionalSummary(mealFoods)
+      
+      return {
+        items: mealFoods,
+        totalCalories,
+        nutrition: nutritionSummary,
+        ayurvedicBalance: {
+          doshaEffect: { vata: 0, pitta: 0, kapha: 0 },
+          rasaBalance: ["Sweet", "Sour", "Salty"],
+          viryaEffect: "Neutral"
+        }
+      }
+    }
+    
+    // Convert selected foods to the expected format
+    const weeklyPlan = [{
+      day: 1,
+      dayName: 'Daily Plan',
+      meals: {
+        breakfast: createMealPlan(foods.breakfast),
+        lunch: createMealPlan(foods.lunch),
+        dinner: createMealPlan(foods.dinner),
+        snacks: createMealPlan(foods.snacks)
+      },
+      dailyCalories: dailyTotals.calories,
+      dailyNutrition: dailyTotals
+    }]
+
+    return {
+      id: chartId,
+      name: chartName,
+      description: `Manually created diet chart for ${patient.constitution} constitution`,
+      patientId: patient.id,
+      startDate: new Date(),
+      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+      weeklyPlan,
+      totalCalories: dailyTotals.calories,
+      nutritionalSummary: dailyTotals,
+      ayurvedicGuidelines: [
+        `Suitable for ${patient.constitution} constitution`,
+        'Follow regular meal timings',
+        'Eat in a peaceful environment'
+      ],
+      createdAt: new Date(),
+      createdBy: 'Manual Selection',
+      isAIGenerated: false
+    }
+  }
+
   const dailyTotals = calculateDailyTotals()
+
+  // Check if export should be enabled (either saved chart or foods selected)
+  const canExport = currentDietChart || (selectedPatient && Object.values(selectedFoods).some(meals => meals.length > 0))
+
+  // Handle export functions - create chart on-the-fly if needed
+  const handleExportPDF = () => {
+    let chartToExport = currentDietChart
+    if (!chartToExport && selectedPatient && Object.values(selectedFoods).some(meals => meals.length > 0)) {
+      chartToExport = createDietChartFromSelectedFoods(selectedPatient, selectedFoods)
+    }
+    if (chartToExport) {
+      exportDietChartToPDF(chartToExport)
+    }
+  }
+
+  const handleExportCSV = () => {
+    let chartToExport = currentDietChart
+    if (!chartToExport && selectedPatient && Object.values(selectedFoods).some(meals => meals.length > 0)) {
+      chartToExport = createDietChartFromSelectedFoods(selectedPatient, selectedFoods)
+    }
+    if (chartToExport) {
+      exportDietChartToCSV(chartToExport)
+    }
+  }
+
+  const handleExportJSON = () => {
+    let chartToExport = currentDietChart
+    if (!chartToExport && selectedPatient && Object.values(selectedFoods).some(meals => meals.length > 0)) {
+      chartToExport = createDietChartFromSelectedFoods(selectedPatient, selectedFoods)
+    }
+    if (chartToExport) {
+      exportDietChartToJSON(chartToExport)
+    }
+  }
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -583,17 +672,36 @@ export default function DietChartsPage() {
 
               {/* Actions */}
               <div className="flex flex-col gap-2">
-                <Button onClick={handleSaveDietChart} className="w-full">
+                <Button 
+                  onClick={handleSaveDietChart} 
+                  className="w-full"
+                  disabled={!selectedPatient || !Object.values(selectedFoods).some(meals => meals.length > 0)}
+                >
                   Save Diet Chart
                 </Button>
                 <div className="grid grid-cols-3 gap-2">
-                  <Button variant="outline" size="sm" onClick={() => exportDietChartToPDF(currentDietChart!)}>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    disabled={!canExport}
+                    onClick={handleExportPDF}
+                  >
                     PDF
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => exportDietChartToCSV(currentDietChart!)}>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    disabled={!canExport}
+                    onClick={handleExportCSV}
+                  >
                     CSV
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => exportDietChartToJSON(currentDietChart!)}>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    disabled={!canExport}
+                    onClick={handleExportJSON}
+                  >
                     JSON
                   </Button>
                 </div>
