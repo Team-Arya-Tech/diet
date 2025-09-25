@@ -64,12 +64,12 @@ export class DietChartPDFExporter {
     this.doc.setTextColor(0, 0, 0)
     this.doc.setFontSize(16)
     this.doc.setFont('helvetica', 'bold')
-    this.doc.text(clinicInfo?.name || 'Ayurvedic Diet Management Center', 40, 18)
+    this.doc.text(clinicInfo?.name || 'AhaarWISE - Ayurvedic Diet Intelligence System', 40, 18)
 
     this.doc.setFontSize(10)
     this.doc.setFont('helvetica', 'normal')
     this.doc.text(clinicInfo?.address || 'Professional Ayurvedic Healthcare', 40, 24)
-    this.doc.text(`Phone: ${clinicInfo?.phone || '+91-XXXX-XXXXXX'} | Email: ${clinicInfo?.email || 'info@ayurdiet.com'}`, 40, 29)
+    this.doc.text(`Phone: ${clinicInfo?.phone || '+91-XXXX-XXXXXX'} | Email: ${clinicInfo?.email || 'info@ahaarwise.com'}`, 40, 29)
     
     if (clinicInfo?.license) {
       this.doc.text(`License: ${clinicInfo.license}`, 40, 34)
@@ -78,7 +78,7 @@ export class DietChartPDFExporter {
     // Date and document type
     this.doc.setFont('helvetica', 'bold')
     this.doc.setFontSize(12)
-    this.doc.text('AYURVEDIC DIET CHART REPORT', this.pageWidth - 10, 18, { align: 'right' })
+    this.doc.text('AHAARWISE DIET CHART REPORT', this.pageWidth - 10, 18, { align: 'right' })
     this.doc.setFont('helvetica', 'normal')
     this.doc.setFontSize(10)
     this.doc.text(`Date: ${consultationDate.toLocaleDateString('en-IN')}`, this.pageWidth - 10, 24, { align: 'right' })
@@ -591,7 +591,7 @@ export class DietChartPDFExporter {
         name: 'Ayurvedic Diet Management Center',
         address: 'Professional Ayurvedic Healthcare Center',
         phone: '+91-XXXX-XXXXXX',
-        email: 'info@ayurdiet.com'
+        email: 'info@ahaarwise.com'
       }
     }
 
@@ -611,10 +611,10 @@ export const exportDietChartToPDF = async (
     consultationDate: new Date(),
     practitionerName: 'Dr. Ayurvedic Practitioner',
     clinicInfo: {
-      name: 'Ayurvedic Diet Management System',
+      name: 'AhaarWISE - Ayurvedic Diet Intelligence System',
       address: 'Digital Healthcare Platform',
       phone: '+91-XXXX-XXXXXX',
-      email: 'info@ayurdiet.com',
+      email: 'info@ahaarwise.com',
       license: 'AYUR-LIC-2024-001'
     }
   }
@@ -643,7 +643,7 @@ export const exportProgressReportToPDF = async (
   // Header
   doc.setFontSize(16)
   doc.setFont('helvetica', 'bold')
-  doc.text('AYURVEDIC DIET MANAGEMENT - PROGRESS REPORT', 105, 20, { align: 'center' })
+  doc.text('AHAARWISE - AYURVEDIC DIET PROGRESS REPORT', 105, 20, { align: 'center' })
   
   doc.setFontSize(10)
   doc.setFont('helvetica', 'normal')

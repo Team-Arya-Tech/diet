@@ -425,7 +425,8 @@ const generatePDFContent = (chart: DietChart): string => {
     throw new Error('Diet chart cannot be null or undefined')
   }
   
-  let content = `AYURVEDIC DIET CHART
+  let content = `AHAARWISE - AYURVEDIC DIET INTELLIGENCE SYSTEM
+===============================================
 Chart Name: ${chart.name}
 Description: ${chart.description}
 Duration: ${chart.startDate.toDateString()} to ${chart.endDate.toDateString()}

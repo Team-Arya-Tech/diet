@@ -341,7 +341,7 @@ export default function ReportsPage() {
             <div className="flex items-center space-x-2">
               <Link href="/" className="flex items-center space-x-2">
                 <Activity className="h-8 w-8 text-primary" />
-                <h1 className="text-2xl font-bold text-primary">AyurDiet</h1>
+                <h1 className="text-2xl font-bold text-primary">AhaarWISE</h1>
               </Link>
             </div>
             <div className="flex items-center space-x-4">

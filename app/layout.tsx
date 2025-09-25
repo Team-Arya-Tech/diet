@@ -17,7 +17,7 @@ const notoSansDevanagari = Noto_Sans_Devanagari({
 })
 
 export const metadata: Metadata = {
-  title: "Ayurvedic Diet Management System",
+  title: "AhaarWISE - Ayurvedic Diet Intelligence System",
   description: "Comprehensive patient management and diet planning system for Ayurvedic practitioners",
   generator: "v0.app",
 }

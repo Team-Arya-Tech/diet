@@ -393,7 +393,7 @@ export const exportRecommendationToJSON = (report: RecommendationReport): void =
 
 // Generate PDF content (as text for now)
 const generatePDFContent = (report: RecommendationReport): string => {
-  let content = `AYURVEDIC CATEGORY RECOMMENDATIONS REPORT
+  let content = `AHAARWISE - AYURVEDIC CATEGORY RECOMMENDATIONS REPORT
 Generated for: ${report.userName}
 Date: ${report.generatedDate.toLocaleDateString()}
 

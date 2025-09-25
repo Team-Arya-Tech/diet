@@ -117,7 +117,7 @@ export default function LoginPage() {
                 <Activity className="h-10 w-10 text-primary" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">AyurDiet</h1>
+                <h1 className="text-3xl font-bold text-gray-900">AhaarWISE</h1>
                 <p className="text-gray-600">Modern Ayurvedic Diet Management</p>
               </div>
             </div>
