@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth, withAuth } from "@/components/auth-context"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -20,7 +22,9 @@ import {
   UserPlus,
   Zap,
   BarChart3,
-  Leaf
+  Leaf,
+  User as UserIcon,
+  LogOut
 } from "lucide-react"
 import Link from "next/link"
 import { 
@@ -31,7 +35,11 @@ import {
   type PatientSummary 
 } from "@/lib/database"
 
-export default function DashboardPage() {
+function DashboardPage() {
+  const { user, loading, logout } = useAuth()
+  const router = useRouter()
+  
+  // All state declarations must come before any conditional returns
   const [stats, setStats] = useState<DashboardStats>({
     totalPatients: 0,
     activePatients: 0,
@@ -53,7 +61,8 @@ export default function DashboardPage() {
     "Balance your doshas with seasonal fruits and vegetables."
   ];
   const [greeting, setGreeting] = useState("");
-
+  
+  // Initialize data and greeting
   useEffect(() => {
     initializeSampleData();
     setStats(getDashboardStats());
@@ -61,6 +70,27 @@ export default function DashboardPage() {
     // Pick a random greeting
     setGreeting(greetings[Math.floor(Math.random() * greetings.length)]);
   }, []);
+  
+  // Redirect to login if not authenticated and not loading
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/auth/login')
+    }
+  }, [user, loading, router])
+
+  // Show loading spinner while checking authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
+
+  // Don't render if user is not authenticated
+  if (!user) {
+    return null
+  }
 
   const statCards = [
     {
@@ -151,6 +181,50 @@ export default function DashboardPage() {
             <span className="text-sm text-muted-foreground">Your Ayurveda dashboard is ready.</span>
           </div>
         </div>
+
+        {/* User Profile Section */}
+        <Card className="mb-8 bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200 shadow-lg">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <Avatar className="h-16 w-16 border-4 border-white shadow-lg">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-lg font-bold">
+                    {user.fullName?.split(' ').map(n => n[0]).join('') || user.username.slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900">{user.fullName || user.username}</h3>
+                  <p className="text-amber-700 font-medium capitalize">{user.role}</p>
+                  <p className="text-sm text-gray-600">{user.email || `@${user.username}`}</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Button
+                  variant="outline"
+                  asChild
+                  className="border-amber-300 hover:bg-amber-100"
+                >
+                  <Link href="/profile">
+                    <UserIcon className="h-4 w-4 mr-2" />
+                    View Profile
+                  </Link>
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (confirm('Are you sure you want to logout?')) {
+                      logout()
+                    }
+                  }}
+                  variant="outline"
+                  className="border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Animated Ayurveda leaf divider */}
         <div className="w-full flex justify-center mb-10">
@@ -447,3 +521,5 @@ export default function DashboardPage() {
     </div>
   )
 }
+
+export default DashboardPage

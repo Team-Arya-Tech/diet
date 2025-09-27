@@ -925,5 +925,566 @@
     ],
     "source": "traditional",
     "region": "North India"
+  },
+  {
+    "id": "recipe-002",
+    "name": "Chickpea Curry",
+    "description": "A protein-rich, spicy and tangy curry made with chickpeas and authentic Indian spices.",
+    "cuisine": "Ayurvedic",
+    "category": "lunch",
+    "ingredients": [
+      {
+        "id": "i1",
+        "name": "chickpeas",
+        "quantity": 1,
+        "unit": "cup",
+        "ayurvedicRole": "main"
+      },
+      {
+        "id": "i2",
+        "name": "onion",
+        "quantity": 1,
+        "unit": "large",
+        "ayurvedicRole": "base"
+      },
+      {
+        "id": "i3",
+        "name": "tomatoes",
+        "quantity": 2,
+        "unit": "medium",
+        "ayurvedicRole": "base"
+      },
+      {
+        "id": "i4",
+        "name": "ginger",
+        "quantity": 1,
+        "unit": "inch",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i5",
+        "name": "garlic",
+        "quantity": 2,
+        "unit": "cloves",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i6",
+        "name": "turmeric powder",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i7",
+        "name": "red chilli powder",
+        "quantity": 1,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i8",
+        "name": "garam masala",
+        "quantity": 1,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i9",
+        "name": "coriander",
+        "quantity": 1,
+        "unit": "handful",
+        "ayurvedicRole": "garnish"
+      },
+      {
+        "id": "i10",
+        "name": "water",
+        "quantity": 2,
+        "unit": "cups"
+      }
+    ],
+    "cookingSteps": [
+      {
+        "stepNumber": 1,
+        "instruction": "Soak chickpeas overnight and rinse them in the morning.",
+        "duration": 720
+      },
+      {
+        "stepNumber": 2,
+        "instruction": "Sauté onions, ginger, and garlic in a pot until golden.",
+        "duration": 10,
+        "temperature": "medium",
+        "ayurvedicTip": "Sautéing onions until golden enhances their sweetness and balances the pungency of the spices."
+      },
+      {
+        "stepNumber": 3,
+        "instruction": "Add tomatoes and spices, cook until tomatoes are soft.",
+        "duration": 10,
+        "temperature": "medium"
+      },
+      {
+        "stepNumber": 4,
+        "instruction": "Add chickpeas and water, simmer until chickpeas are soft.",
+        "duration": 30,
+        "temperature": "low",
+        "ayurvedicTip": "Simmering on a low flame helps to infuse the flavors and make the chickpeas more digestible."
+      },
+      {
+        "stepNumber": 5,
+        "instruction": "Garnish with fresh coriander and serve hot.",
+        "duration": 2
+      }
+    ],
+    "prepTime": 15,
+    "cookTime": 50,
+    "totalTime": 65,
+    "servings": 4,
+    "difficulty": "medium",
+    "skillsRequired": [
+      "Chopping",
+      "Sautéing",
+      "Simmering"
+    ],
+    "ayurvedicProperties": {
+      "primaryRasa": [
+        "pungent"
+      ],
+      "secondaryRasa": [
+        "sweet",
+        "sour"
+      ],
+      "virya": "heating",
+      "vipaka": "pungent",
+      "doshaEffect": {
+        "vata": "balances",
+        "pitta": "increases",
+        "kapha": "decreases"
+      },
+      "constitution": [
+        "Vata",
+        "Pitta",
+        "Kapha"
+      ],
+      "season": [
+        "Autumn",
+        "Winter"
+      ],
+      "timeOfDay": [
+        "Noon"
+      ],
+      "digestibility": "moderate"
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 220,
+      "protein": 12,
+      "carbohydrates": 30,
+      "fat": 6,
+      "fiber": 8,
+      "sugar": 5,
+      "sodium": 20,
+      "potassium": 300,
+      "calcium": 60,
+      "iron": 4,
+      "vitamins": {
+        "Vitamin C": 15,
+        "Vitamin A": 500
+      }
+    },
+    "ayurvedicGuidelines": [
+      {
+        "principle": "Agni",
+        "description": "Enhances digestive fire",
+        "benefits": [
+          "Improves digestion",
+          "Aids nutrient absorption"
+        ],
+        "application": "Eat warm and freshly cooked."
+      },
+      {
+        "principle": "Ojas",
+        "description": "Nourishes the body",
+        "benefits": [
+          "Promotes strength",
+          "Boosts immunity"
+        ],
+        "application": "Consume as a part of a balanced diet."
+      }
+    ],
+    "tags": [
+      "High protein",
+      "Lunch",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "healthBenefits": [
+      "High in protein",
+      "Boosts digestive health",
+      "Rich in vitamins"
+    ],
+    "source": "traditional",
+    "region": "North India"
+  },
+  {
+    "id": "recipe-003",
+    "name": "Quinoa Pulao",
+    "description": "A nutritious and delicious dish made with cooked quinoa, mixed vegetables, and Indian spices.",
+    "cuisine": "Ayurvedic",
+    "category": "lunch",
+    "ingredients": [
+      {
+        "id": "i1",
+        "name": "quinoa",
+        "quantity": 1,
+        "unit": "cup",
+        "ayurvedicRole": "main"
+      },
+      {
+        "id": "i2",
+        "name": "mixed vegetables",
+        "quantity": 2,
+        "unit": "cups",
+        "ayurvedicRole": "main"
+      },
+      {
+        "id": "i3",
+        "name": "cumin seeds",
+        "quantity": 1,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i4",
+        "name": "turmeric powder",
+        "quantity": 1,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i5",
+        "name": "coriander powder",
+        "quantity": 1,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i6",
+        "name": "garam masala",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i7",
+        "name": "lemon juice",
+        "quantity": 1,
+        "unit": "tbsp",
+        "ayurvedicRole": "garnish"
+      },
+      {
+        "id": "i8",
+        "name": "water",
+        "quantity": 2,
+        "unit": "cups"
+      }
+    ],
+    "cookingSteps": [
+      {
+        "stepNumber": 1,
+        "instruction": "Rinse quinoa under cold water until the water runs clear.",
+        "duration": 5
+      },
+      {
+        "stepNumber": 2,
+        "instruction": "In a pan, sauté cumin seeds until they splutter.",
+        "duration": 2,
+        "temperature": "medium",
+        "ayurvedicTip": "Sautéing cumin seeds enhances their flavor and aids digestion."
+      },
+      {
+        "stepNumber": 3,
+        "instruction": "Add mixed vegetables and spices, cook until vegetables are tender.",
+        "duration": 10,
+        "temperature": "medium"
+      },
+      {
+        "stepNumber": 4,
+        "instruction": "Add quinoa and water, cover and simmer until quinoa is cooked.",
+        "duration": 15,
+        "temperature": "low",
+        "ayurvedicTip": "Cooking quinoa on a low flame retains its nutrients and makes it easier to digest."
+      },
+      {
+        "stepNumber": 5,
+        "instruction": "Drizzle lemon juice and serve hot.",
+        "duration": 2
+      }
+    ],
+    "prepTime": 10,
+    "cookTime": 30,
+    "totalTime": 40,
+    "servings": 4,
+    "difficulty": "easy",
+    "skillsRequired": [
+      "Sautéing",
+      "Simmering"
+    ],
+    "ayurvedicProperties": {
+      "primaryRasa": [
+        "sweet"
+      ],
+      "secondaryRasa": [
+        "pungent"
+      ],
+      "virya": "neutral",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balances",
+        "pitta": "balances",
+        "kapha": "balances"
+      },
+      "constitution": [
+        "Vata",
+        "Pitta",
+        "Kapha"
+      ],
+      "season": [
+        "All"
+      ],
+      "timeOfDay": [
+        "Noon"
+      ],
+      "digestibility": "easy"
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 200,
+      "protein": 8,
+      "carbohydrates": 35,
+      "fat": 3,
+      "fiber": 5,
+      "sugar": 4,
+      "sodium": 10,
+      "potassium": 300,
+      "calcium": 20,
+      "iron": 3,
+      "vitamins": {
+        "Vitamin C": 30,
+        "Vitamin A": 1000
+      }
+    },
+    "ayurvedicGuidelines": [
+      {
+        "principle": "Agni",
+        "description": "Enhances digestive fire",
+        "benefits": [
+          "Improves digestion",
+          "Aids nutrient absorption"
+        ],
+        "application": "Eat warm and freshly cooked."
+      },
+      {
+        "principle": "Ojas",
+        "description": "Nourishes the body",
+        "benefits": [
+          "Promotes strength",
+          "Boosts immunity"
+        ],
+        "application": "Consume as a part of a balanced diet."
+      }
+    ],
+    "tags": [
+      "High protein",
+      "Lunch",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "healthBenefits": [
+      "High in protein",
+      "Boosts digestive health",
+      "Rich in vitamins"
+    ],
+    "source": "modern",
+    "region": "Global"
+  },
+  {
+    "id": "recipe-004",
+    "name": "Dal Tadka",
+    "description": "A popular Indian dish made with protein-rich lentils and aromatic spices, topped with a flavorful tadka (tempering).",
+    "cuisine": "Ayurvedic",
+    "category": "lunch",
+    "ingredients": [
+      {
+        "id": "i1",
+        "name": "yellow lentils",
+        "quantity": 1,
+        "unit": "cup",
+        "ayurvedicRole": "main"
+      },
+      {
+        "id": "i2",
+        "name": "onion",
+        "quantity": 1,
+        "unit": "small",
+        "ayurvedicRole": "base"
+      },
+      {
+        "id": "i3",
+        "name": "tomato",
+        "quantity": 1,
+        "unit": "medium",
+        "ayurvedicRole": "base"
+      },
+      {
+        "id": "i4",
+        "name": "cumin seeds",
+        "quantity": 1,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i5",
+        "name": "turmeric powder",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i6",
+        "name": "asafetida",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i7",
+        "name": "ghee",
+        "quantity": 1,
+        "unit": "tbsp",
+        "ayurvedicRole": "garnish"
+      },
+      {
+        "id": "i8",
+        "name": "water",
+        "quantity": 3,
+        "unit": "cups"
+      }
+    ],
+    "cookingSteps": [
+      {
+        "stepNumber": 1,
+        "instruction": "Rinse lentils under cold water until the water runs clear.",
+        "duration": 5
+      },
+      {
+        "stepNumber": 2,
+        "instruction": "In a pot, add lentils, water, turmeric, and salt. Simmer until lentils are soft.",
+        "duration": 30,
+        "temperature": "medium",
+        "ayurvedicTip": "Cooking lentils until they are soft aids digestion."
+      },
+      {
+        "stepNumber": 3,
+        "instruction": "In a separate pan, heat ghee and add cumin seeds and asafetida. Sauté until cumin seeds splutter.",
+        "duration": 2,
+        "temperature": "medium",
+        "ayurvedicTip": "Tempering spices in ghee enhances their flavor and aids digestion."
+      },
+      {
+        "stepNumber": 4,
+        "instruction": "Add onions and tomatoes to the pan, cook until soft.",
+        "duration": 10,
+        "temperature": "medium"
+      },
+      {
+        "stepNumber": 5,
+        "instruction": "Add this mixture to the cooked lentils, stir well and serve hot.",
+        "duration": 5
+      }
+    ],
+    "prepTime": 10,
+    "cookTime": 45,
+    "totalTime": 55,
+    "servings": 4,
+    "difficulty": "medium",
+    "skillsRequired": [
+      "Sautéing",
+      "Simmering"
+    ],
+    "ayurvedicProperties": {
+      "primaryRasa": [
+        "sweet",
+        "sour"
+      ],
+      "secondaryRasa": [
+        "pungent"
+      ],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balances",
+        "pitta": "increases",
+        "kapha": "decreases"
+      },
+      "constitution": [
+        "Vata",
+        "Pitta",
+        "Kapha"
+      ],
+      "season": [
+        "All"
+      ],
+      "timeOfDay": [
+        "Noon"
+      ],
+      "digestibility": "easy"
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 210,
+      "protein": 11,
+      "carbohydrates": 30,
+      "fat": 5,
+      "fiber": 7,
+      "sugar": 3,
+      "sodium": 10,
+      "potassium": 300,
+      "calcium": 30,
+      "iron": 3,
+      "vitamins": {
+        "Vitamin C": 15,
+        "Vitamin A": 500
+      }
+    },
+    "ayurvedicGuidelines": [
+      {
+        "principle": "Agni",
+        "description": "Enhances digestive fire",
+        "benefits": [
+          "Improves digestion",
+          "Aids nutrient absorption"
+        ],
+        "application": "Eat warm and freshly cooked."
+      },
+      {
+        "principle": "Ojas",
+        "description": "Nourishes the body",
+        "benefits": [
+          "Promotes strength",
+          "Boosts immunity"
+        ],
+        "application": "Consume as a part of a balanced diet."
+      }
+    ],
+    "tags": [
+      "High protein",
+      "Lunch",
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "healthBenefits": [
+      "High in protein",
+      "Boosts digestive health",
+      "Rich in vitamins"
+    ],
+    "source": "traditional",
+    "region": "North India"
   }
 ]

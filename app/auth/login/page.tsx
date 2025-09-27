@@ -2,79 +2,193 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Activity, Eye, EyeOff, Shield, Lock, User, Languages } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Activity, Eye, EyeOff, Shield, Lock, User, Languages, UserPlus } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/components/auth-context"
 
-interface LoginCredentials {
+interface SignUpData {
   username: string
+  email: string
   password: string
-  role: "admin" | "practitioner" | "assistant"
+  confirmPassword: string
+  role: "practitioner" | "assistant"
+  fullName: string
 }
 
-// Mock user database - in a real app, this would be in a backend
-const users: LoginCredentials[] = [
-  { username: "admin", password: "admin123", role: "admin" },
-  { username: "doctor", password: "doctor123", role: "practitioner" },
-  { username: "assistant", password: "assist123", role: "assistant" }
-]
+const registerUser = async (userData: SignUpData) => {
+  const response = await fetch('/api/auth/signup', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
+  })
+  
+  const data = await response.json()
+  
+  if (!response.ok) {
+    throw new Error(data.error || 'Registration failed')
+  }
+  
+  return data
+}
 
-export default function LoginPage() {
+export default function AuthPage() {
+  const { login: authLogin, user, loading } = useAuth()
+  const router = useRouter()
+
+  // Redirect to home if already authenticated
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/')
+    }
+  }, [user, loading, router])
+  
+  // Login form state
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
   const [language, setLanguage] = useState<"en" | "hi">("en")
-  const router = useRouter()
+  
+  // Sign up form state
+  const [signUpData, setSignUpData] = useState<SignUpData>({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "practitioner",
+    fullName: ""
+  })
+  const [showSignUpPassword, setShowSignUpPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [signUpLoading, setSignUpLoading] = useState(false)
+  const [activeTab, setActiveTab] = useState("signin")
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError("")
+    setSuccess("")
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    // Check credentials
-    const user = users.find(u => u.username === username && u.password === password)
-    
-    if (user) {
-      // Store user session (in a real app, use secure tokens)
-      if (typeof window !== "undefined") {
-        localStorage.setItem("ayurvedic_user", JSON.stringify({
-          username: user.username,
-          role: user.role,
-          loginTime: new Date().toISOString()
-        }))
-      }
+    try {
+      await authLogin(username, password)
       
-      // Redirect to dashboard
-      router.push("/")
-    } else {
-      setError(language === "en" ? "Invalid username or password" : "गलत उपयोगकर्ता नाम या पासवर्ड")
+      setSuccess(language === "en" ? "Login successful! Redirecting..." : "लॉगिन सफल! पुनर्निर्देशित कर रहे हैं...")
+      
+      // Redirect to dashboard after a brief delay
+      setTimeout(() => {
+        router.push("/")
+      }, 1500)
+      
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(language === "en" ? err.message : "गलत उपयोगकर्ता नाम या पासवर्ड")
+      } else {
+        setError(language === "en" ? "Login failed. Please try again." : "लॉगिन असफल। कृपया पुनः प्रयास करें।")
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSignUpLoading(true)
+    setError("")
+    setSuccess("")
+
+    // Validate passwords match
+    if (signUpData.password !== signUpData.confirmPassword) {
+      setError(language === "en" ? "Passwords do not match" : "पासवर्ड मेल नहीं खाते")
+      setSignUpLoading(false)
+      return
     }
 
-    setIsLoading(false)
+    // Validate password strength
+    if (signUpData.password.length < 6) {
+      setError(language === "en" ? "Password must be at least 6 characters long" : "पासवर्ड कम से कम 6 अक्षर लंबा होना चाहिए")
+      setSignUpLoading(false)
+      return
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(signUpData.email)) {
+      setError(language === "en" ? "Please enter a valid email address" : "कृपया एक वैध ईमेल पता दर्ज करें")
+      setSignUpLoading(false)
+      return
+    }
+
+    try {
+      const result = await registerUser(signUpData)
+      setSuccess(language === "en" ? "Account created successfully! Please sign in." : "खाता सफलतापूर्वक बनाया गया! कृपया साइन इन करें।")
+      
+      // Store username to pre-fill login form
+      const newUsername = signUpData.username
+      
+      // Reset form
+      setSignUpData({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        role: "practitioner",
+        fullName: ""
+      })
+      
+      // Switch to sign-in tab after successful registration
+      setTimeout(() => {
+        setActiveTab("signin")
+        setUsername(newUsername) // Pre-fill username for convenience
+        setSuccess("") // Clear success message
+      }, 2000)
+      
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(language === "en" ? err.message : 
+          err.message.includes("Username") ? "उपयोगकर्ता नाम पहले से मौजूद है" :
+          err.message.includes("Email") ? "ईमेल पहले से मौजूद है" :
+          "पंजीकरण में त्रुटि")
+      } else {
+        setError(language === "en" ? "Registration failed. Please try again." : "पंजीकरण असफल। कृपया पुनः प्रयास करें।")
+      }
+    } finally {
+      setSignUpLoading(false)
+    }
   }
 
   const content = {
     en: {
       title: "Welcome Back",
       subtitle: "Sign in to your Ayurvedic Diet Management account",
+      createAccount: "Create Account",
+      createSubtitle: "Join our Ayurvedic Diet Management platform",
       username: "Username",
       password: "Password",
+      confirmPassword: "Confirm Password",
+      fullName: "Full Name",
+      email: "Email Address",
+      role: "Role",
       signin: "Sign In",
+      signup: "Sign Up",
       signingIn: "Signing In...",
+      signingUp: "Creating Account...",
       demoAccount: "Demo Accounts",
       admin: "Admin",
       practitioner: "Practitioner", 
       assistant: "Assistant",
+      selectRole: "Select your role",
       features: [
         "Comprehensive patient management",
         "AI-powered dietary recommendations",
@@ -86,14 +200,23 @@ export default function LoginPage() {
     hi: {
       title: "स्वागत है",
       subtitle: "अपने आयुर्वेदिक आहार प्रबंधन खाते में साइन इन करें",
+      createAccount: "खाता बनाएं",
+      createSubtitle: "हमारे आयुर्वेदिक आहार प्रबंधन प्लेटफॉर्म से जुड़ें",
       username: "उपयोगकर्ता नाम",
       password: "पासवर्ड",
+      confirmPassword: "पासवर्ड की पुष्टि करें",
+      fullName: "पूरा नाम",
+      email: "ईमेल पता",
+      role: "भूमिका",
       signin: "साइन इन",
+      signup: "साइन अप",
       signingIn: "साइन इन हो रहा है...",
+      signingUp: "खाता बनाया जा रहा है...",
       demoAccount: "डेमो खाते",
       admin: "प्रशासक",
       practitioner: "चिकित्सक",
       assistant: "सहायक",
+      selectRole: "अपनी भूमिका चुनें",
       features: [
         "व्यापक रोगी प्रबंधन",
         "AI-संचालित आहार सिफारिशें",
@@ -105,6 +228,20 @@ export default function LoginPage() {
   }
 
   const currentContent = content[language]
+
+  // Show loading spinner while checking authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
+
+  // Don't render if already authenticated (will redirect)
+  if (user) {
+    return null
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center p-4">
@@ -176,15 +313,15 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Right Side - Login Form */}
+        {/* Right Side - Authentication Forms */}
         <div className="flex justify-center">
           <Card className="w-full max-w-md shadow-xl bg-white/80 backdrop-blur-sm">
             <CardHeader className="text-center">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-2">
                   <Lock className="h-6 w-6 text-primary" />
-                  <CardTitle className={`text-2xl ${language === "hi" ? "font-devanagari" : ""}`}>
-                    {currentContent.title}
+                  <CardTitle className="text-xl">
+                    AhaarWISE Auth
                   </CardTitle>
                 </div>
                 <Button
@@ -197,9 +334,6 @@ export default function LoginPage() {
                   <span>{language === "en" ? "हिंदी" : "EN"}</span>
                 </Button>
               </div>
-              <p className={`text-muted-foreground ${language === "hi" ? "font-devanagari" : ""}`}>
-                {currentContent.subtitle}
-              </p>
             </CardHeader>
             
             <CardContent>
@@ -211,60 +345,244 @@ export default function LoginPage() {
                 </Alert>
               )}
 
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="username" className={language === "hi" ? "font-devanagari" : ""}>
-                    {currentContent.username}
-                  </Label>
-                  <Input
-                    id="username"
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder={currentContent.username}
-                    required
-                    className={language === "hi" ? "font-devanagari" : ""}
-                  />
-                </div>
+              {success && (
+                <Alert className="mb-4 border-green-200 bg-green-50">
+                  <AlertDescription className={`text-green-700 ${language === "hi" ? "font-devanagari" : ""}`}>
+                    {success}
+                  </AlertDescription>
+                </Alert>
+              )}
 
-                <div className="space-y-2">
-                  <Label htmlFor="password" className={language === "hi" ? "font-devanagari" : ""}>
-                    {currentContent.password}
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder={currentContent.password}
-                      required
-                      className={language === "hi" ? "font-devanagari" : ""}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </Button>
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="signin" className={language === "hi" ? "font-devanagari" : ""}>
+                    {currentContent.signin}
+                  </TabsTrigger>
+                  <TabsTrigger value="signup" className={language === "hi" ? "font-devanagari" : ""}>
+                    {currentContent.signup}
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* Sign In Tab */}
+                <TabsContent value="signin" className="space-y-4 mt-6">
+                  <div className="text-center mb-4">
+                    <h3 className={`text-lg font-semibold ${language === "hi" ? "font-devanagari" : ""}`}>
+                      {currentContent.title}
+                    </h3>
+                    <p className={`text-sm text-muted-foreground ${language === "hi" ? "font-devanagari" : ""}`}>
+                      {currentContent.subtitle}
+                    </p>
                   </div>
-                </div>
 
-                <Button 
-                  type="submit" 
-                  className={`w-full ${language === "hi" ? "font-devanagari" : ""}`}
-                  disabled={isLoading}
-                >
-                  {isLoading ? currentContent.signingIn : currentContent.signin}
-                </Button>
-              </form>
+                  <form onSubmit={handleLogin} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="username" className={language === "hi" ? "font-devanagari" : ""}>
+                        <User className="w-4 h-4 inline mr-2" />
+                        {currentContent.username}
+                      </Label>
+                      <Input
+                        id="username"
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder={currentContent.username}
+                        required
+                        className={language === "hi" ? "font-devanagari" : ""}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="password" className={language === "hi" ? "font-devanagari" : ""}>
+                        <Lock className="w-4 h-4 inline mr-2" />
+                        {currentContent.password}
+                      </Label>
+                      <div className="relative">
+                        <Input
+                          id="password"
+                          type={showPassword ? "text" : "password"}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder={currentContent.password}
+                          required
+                          className={language === "hi" ? "font-devanagari" : ""}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 py-2"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      className={`w-full ${language === "hi" ? "font-devanagari" : ""}`}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? currentContent.signingIn : currentContent.signin}
+                    </Button>
+                  </form>
+                </TabsContent>
+
+                {/* Sign Up Tab */}
+                <TabsContent value="signup" className="space-y-4 mt-6">
+                  <div className="text-center mb-4">
+                    <h3 className={`text-lg font-semibold ${language === "hi" ? "font-devanagari" : ""}`}>
+                      {currentContent.createAccount}
+                    </h3>
+                    <p className={`text-sm text-muted-foreground ${language === "hi" ? "font-devanagari" : ""}`}>
+                      {currentContent.createSubtitle}
+                    </p>
+                  </div>
+
+                  <form onSubmit={handleSignUp} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="fullName" className={`text-sm font-medium ${language === "hi" ? "font-devanagari" : ""}`}>
+                        <User className="w-4 h-4 inline mr-2" />
+                        {currentContent.fullName}
+                      </Label>
+                      <Input
+                        id="fullName"
+                        type="text"
+                        value={signUpData.fullName}
+                        onChange={(e) => setSignUpData({...signUpData, fullName: e.target.value})}
+                        className="w-full"
+                        placeholder={currentContent.fullName}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className={`text-sm font-medium ${language === "hi" ? "font-devanagari" : ""}`}>
+                        {currentContent.email}
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={signUpData.email}
+                        onChange={(e) => setSignUpData({...signUpData, email: e.target.value})}
+                        className="w-full"
+                        placeholder={currentContent.email}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="signupUsername" className={`text-sm font-medium ${language === "hi" ? "font-devanagari" : ""}`}>
+                        {currentContent.username}
+                      </Label>
+                      <Input
+                        id="signupUsername"
+                        type="text"
+                        value={signUpData.username}
+                        onChange={(e) => setSignUpData({...signUpData, username: e.target.value})}
+                        className="w-full"
+                        placeholder={currentContent.username}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="role" className={`text-sm font-medium ${language === "hi" ? "font-devanagari" : ""}`}>
+                        {currentContent.role}
+                      </Label>
+                      <Select 
+                        value={signUpData.role} 
+                        onValueChange={(value: "practitioner" | "assistant") => 
+                          setSignUpData({...signUpData, role: value})
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={currentContent.selectRole} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="practitioner">{currentContent.practitioner}</SelectItem>
+                          <SelectItem value="assistant">{currentContent.assistant}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="signupPassword" className={`text-sm font-medium ${language === "hi" ? "font-devanagari" : ""}`}>
+                        <Lock className="w-4 h-4 inline mr-2" />
+                        {currentContent.password}
+                      </Label>
+                      <div className="relative">
+                        <Input
+                          id="signupPassword"
+                          type={showSignUpPassword ? "text" : "password"}
+                          value={signUpData.password}
+                          onChange={(e) => setSignUpData({...signUpData, password: e.target.value})}
+                          className="w-full pr-10"
+                          placeholder={currentContent.password}
+                          required
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          onClick={() => setShowSignUpPassword(!showSignUpPassword)}
+                        >
+                          {showSignUpPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="confirmPassword" className={`text-sm font-medium ${language === "hi" ? "font-devanagari" : ""}`}>
+                        <Lock className="w-4 h-4 inline mr-2" />
+                        {currentContent.confirmPassword}
+                      </Label>
+                      <div className="relative">
+                        <Input
+                          id="confirmPassword"
+                          type={showConfirmPassword ? "text" : "password"}
+                          value={signUpData.confirmPassword}
+                          onChange={(e) => setSignUpData({...signUpData, confirmPassword: e.target.value})}
+                          className="w-full pr-10"
+                          placeholder={currentContent.confirmPassword}
+                          required
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                          {showConfirmPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      className={`w-full ${language === "hi" ? "font-devanagari" : ""}`}
+                      disabled={signUpLoading}
+                    >
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      {signUpLoading ? currentContent.signingUp : currentContent.signup}
+                    </Button>
+                  </form>
+                </TabsContent>
+              </Tabs>
 
               {/* Mobile Demo Accounts */}
               <div className="lg:hidden mt-6">

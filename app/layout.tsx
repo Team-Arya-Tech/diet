@@ -4,6 +4,7 @@ import { Inter, Noto_Sans_Devanagari } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { TranslationProvider } from "@/components/translation-provider"
+import { AuthProvider } from "@/components/auth-context"
 import "./globals.css"
 
 const inter = Inter({
@@ -51,9 +52,11 @@ export default function RootLayout({
           <path d="M12 8V14" />
         </svg>
         <div className="relative z-10">
-          <TranslationProvider>
-            <Suspense fallback={null}>{children}</Suspense>
-          </TranslationProvider>
+          <AuthProvider>
+            <TranslationProvider>
+              <Suspense fallback={null}>{children}</Suspense>
+            </TranslationProvider>
+          </AuthProvider>
           <Analytics />
         </div>
       </body>
