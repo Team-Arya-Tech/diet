@@ -1,0 +1,929 @@
+[
+  {
+    "id": "recipe-001",
+    "name": "Ayurvedic Golden Milk Khichdi",
+    "description": "A healing one-pot meal combining rice, lentils with turmeric and warming spices - perfect for all constitutions",
+    "cuisine": "indian",
+    "category": "lunch",
+    "ingredients": [
+      {
+        "id": "rice-basmati",
+        "name": "Basmati Rice",
+        "quantity": 0.5,
+        "unit": "cup",
+        "ayurvedicRole": "base",
+        "notes": "Aged basmati preferred for better digestibility"
+      },
+      {
+        "id": "moong-dal",
+        "name": "Split Yellow Moong Dal",
+        "quantity": 0.25,
+        "unit": "cup",
+        "ayurvedicRole": "main",
+        "notes": "Pre-soaked for 30 minutes"
+      },
+      {
+        "id": "ghee",
+        "name": "Pure Cow Ghee",
+        "quantity": 1,
+        "unit": "tbsp",
+        "ayurvedicRole": "base",
+        "notes": "Organic, grass-fed ghee preferred"
+      },
+      {
+        "id": "turmeric",
+        "name": "Turmeric Powder",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "ayurvedicRole": "spice",
+        "notes": "Fresh turmeric can be used (1 inch piece)"
+      },
+      {
+        "id": "cumin-seeds",
+        "name": "Cumin Seeds",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "ginger",
+        "name": "Fresh Ginger",
+        "quantity": 1,
+        "unit": "inch piece",
+        "ayurvedicRole": "spice",
+        "notes": "Finely minced"
+      },
+      {
+        "id": "rock-salt",
+        "name": "Rock Salt (Sendha Namak)",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "ayurvedicRole": "spice",
+        "notes": "Adjust to taste"
+      },
+      {
+        "id": "water",
+        "name": "Filtered Water",
+        "quantity": 3,
+        "unit": "cups",
+        "ayurvedicRole": "base"
+      }
+    ],
+    "cookingSteps": [
+      {
+        "stepNumber": 1,
+        "instruction": "Wash basmati rice and moong dal together until water runs clear. Soak for 15 minutes.",
+        "duration": 5,
+        "ayurvedicTip": "Washing removes excess starch and makes grains lighter for digestion"
+      },
+      {
+        "stepNumber": 2,
+        "instruction": "Heat ghee in a heavy-bottomed pot or pressure cooker over medium heat.",
+        "duration": 2,
+        "ayurvedicTip": "Ghee should be warm but not smoking to preserve its medicinal properties"
+      },
+      {
+        "stepNumber": 3,
+        "instruction": "Add cumin seeds and let them splutter. Add minced ginger and sauté for 30 seconds.",
+        "duration": 1,
+        "ayurvedicTip": "Tempering spices in ghee releases their essential oils and improves digestibility"
+      },
+      {
+        "stepNumber": 4,
+        "instruction": "Add turmeric powder and stir quickly to avoid burning. Add drained rice and dal.",
+        "duration": 1,
+        "ayurvedicTip": "Turmeric should be added carefully as it can become bitter if overheated"
+      },
+      {
+        "stepNumber": 5,
+        "instruction": "Sauté rice and dal for 2-3 minutes until grains are well-coated with ghee and spices.",
+        "duration": 3,
+        "ayurvedicTip": "This step helps seal the grains and prevents them from becoming mushy"
+      },
+      {
+        "stepNumber": 6,
+        "instruction": "Add water and rock salt. Bring to a boil, then reduce heat to low and cover.",
+        "duration": 5,
+        "ayurvedicTip": "Using the right water-to-grain ratio ensures proper texture and digestibility"
+      },
+      {
+        "stepNumber": 7,
+        "instruction": "Cook for 15-20 minutes until rice and dal are soft and well-cooked. Stir occasionally.",
+        "duration": 20,
+        "ayurvedicTip": "Low, slow cooking preserves prana (life energy) in the food"
+      },
+      {
+        "stepNumber": 8,
+        "instruction": "Let rest for 5 minutes before serving. Garnish with fresh cilantro if desired.",
+        "duration": 5,
+        "ayurvedicTip": "Resting allows flavors to meld and makes the dish easier to digest"
+      }
+    ],
+    "prepTime": 20,
+    "cookTime": 25,
+    "totalTime": 45,
+    "servings": 2,
+    "difficulty": "easy",
+    "skillsRequired": [
+      "Basic knife skills",
+      "Stovetop cooking"
+    ],
+    "ayurvedicProperties": {
+      "primaryRasa": [
+        "sweet"
+      ],
+      "secondaryRasa": [
+        "astringent"
+      ],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balances",
+        "pitta": "neutral",
+        "kapha": "balances"
+      },
+      "constitution": [
+        "vata",
+        "kapha",
+        "tridoshic"
+      ],
+      "season": [
+        "winter",
+        "monsoon",
+        "spring"
+      ],
+      "timeOfDay": [
+        "noon",
+        "evening"
+      ],
+      "digestibility": "easy"
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 280,
+      "protein": 10,
+      "carbohydrates": 45,
+      "fat": 8,
+      "fiber": 4,
+      "sugar": 2,
+      "sodium": 350,
+      "potassium": 280,
+      "calcium": 40,
+      "iron": 2.5,
+      "vitamins": {
+        "vitaminB1": 0.2,
+        "folate": 45,
+        "vitaminE": 1.2
+      }
+    },
+    "ayurvedicGuidelines": [
+      {
+        "principle": "Agni Enhancement",
+        "description": "The combination of ghee, ginger, and cumin kindles digestive fire",
+        "benefits": [
+          "Improves metabolism",
+          "Reduces bloating",
+          "Enhances nutrient absorption"
+        ],
+        "application": "Eat when hungry, avoid overeating"
+      },
+      {
+        "principle": "Tridoshic Balance",
+        "description": "This recipe balances all three doshas when prepared correctly",
+        "benefits": [
+          "Suitable for daily consumption",
+          "Promotes harmony",
+          "Builds ojas (vitality)"
+        ],
+        "application": "Can be eaten by all constitutions in appropriate quantities"
+      },
+      {
+        "principle": "Sattvic Cooking",
+        "description": "Prepared with pure ingredients and positive intention",
+        "benefits": [
+          "Promotes mental clarity",
+          "Increases spiritual awareness",
+          "Nourishes deeply"
+        ],
+        "application": "Cook with love and awareness, eat in peaceful environment"
+      }
+    ],
+    "variations": [
+      {
+        "name": "Pitta-Pacifying Version",
+        "changes": [
+          "Reduce ginger by half",
+          "Add 1 tsp coconut oil",
+          "Use sweet spices like fennel"
+        ],
+        "ayurvedicBenefit": "More cooling for pitta constitution"
+      },
+      {
+        "name": "Kapha-Reducing Version",
+        "changes": [
+          "Add pinch of black pepper",
+          "Include 1 tsp mustard seeds",
+          "Reduce ghee slightly"
+        ],
+        "ayurvedicBenefit": "More stimulating for kapha constitution"
+      }
+    ],
+    "tags": [
+      "comfort-food",
+      "healing",
+      "easy-digest",
+      "one-pot",
+      "protein-rich"
+    ],
+    "healthBenefits": [
+      "Supports digestive health",
+      "Provides complete protein",
+      "Anti-inflammatory properties",
+      "Boosts immunity",
+      "Calms nervous system"
+    ],
+    "source": "traditional",
+    "region": "North India"
+  },
+  {
+    "id": "recipe-002",
+    "name": "Ayurvedic Spiced Oatmeal with Almonds",
+    "description": "A warming breakfast that combines western oats with Ayurvedic spices for optimal digestion and nourishment",
+    "cuisine": "fusion",
+    "category": "breakfast",
+    "ingredients": [
+      {
+        "id": "rolled-oats",
+        "name": "Organic Rolled Oats",
+        "quantity": 0.5,
+        "unit": "cup",
+        "ayurvedicRole": "base"
+      },
+      {
+        "id": "almond-milk",
+        "name": "Fresh Almond Milk",
+        "quantity": 1,
+        "unit": "cup",
+        "ayurvedicRole": "base",
+        "notes": "Homemade preferred, or unsweetened store-bought"
+      },
+      {
+        "id": "almonds",
+        "name": "Soaked Almonds",
+        "quantity": 6,
+        "unit": "pieces",
+        "ayurvedicRole": "main",
+        "notes": "Soaked overnight and peeled"
+      },
+      {
+        "id": "dates",
+        "name": "Medjool Dates",
+        "quantity": 2,
+        "unit": "pieces",
+        "ayurvedicRole": "main",
+        "notes": "Pitted and chopped"
+      },
+      {
+        "id": "cardamom",
+        "name": "Green Cardamom Powder",
+        "quantity": 0.25,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "cinnamon",
+        "name": "Ceylon Cinnamon Powder",
+        "quantity": 0.25,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "ghee",
+        "name": "Ghee",
+        "quantity": 1,
+        "unit": "tsp",
+        "ayurvedicRole": "base"
+      }
+    ],
+    "cookingSteps": [
+      {
+        "stepNumber": 1,
+        "instruction": "Soak almonds overnight. In the morning, peel and roughly chop them.",
+        "duration": 5,
+        "ayurvedicTip": "Soaking almonds removes tannins and makes them easier to digest"
+      },
+      {
+        "stepNumber": 2,
+        "instruction": "Warm almond milk gently in a saucepan - do not boil.",
+        "duration": 3,
+        "ayurvedicTip": "Gentle heating preserves the nutritional quality of almond milk"
+      },
+      {
+        "stepNumber": 3,
+        "instruction": "Add oats to warm milk and cook on low heat for 5-7 minutes, stirring frequently.",
+        "duration": 7,
+        "ayurvedicTip": "Slow cooking makes oats more digestible and creamy"
+      },
+      {
+        "stepNumber": 4,
+        "instruction": "Add chopped dates, cardamom, and cinnamon. Continue cooking for 2-3 minutes.",
+        "duration": 3,
+        "ayurvedicTip": "Spices aid digestion and dates provide natural sweetness"
+      },
+      {
+        "stepNumber": 5,
+        "instruction": "Remove from heat and stir in ghee. Top with chopped almonds.",
+        "duration": 1,
+        "ayurvedicTip": "Adding ghee at the end preserves its beneficial properties"
+      },
+      {
+        "stepNumber": 6,
+        "instruction": "Serve warm immediately. Can be garnished with a pinch of saffron if desired.",
+        "duration": 1,
+        "ayurvedicTip": "Eating warm food supports digestive fire (agni)"
+      }
+    ],
+    "prepTime": 10,
+    "cookTime": 15,
+    "totalTime": 25,
+    "servings": 1,
+    "difficulty": "easy",
+    "skillsRequired": [
+      "Basic stovetop cooking"
+    ],
+    "ayurvedicProperties": {
+      "primaryRasa": [
+        "sweet"
+      ],
+      "secondaryRasa": [
+        "astringent"
+      ],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balances",
+        "pitta": "neutral",
+        "kapha": "increases"
+      },
+      "constitution": [
+        "vata",
+        "pitta"
+      ],
+      "season": [
+        "winter",
+        "spring",
+        "autumn"
+      ],
+      "timeOfDay": [
+        "morning"
+      ],
+      "digestibility": "easy"
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 350,
+      "protein": 12,
+      "carbohydrates": 45,
+      "fat": 14,
+      "fiber": 8,
+      "sugar": 18,
+      "sodium": 100,
+      "potassium": 400,
+      "calcium": 200,
+      "iron": 3,
+      "vitamins": {
+        "vitaminE": 8,
+        "vitaminB1": 0.4,
+        "vitaminB6": 0.2,
+        "magnesium": 80
+      }
+    },
+    "ayurvedicGuidelines": [
+      {
+        "principle": "Morning Nourishment",
+        "description": "Provides sustained energy without being too heavy for morning digestion",
+        "benefits": [
+          "Steady blood sugar",
+          "Mental clarity",
+          "Digestive strength"
+        ],
+        "application": "Best eaten between 7-9 AM when digestive fire is awakening"
+      },
+      {
+        "principle": "Ojas Building",
+        "description": "Combination of nuts, dates, and spices builds vital essence",
+        "benefits": [
+          "Increases immunity",
+          "Enhances vitality",
+          "Promotes longevity"
+        ],
+        "application": "Regular consumption supports overall health and vigor"
+      }
+    ],
+    "variations": [
+      {
+        "name": "Kapha-Reducing Version",
+        "changes": [
+          "Use water instead of almond milk",
+          "Add ginger powder",
+          "Reduce dates to 1"
+        ],
+        "ayurvedicBenefit": "Lighter and more stimulating for kapha types"
+      }
+    ],
+    "tags": [
+      "breakfast",
+      "nourishing",
+      "easy-digest",
+      "protein-rich",
+      "warming"
+    ],
+    "healthBenefits": [
+      "Heart healthy",
+      "Brain food",
+      "Sustained energy",
+      "High fiber",
+      "Antioxidant rich"
+    ],
+    "source": "fusion",
+    "region": "Global Ayurvedic"
+  },
+  {
+    "id": "recipe-002",
+    "name": "Chickpea Pancakes",
+    "description": "A protein-rich, gluten-free breakfast dish made from chickpea flour and a mix of vegetables. Light to digest and keeps you full for longer.",
+    "cuisine": "Ayurvedic",
+    "category": "breakfast",
+    "ingredients": [
+      {
+        "id": "i1",
+        "name": "chickpea flour",
+        "quantity": 1,
+        "unit": "cup",
+        "ayurvedicRole": "main"
+      },
+      {
+        "id": "i2",
+        "name": "carrot",
+        "quantity": 1,
+        "unit": "medium",
+        "ayurvedicRole": "garnish"
+      },
+      {
+        "id": "i3",
+        "name": "spinach",
+        "quantity": 1,
+        "unit": "cup",
+        "ayurvedicRole": "garnish"
+      },
+      {
+        "id": "i4",
+        "name": "cumin seeds",
+        "quantity": 1,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i5",
+        "name": "turmeric",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i6",
+        "name": "water",
+        "quantity": 1.5,
+        "unit": "cups"
+      },
+      {
+        "id": "i7",
+        "name": "ghee",
+        "quantity": 1,
+        "unit": "tbsp",
+        "ayurvedicRole": "garnish"
+      }
+    ],
+    "cookingSteps": [
+      {
+        "stepNumber": 1,
+        "instruction": "Mix chickpea flour, cumin seeds, and turmeric with water to make a batter",
+        "duration": 5
+      },
+      {
+        "stepNumber": 2,
+        "instruction": "Add grated carrot and chopped spinach to the batter and mix well.",
+        "duration": 5
+      },
+      {
+        "stepNumber": 3,
+        "instruction": "Heat a pan, pour a ladle of batter and spread it. Cook until golden brown on both sides.",
+        "duration": 10,
+        "temperature": "medium",
+        "ayurvedicTip": "Cook on a medium flame to retain nutrients."
+      },
+      {
+        "stepNumber": 4,
+        "instruction": "Drizzle ghee on top and serve hot.",
+        "duration": 1
+      }
+    ],
+    "prepTime": 10,
+    "cookTime": 20,
+    "totalTime": 30,
+    "servings": 2,
+    "difficulty": "easy",
+    "skillsRequired": [
+      "Grating",
+      "Chopping",
+      "Frying"
+    ],
+    "ayurvedicProperties": {
+      "primaryRasa": [
+        "sweet"
+      ],
+      "secondaryRasa": [
+        "pungent"
+      ],
+      "virya": "neutral",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balances",
+        "pitta": "balances",
+        "kapha": "decreases"
+      },
+      "constitution": [
+        "Vata",
+        "Pitta",
+        "Kapha"
+      ],
+      "season": [
+        "All"
+      ],
+      "timeOfDay": [
+        "Morning"
+      ],
+      "digestibility": "easy"
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 250,
+      "protein": 12,
+      "carbohydrates": 38,
+      "fat": 5,
+      "fiber": 7,
+      "sugar": 5,
+      "sodium": 15,
+      "potassium": 400,
+      "calcium": 60,
+      "iron": 3,
+      "vitamins": {
+        "Vitamin C": 15,
+        "Vitamin A": 200
+      }
+    },
+    "ayurvedicGuidelines": [
+      {
+        "principle": "Agni",
+        "description": "Enhances digestive fire",
+        "benefits": [
+          "Improves digestion",
+          "Aids nutrient absorption"
+        ],
+        "application": "Eat warm and freshly cooked."
+      },
+      {
+        "principle": "Ojas",
+        "description": "Nourishes the body",
+        "benefits": [
+          "Promotes strength",
+          "Boosts immunity"
+        ],
+        "application": "Consume as a part of a balanced diet."
+      }
+    ],
+    "tags": [
+      "High protein",
+      "Breakfast",
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "healthBenefits": [
+      "High in protein",
+      "Boosts digestive health",
+      "Rich in vitamins"
+    ],
+    "source": "traditional",
+    "region": "North India"
+  },
+  {
+    "id": "recipe-003",
+    "name": "Quinoa Upma",
+    "description": "A nutritious breakfast dish made from cooked quinoa and a mix of vegetables. High in protein and fiber, it keeps you full and energized throughout the day.",
+    "cuisine": "Ayurvedic",
+    "category": "breakfast",
+    "ingredients": [
+      {
+        "id": "i1",
+        "name": "quinoa",
+        "quantity": 1,
+        "unit": "cup",
+        "ayurvedicRole": "main"
+      },
+      {
+        "id": "i2",
+        "name": "carrot",
+        "quantity": 1,
+        "unit": "medium",
+        "ayurvedicRole": "garnish"
+      },
+      {
+        "id": "i3",
+        "name": "peas",
+        "quantity": 0.5,
+        "unit": "cup",
+        "ayurvedicRole": "garnish"
+      },
+      {
+        "id": "i4",
+        "name": "ginger",
+        "quantity": 1,
+        "unit": "inch",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i5",
+        "name": "cumin seeds",
+        "quantity": 1,
+        "unit": "tsp",
+        "ayurvedicRole": "spice"
+      },
+      {
+        "id": "i6",
+        "name": "water",
+        "quantity": 2,
+        "unit": "cups"
+      },
+      {
+        "id": "i7",
+        "name": "ghee",
+        "quantity": 1,
+        "unit": "tbsp",
+        "ayurvedicRole": "garnish"
+      }
+    ],
+    "cookingSteps": [
+      {
+        "stepNumber": 1,
+        "instruction": "Rinse quinoa thoroughly and cook with water until soft and fluffy.",
+        "duration": 15
+      },
+      {
+        "stepNumber": 2,
+        "instruction": "In a pan, heat ghee and add cumin seeds and finely chopped ginger. Saute until aromatic.",
+        "duration": 5,
+        "temperature": "medium",
+        "ayurvedicTip": "Saute on a medium flame to retain nutrients."
+      },
+      {
+        "stepNumber": 3,
+        "instruction": "Add chopped carrot and peas to the pan and cook until soft.",
+        "duration": 10,
+        "temperature": "medium"
+      },
+      {
+        "stepNumber": 4,
+        "instruction": "Add cooked quinoa to the pan and mix well. Cook for a few more minutes and serve hot.",
+        "duration": 5
+      }
+    ],
+    "prepTime": 10,
+    "cookTime": 30,
+    "totalTime": 40,
+    "servings": 2,
+    "difficulty": "easy",
+    "skillsRequired": [
+      "Chopping",
+      "Boiling",
+      "Sauteing"
+    ],
+    "ayurvedicProperties": {
+      "primaryRasa": [
+        "sweet"
+      ],
+      "secondaryRasa": [
+        "pungent"
+      ],
+      "virya": "neutral",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "increases",
+        "pitta": "decreases",
+        "kapha": "balances"
+      },
+      "constitution": [
+        "Vata",
+        "Pitta",
+        "Kapha"
+      ],
+      "season": [
+        "All"
+      ],
+      "timeOfDay": [
+        "Morning"
+      ],
+      "digestibility": "easy"
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 220,
+      "protein": 8,
+      "carbohydrates": 40,
+      "fat": 4,
+      "fiber": 5,
+      "sugar": 3,
+      "sodium": 15,
+      "potassium": 300,
+      "calcium": 30,
+      "iron": 3,
+      "vitamins": {
+        "Vitamin C": 20,
+        "Vitamin A": 150
+      }
+    },
+    "ayurvedicGuidelines": [
+      {
+        "principle": "Agni",
+        "description": "Enhances digestive fire",
+        "benefits": [
+          "Improves digestion",
+          "Aids nutrient absorption"
+        ],
+        "application": "Eat warm and freshly cooked."
+      },
+      {
+        "principle": "Ojas",
+        "description": "Nourishes the body",
+        "benefits": [
+          "Promotes strength",
+          "Boosts immunity"
+        ],
+        "application": "Consume as a part of a balanced diet."
+      }
+    ],
+    "tags": [
+      "High protein",
+      "Breakfast",
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "healthBenefits": [
+      "High in protein",
+      "Boosts digestive health",
+      "Rich in vitamins"
+    ],
+    "source": "fusion",
+    "region": "South India"
+  },
+  {
+    "id": "recipe-004",
+    "name": "Millet Porridge",
+    "description": "A wholesome breakfast dish made from cooked millets and a mix of nuts and seeds. High in protein and fiber, it keeps you energized throughout the day.",
+    "cuisine": "Ayurvedic",
+    "category": "breakfast",
+    "ingredients": [
+      {
+        "id": "i1",
+        "name": "millet",
+        "quantity": 1,
+        "unit": "cup",
+        "ayurvedicRole": "main"
+      },
+      {
+        "id": "i2",
+        "name": "almonds",
+        "quantity": 10,
+        "unit": "pieces",
+        "ayurvedicRole": "garnish"
+      },
+      {
+        "id": "i3",
+        "name": "flax seeds",
+        "quantity": 1,
+        "unit": "tbsp",
+        "ayurvedicRole": "garnish"
+      },
+      {
+        "id": "i4",
+        "name": "honey",
+        "quantity": 1,
+        "unit": "tbsp",
+        "ayurvedicRole": "garnish"
+      },
+      {
+        "id": "i5",
+        "name": "water",
+        "quantity": 2,
+        "unit": "cups"
+      }
+    ],
+    "cookingSteps": [
+      {
+        "stepNumber": 1,
+        "instruction": "Rinse millet thoroughly and cook with water until soft and creamy.",
+        "duration": 20
+      },
+      {
+        "stepNumber": 2,
+        "instruction": "Add chopped almonds and flax seeds to the cooked millet and mix well.",
+        "duration": 5
+      },
+      {
+        "stepNumber": 3,
+        "instruction": "Drizzle honey on top and serve hot.",
+        "duration": 1
+      }
+    ],
+    "prepTime": 10,
+    "cookTime": 20,
+    "totalTime": 30,
+    "servings": 2,
+    "difficulty": "easy",
+    "skillsRequired": [
+      "Chopping",
+      "Boiling"
+    ],
+    "ayurvedicProperties": {
+      "primaryRasa": [
+        "sweet"
+      ],
+      "secondaryRasa": [
+        "pungent"
+      ],
+      "virya": "heating",
+      "vipaka": "sweet",
+      "doshaEffect": {
+        "vata": "balances",
+        "pitta": "increases",
+        "kapha": "balances"
+      },
+      "constitution": [
+        "Vata",
+        "Pitta",
+        "Kapha"
+      ],
+      "season": [
+        "All"
+      ],
+      "timeOfDay": [
+        "Morning"
+      ],
+      "digestibility": "easy"
+    },
+    "nutritionalInfo": {
+      "caloriesPerServing": 200,
+      "protein": 6,
+      "carbohydrates": 35,
+      "fat": 3,
+      "fiber": 4,
+      "sugar": 8,
+      "sodium": 10,
+      "potassium": 200,
+      "calcium": 20,
+      "iron": 2,
+      "vitamins": {
+        "Vitamin C": 0,
+        "Vitamin A": 50
+      }
+    },
+    "ayurvedicGuidelines": [
+      {
+        "principle": "Agni",
+        "description": "Enhances digestive fire",
+        "benefits": [
+          "Improves digestion",
+          "Aids nutrient absorption"
+        ],
+        "application": "Eat warm and freshly cooked."
+      },
+      {
+        "principle": "Ojas",
+        "description": "Nourishes the body",
+        "benefits": [
+          "Promotes strength",
+          "Boosts immunity"
+        ],
+        "application": "Consume as a part of a balanced diet."
+      }
+    ],
+    "tags": [
+      "High protein",
+      "Breakfast",
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "healthBenefits": [
+      "High in protein",
+      "Boosts digestive health",
+      "Rich in vitamins"
+    ],
+    "source": "traditional",
+    "region": "North India"
+  }
+]

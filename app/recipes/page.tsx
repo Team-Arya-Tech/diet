@@ -27,72 +27,52 @@ import {
   Share2
 } from "lucide-react"
 
-import { 
-  getAllRecipes, 
-  getRecipesByCategory, 
-  getRecipesByConstitution,
-  getRecipesBySeason,
-  searchRecipes,
-  getRecipeById,
-  Recipe,
-  ayurvedicCookingPrinciples
-} from "@/lib/recipe-intelligence"
-import { NutritionalCalculator } from "@/lib/nutritional-calculator"
-
 export default function RecipesPage() {
-  const [recipes, setRecipes] = useState<Recipe[]>([])
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState<string>("")
-  const [selectedConstitution, setSelectedConstitution] = useState<string>("")
-  const [selectedSeason, setSelectedSeason] = useState<string>("")
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("")
-  const [activeTab, setActiveTab] = useState("recipes")
+  const [recipes, setRecipes] = useState<any[]>([]);
+  const [selectedRecipe, setSelectedRecipe] = useState<any | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedConstitution, setSelectedConstitution] = useState<string>("");
+  const [selectedSeason, setSelectedSeason] = useState<string>("");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("");
+  const [activeTab, setActiveTab] = useState("recipes");
 
   useEffect(() => {
-    setRecipes(getAllRecipes())
-  }, [])
+    fetch("/api/recipes")
+      .then((res) => res.json())
+      .then((data) => setRecipes(data))
+      .catch((err) => console.error("Failed to load recipes:", err));
+  }, []);
 
-  useEffect(() => {
-    // If no search query and no filters, show all recipes
-    if (!searchQuery && !selectedCategory && !selectedConstitution && !selectedSeason && !selectedDifficulty) {
-      setRecipes(getAllRecipes())
-      return
-    }
-
-    const filters = {
-      category: selectedCategory as Recipe['category'] || undefined,
-      constitution: selectedConstitution || undefined,
-      season: selectedSeason || undefined,
-      difficulty: selectedDifficulty as Recipe['difficulty'] || undefined
-    }
-
-    const filteredRecipes = searchRecipes(searchQuery, filters)
-    setRecipes(filteredRecipes)
-  }, [searchQuery, selectedCategory, selectedConstitution, selectedSeason, selectedDifficulty])
+  const filteredRecipes = recipes.filter((recipe) => {
+    if (searchQuery && !recipe.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    if (selectedCategory && recipe.category !== selectedCategory) return false;
+    if (selectedConstitution && !recipe.ayurvedicProperties?.constitution?.includes(selectedConstitution)) return false;
+    if (selectedSeason && !recipe.ayurvedicProperties?.season?.includes(selectedSeason)) return false;
+    if (selectedDifficulty && recipe.difficulty !== selectedDifficulty) return false;
+    return true;
+  });
 
   const clearFilters = () => {
-    setSearchQuery("")
-    setSelectedCategory("")
-    setSelectedConstitution("")
-    setSelectedSeason("")
-    setSelectedDifficulty("")
-    // Reset to show all recipes
-    setRecipes(getAllRecipes())
-  }
+    setSearchQuery("");
+    setSelectedCategory("");
+    setSelectedConstitution("");
+    setSelectedSeason("");
+    setSelectedDifficulty("");
+  };
 
-  const exportRecipe = (recipe: Recipe) => {
-    const recipeText = generateRecipeText(recipe)
-    const blob = new Blob([recipeText], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `${recipe.name.replace(/\s+/g, '-').toLowerCase()}-recipe.txt`
-    link.click()
-    URL.revokeObjectURL(url)
-  }
+  const exportRecipe = (recipe: any) => {
+    const recipeText = generateRecipeText(recipe);
+    const blob = new Blob([recipeText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${recipe.name.replace(/\s+/g, '-').toLowerCase()}-recipe.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
-  const generateRecipeText = (recipe: Recipe): string => {
+  const generateRecipeText = (recipe: any): string => {
     return `${recipe.name}
 ${'='.repeat(recipe.name.length)}
 
@@ -107,33 +87,33 @@ Total Time: ${recipe.totalTime} mins
 Servings: ${recipe.servings}
 
 INGREDIENTS:
-${recipe.ingredients.map(ing => `• ${ing.quantity} ${ing.unit} ${ing.name}${ing.notes ? ` (${ing.notes})` : ''}`).join('\n')}
+${recipe.ingredients?.map((ing: any) => `• ${ing.quantity} ${ing.unit} ${ing.name}${ing.notes ? ` (${ing.notes})` : ''}`).join('\n') || 'N/A'}
 
 INSTRUCTIONS:
-${recipe.cookingSteps.map(step => `${step.stepNumber}. ${step.instruction}${step.ayurvedicTip ? `\n   💡 Ayurvedic Tip: ${step.ayurvedicTip}` : ''}`).join('\n\n')}
+${recipe.cookingSteps?.map((step: any) => `${step.stepNumber}. ${step.instruction}${step.ayurvedicTip ? `\n   💡 Ayurvedic Tip: ${step.ayurvedicTip}` : ''}`).join('\n\n') || 'N/A'}
 
 NUTRITIONAL INFORMATION (Per Serving):
-• Calories: ${recipe.nutritionalInfo.caloriesPerServing}
-• Protein: ${recipe.nutritionalInfo.protein}g
-• Carbohydrates: ${recipe.nutritionalInfo.carbohydrates}g
-• Fat: ${recipe.nutritionalInfo.fat}g
-• Fiber: ${recipe.nutritionalInfo.fiber}g
+• Calories: ${recipe.nutritionalInfo?.caloriesPerServing || 'N/A'}
+• Protein: ${recipe.nutritionalInfo?.protein || 'N/A'}g
+• Carbohydrates: ${recipe.nutritionalInfo?.carbohydrates || 'N/A'}g
+• Fat: ${recipe.nutritionalInfo?.fat || 'N/A'}g
+• Fiber: ${recipe.nutritionalInfo?.fiber || 'N/A'}g
 
 AYURVEDIC PROPERTIES:
-• Primary Rasa: ${recipe.ayurvedicProperties.primaryRasa.join(', ')}
-• Virya: ${recipe.ayurvedicProperties.virya}
-• Vipaka: ${recipe.ayurvedicProperties.vipaka}
-• Digestibility: ${recipe.ayurvedicProperties.digestibility}
-• Best for: ${recipe.ayurvedicProperties.constitution.join(', ')} constitution(s)
-• Ideal seasons: ${recipe.ayurvedicProperties.season.join(', ')}
+• Primary Rasa: ${recipe.ayurvedicProperties?.primaryRasa?.join(', ') || 'N/A'}
+• Virya: ${recipe.ayurvedicProperties?.virya || 'N/A'}
+• Vipaka: ${recipe.ayurvedicProperties?.vipaka || 'N/A'}
+• Digestibility: ${recipe.ayurvedicProperties?.digestibility || 'N/A'}
+• Best for: ${recipe.ayurvedicProperties?.constitution?.join(', ') || 'N/A'} constitution(s)
+• Ideal seasons: ${recipe.ayurvedicProperties?.season?.join(', ') || 'N/A'}
 
 HEALTH BENEFITS:
-${recipe.healthBenefits.map(benefit => `• ${benefit}`).join('\n')}
+${recipe.healthBenefits?.map((benefit: string) => `• ${benefit}`).join('\n') || 'N/A'}
 
 AYURVEDIC GUIDELINES:
-${recipe.ayurvedicGuidelines.map(guideline => `• ${guideline.principle}: ${guideline.description}`).join('\n')}
-`
-  }
+${recipe.ayurvedicGuidelines?.map((guideline: any) => `• ${guideline.principle}: ${guideline.description}`).join('\n') || 'N/A'}
+`;
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -191,18 +171,19 @@ ${recipe.ayurvedicGuidelines.map(guideline => `• ${guideline.principle}: ${gui
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <Label>Search Recipes</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div>
+                  <Label htmlFor="search">Search by name</Label>
                   <Input
-                    placeholder="Search by name, ingredients, or tags..."
+                    id="search"
+                    placeholder="Search recipes..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
-                <div className="w-48">
-                  <Label>Category</Label>
-                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <div>
+                  <Label htmlFor="category">Category</Label>
+                  <Select value={selectedCategory || undefined} onValueChange={(value) => setSelectedCategory(value || "")}>
                     <SelectTrigger>
                       <SelectValue placeholder="All categories" />
                     </SelectTrigger>
@@ -210,17 +191,13 @@ ${recipe.ayurvedicGuidelines.map(guideline => `• ${guideline.principle}: ${gui
                       <SelectItem value="breakfast">Breakfast</SelectItem>
                       <SelectItem value="lunch">Lunch</SelectItem>
                       <SelectItem value="dinner">Dinner</SelectItem>
-                      <SelectItem value="snacks">Snacks</SelectItem>
-                      <SelectItem value="beverage">Beverages</SelectItem>
+                      <SelectItem value="snack">Snack</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <Label>Constitution</Label>
-                  <Select value={selectedConstitution} onValueChange={setSelectedConstitution}>
+                <div>
+                  <Label htmlFor="constitution">Constitution</Label>
+                  <Select value={selectedConstitution || undefined} onValueChange={(value) => setSelectedConstitution(value || "")}>
                     <SelectTrigger>
                       <SelectValue placeholder="All constitutions" />
                     </SelectTrigger>
@@ -232,9 +209,9 @@ ${recipe.ayurvedicGuidelines.map(guideline => `• ${guideline.principle}: ${gui
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="flex-1">
-                  <Label>Season</Label>
-                  <Select value={selectedSeason} onValueChange={setSelectedSeason}>
+                <div>
+                  <Label htmlFor="season">Season</Label>
+                  <Select value={selectedSeason || undefined} onValueChange={(value) => setSelectedSeason(value || "")}>
                     <SelectTrigger>
                       <SelectValue placeholder="All seasons" />
                     </SelectTrigger>
@@ -243,12 +220,13 @@ ${recipe.ayurvedicGuidelines.map(guideline => `• ${guideline.principle}: ${gui
                       <SelectItem value="summer">Summer</SelectItem>
                       <SelectItem value="autumn">Autumn</SelectItem>
                       <SelectItem value="winter">Winter</SelectItem>
+                      <SelectItem value="monsoon">Monsoon</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="flex-1">
-                  <Label>Difficulty</Label>
-                  <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
+                <div>
+                  <Label htmlFor="difficulty">Difficulty</Label>
+                  <Select value={selectedDifficulty || undefined} onValueChange={(value) => setSelectedDifficulty(value || "")}>
                     <SelectTrigger>
                       <SelectValue placeholder="All levels" />
                     </SelectTrigger>
@@ -263,16 +241,18 @@ ${recipe.ayurvedicGuidelines.map(guideline => `• ${guideline.principle}: ${gui
             </CardContent>
           </Card>
 
-          {/* Recipe Grid and Detail */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid lg:grid-cols-2 gap-6 min-w-0 overflow-hidden">
             {/* Recipe List */}
-            <div className="lg:col-span-1 space-y-4">
-              <div className="text-sm text-muted-foreground">
-                Found {recipes.length} recipe{recipes.length !== 1 ? 's' : ''}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold">
+                  Recipes ({filteredRecipes.length})
+                </h2>
               </div>
+              
               <ScrollArea className="h-[600px]">
-                <div className="space-y-3">
-                  {recipes.map((recipe) => (
+                <div className="space-y-4 pr-4">
+                  {filteredRecipes.map((recipe) => (
                     <Card 
                       key={recipe.id} 
                       className={`cursor-pointer transition-all hover:shadow-md ${
@@ -280,36 +260,39 @@ ${recipe.ayurvedicGuidelines.map(guideline => `• ${guideline.principle}: ${gui
                       }`}
                       onClick={() => setSelectedRecipe(recipe)}
                     >
-                      <CardContent className="p-4">
-                        <div className="space-y-2">
-                          <div className="flex items-start justify-between">
-                            <h3 className="font-medium text-sm leading-tight">{recipe.name}</h3>
-                            <Badge variant="secondary" className="text-xs">
-                              {recipe.category}
-                            </Badge>
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <CardTitle className="text-lg leading-tight">{recipe.name}</CardTitle>
+                            <CardDescription className="text-sm mt-1 line-clamp-2">
+                              {recipe.description}
+                            </CardDescription>
                           </div>
-                          
-                          <p className="text-xs text-muted-foreground line-clamp-2">
-                            {recipe.description}
-                          </p>
-                          
-                          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-1 ml-3">
+                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            <span className="text-sm font-medium">4.8</span>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
                             <div className="flex items-center gap-1">
-                              <Clock className="w-3 h-3" />
-                              {recipe.totalTime}m
+                              <Clock className="w-4 h-4" />
+                              {(recipe.prepTime || 0) + (recipe.cookTime || 0)}m
                             </div>
                             <div className="flex items-center gap-1">
-                              <Users className="w-3 h-3" />
+                              <Users className="w-4 h-4" />
                               {recipe.servings}
                             </div>
                             <div className="flex items-center gap-1">
-                              <Flame className="w-3 h-3" />
-                              {recipe.difficulty}
+                              <ChefHat className="w-4 h-4" />
+                              <span className="capitalize">{recipe.difficulty}</span>
                             </div>
                           </div>
                           
                           <div className="flex items-center gap-1">
-                            {recipe.ayurvedicProperties.constitution.slice(0, 2).map((const_) => (
+                            {recipe.ayurvedicProperties?.constitution?.slice(0, 2).map((const_: string) => (
                               <Badge key={const_} variant="outline" className="text-xs">
                                 {const_}
                               </Badge>
@@ -319,23 +302,32 @@ ${recipe.ayurvedicGuidelines.map(guideline => `• ${guideline.principle}: ${gui
                       </CardContent>
                     </Card>
                   ))}
+                  
+                  {filteredRecipes.length === 0 && (
+                    <div className="text-center py-12">
+                      <ChefHat className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                      <p className="text-muted-foreground">
+                        {recipes.length === 0 ? "Loading recipes..." : "No recipes found matching your filters."}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </ScrollArea>
             </div>
 
             {/* Recipe Detail */}
-            <div className="lg:col-span-2">
+            <div className="space-y-4 min-w-0 h-full">
               {selectedRecipe ? (
-                <Card>
-                  <CardHeader>
+                <Card className="h-[600px] min-w-0 w-full flex flex-col overflow-hidden">
+                  <CardHeader className="pb-4 min-w-0 w-full overflow-hidden">
                     <div className="flex items-start justify-between">
-                      <div>
+                      <div className="flex-1">
                         <CardTitle className="text-2xl">{selectedRecipe.name}</CardTitle>
-                        <CardDescription className="mt-2">
+                        <CardDescription className="text-base mt-2">
                           {selectedRecipe.description}
                         </CardDescription>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 ml-4">
                         <Button variant="outline" size="sm" onClick={() => exportRecipe(selectedRecipe)}>
                           <Download className="w-4 h-4 mr-2" />
                           Export
@@ -347,422 +339,276 @@ ${recipe.ayurvedicGuidelines.map(guideline => `• ${guideline.principle}: ${gui
                       </div>
                     </div>
                     
-                    {/* Recipe Meta */}
-                    <div className="flex flex-wrap gap-4 pt-4">
+                    <div className="flex items-center gap-6 text-sm text-muted-foreground mt-4">
                       <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-sm">
+                        <Clock className="w-4 h-4" />
+                        <span>
                           Prep: {selectedRecipe.prepTime}m | Cook: {selectedRecipe.cookTime}m | Total: {selectedRecipe.totalTime}m
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-muted-foreground" />
+                    </div>
+                    
+                    <div className="flex items-center gap-4 mt-2">
+                      <div className="flex items-center gap-1">
+                        <Users className="w-4 h-4" />
                         <span className="text-sm">Serves {selectedRecipe.servings}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <ChefHat className="w-4 h-4 text-muted-foreground" />
+                      <div className="flex items-center gap-1">
+                        <ChefHat className="w-4 h-4" />
                         <span className="text-sm capitalize">{selectedRecipe.difficulty}</span>
                       </div>
+                      <Badge variant="outline">{selectedRecipe.category}</Badge>
+                      <Badge variant="secondary">{selectedRecipe.cuisine}</Badge>
                     </div>
                   </CardHeader>
                   
-                  <CardContent className="space-y-6">
-                    <Tabs defaultValue="ingredients" className="w-full">
+                  <CardContent className="pt-0 flex-1 min-w-0 w-full flex flex-col overflow-hidden">
+                    <Tabs defaultValue="ingredients" className="h-full flex flex-col min-w-0 w-full overflow-hidden">
                       <TabsList className="grid w-full grid-cols-4">
                         <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
                         <TabsTrigger value="instructions">Instructions</TabsTrigger>
                         <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
-                        <TabsTrigger value="ayurvedic">Ayurvedic</TabsTrigger>
+                        <TabsTrigger value="ayurveda">Ayurveda</TabsTrigger>
                       </TabsList>
                       
-                      <TabsContent value="ingredients" className="space-y-4">
-                        <div className="grid gap-3">
-                          {selectedRecipe.ingredients.map((ingredient, index) => (
-                            <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                              <div className="flex items-center gap-3">
-                                <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                                <span className="font-medium">{ingredient.name}</span>
-                                {ingredient.ayurvedicRole && (
-                                  <Badge variant="outline" className="text-xs">
-                                    {ingredient.ayurvedicRole}
-                                  </Badge>
-                                )}
-                              </div>
-                              <div className="text-right">
-                                <div className="font-medium">{ingredient.quantity} {ingredient.unit}</div>
-                                {ingredient.notes && (
-                                  <div className="text-xs text-muted-foreground">{ingredient.notes}</div>
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </TabsContent>
-                      
-                      <TabsContent value="instructions" className="space-y-4">
-                        <div className="space-y-4">
-                          {selectedRecipe.cookingSteps.map((step) => (
-                            <div key={step.stepNumber} className="flex gap-4">
-                              <div className="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
-                                {step.stepNumber}
-                              </div>
-                              <div className="flex-1 space-y-2">
-                                <p className="text-sm">{step.instruction}</p>
-                                {step.duration && (
-                                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                    <Clock className="w-3 h-3" />
-                                    {step.duration} minutes
+                      <ScrollArea className="h-[350px] mt-4 min-w-0 w-full overflow-auto">
+                        <TabsContent value="ingredients" className="space-y-4">
+                          <div className="grid gap-3">
+                            {selectedRecipe.ingredients?.map((ingredient: any, index: number) => (
+                              <div key={index} className="flex flex-wrap items-center justify-between p-3 bg-muted/30 rounded-lg min-w-0">
+                                <div className="flex items-center gap-3 min-w-0">
+                                  <div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></div>
+                                  <div className="min-w-0">
+                                    <div className="font-medium break-words truncate max-w-xs">{ingredient.name}</div>
+                                    {ingredient.notes && (
+                                      <div className="text-xs text-muted-foreground break-words truncate max-w-xs">{ingredient.notes}</div>
+                                    )}
                                   </div>
-                                )}
-                                {step.ayurvedicTip && (
-                                  <div className="p-3 bg-orange-50 border-l-4 border-orange-500 rounded">
-                                    <div className="flex items-start gap-2">
-                                      <Leaf className="w-4 h-4 text-orange-500 mt-0.5" />
-                                      <div>
-                                        <div className="text-xs font-medium text-orange-700">Ayurvedic Tip</div>
-                                        <div className="text-xs text-orange-600">{step.ayurvedicTip}</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
+                                </div>
+                                <div className="text-sm font-medium break-words truncate max-w-[120px] text-right">
+                                  {ingredient.quantity} {ingredient.unit}
+                                </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
-                      </TabsContent>
-                      
-                      <TabsContent value="nutrition" className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                          <Card>
-                            <CardHeader className="pb-3">
-                              <CardTitle className="text-sm">Calories per Serving</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <div className="text-2xl font-bold text-green-600">
-                                {selectedRecipe.nutritionalInfo.caloriesPerServing}
-                              </div>
-                            </CardContent>
-                          </Card>
-                          
-                          <Card>
-                            <CardHeader className="pb-3">
-                              <CardTitle className="text-sm">Macronutrients</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-2">
-                              <div className="flex justify-between text-sm">
-                                <span>Protein</span>
-                                <span className="font-medium">{selectedRecipe.nutritionalInfo.protein}g</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span>Carbs</span>
-                                <span className="font-medium">{selectedRecipe.nutritionalInfo.carbohydrates}g</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span>Fat</span>
-                                <span className="font-medium">{selectedRecipe.nutritionalInfo.fat}g</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span>Fiber</span>
-                                <span className="font-medium">{selectedRecipe.nutritionalInfo.fiber}g</span>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </div>
+                            )) || <p>No ingredients available</p>}
+                          </div>
+                        </TabsContent>
                         
-                        <Card>
-                          <CardHeader className="pb-3">
-                            <CardTitle className="text-sm">Micronutrients</CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                            <div className="grid grid-cols-2 gap-4 text-sm">
-                              <div className="flex justify-between">
-                                <span>Calcium</span>
-                                <span className="font-medium">{selectedRecipe.nutritionalInfo.calcium}mg</span>
+                        <TabsContent value="instructions" className="space-y-4">
+                          <div className="space-y-4">
+                            {selectedRecipe.cookingSteps?.map((step: any) => (
+                              <div key={step.stepNumber} className="flex gap-4">
+                                <div className="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                                  {step.stepNumber}
+                                </div>
+                                <div className="flex-1">
+                                  <p className="text-sm leading-relaxed">{step.instruction}</p>
+                                  {step.ayurvedicTip && (
+                                    <div className="mt-2 p-2 bg-orange-50 rounded text-xs text-orange-700">
+                                      <strong>💡 Ayurvedic Tip:</strong> {step.ayurvedicTip}
+                                    </div>
+                                  )}
+                                  {step.duration && (
+                                    <div className="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
+                                      <Clock className="w-3 h-3" />
+                                      {step.duration} mins
+                                    </div>
+                                  )}
+                                </div>
                               </div>
-                              <div className="flex justify-between">
-                                <span>Iron</span>
-                                <span className="font-medium">{selectedRecipe.nutritionalInfo.iron}mg</span>
+                            )) || <p>No instructions available</p>}
+                          </div>
+                        </TabsContent>
+                        
+                        <TabsContent value="nutrition" className="space-y-4">
+                          <div className="grid grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                              <div className="text-center p-4 bg-green-50 rounded-lg">
+                                <div className="text-2xl font-bold text-green-600">
+                                  {selectedRecipe.nutritionalInfo?.caloriesPerServing || 'N/A'}
+                                </div>
+                                <div className="text-sm text-green-600">Calories per serving</div>
                               </div>
-                              <div className="flex justify-between">
-                                <span>Potassium</span>
-                                <span className="font-medium">{selectedRecipe.nutritionalInfo.potassium}mg</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span>Sodium</span>
-                                <span className="font-medium">{selectedRecipe.nutritionalInfo.sodium}mg</span>
+                              
+                              <div className="space-y-3">
+                                <div className="flex items-center justify-between p-2 bg-muted/20 rounded">
+                                  <span className="text-sm">Protein</span>
+                                  <span className="font-medium">{selectedRecipe.nutritionalInfo?.protein || 'N/A'}g</span>
+                                </div>
+                                <div className="flex items-center justify-between p-2 bg-muted/20 rounded">
+                                  <span className="text-sm">Carbohydrates</span>
+                                  <span className="font-medium">{selectedRecipe.nutritionalInfo?.carbohydrates || 'N/A'}g</span>
+                                </div>
+                                <div className="flex items-center justify-between p-2 bg-muted/20 rounded">
+                                  <span className="text-sm">Fat</span>
+                                  <span className="font-medium">{selectedRecipe.nutritionalInfo?.fat || 'N/A'}g</span>
+                                </div>
+                                <div className="flex items-center justify-between p-2 bg-muted/20 rounded">
+                                  <span className="text-sm">Fiber</span>
+                                  <span className="font-medium">{selectedRecipe.nutritionalInfo?.fiber || 'N/A'}g</span>
+                                </div>
                               </div>
                             </div>
-                          </CardContent>
-                        </Card>
-                      </TabsContent>
-                      
-                      <TabsContent value="ayurvedic" className="space-y-4">
-                        <Card>
-                          <CardHeader>
-                            <CardTitle className="text-sm flex items-center gap-2">
-                              <Leaf className="w-4 h-4" />
-                              Ayurvedic Properties
-                            </CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4 text-sm">
-                              <div>
+                            
+                            <div className="space-y-3">
+                              <h4 className="font-medium">Minerals & Vitamins</h4>
+                              <div className="space-y-2 text-sm">
+                                <div className="flex items-center justify-between p-2 bg-muted/20 rounded">
+                                  <span>Calcium</span>
+                                  <span className="font-medium">{selectedRecipe.nutritionalInfo?.calcium || 'N/A'}mg</span>
+                                </div>
+                                <div className="flex items-center justify-between p-2 bg-muted/20 rounded">
+                                  <span>Iron</span>
+                                  <span className="font-medium">{selectedRecipe.nutritionalInfo?.iron || 'N/A'}mg</span>
+                                </div>
+                                <div className="flex items-center justify-between p-2 bg-muted/20 rounded">
+                                  <span>Potassium</span>
+                                  <span className="font-medium">{selectedRecipe.nutritionalInfo?.potassium || 'N/A'}mg</span>
+                                </div>
+                                <div className="flex items-center justify-between p-2 bg-muted/20 rounded">
+                                  <span>Sodium</span>
+                                  <span className="font-medium">{selectedRecipe.nutritionalInfo?.sodium || 'N/A'}mg</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </TabsContent>
+                        
+                        <TabsContent value="ayurveda" className="space-y-4">
+                          <div className="space-y-6">
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-2">
                                 <span className="text-muted-foreground">Primary Rasa:</span>
                                 <div className="flex gap-1 mt-1">
-                                  {selectedRecipe.ayurvedicProperties.primaryRasa.map((rasa) => (
+                                  {selectedRecipe.ayurvedicProperties?.primaryRasa?.map((rasa: string) => (
                                     <Badge key={rasa} variant="secondary" className="text-xs">
                                       {rasa}
                                     </Badge>
-                                  ))}
+                                  )) || 'N/A'}
                                 </div>
                               </div>
-                              <div>
-                                <span className="text-muted-foreground">Virya:</span>
-                                <div className="mt-1">
-                                  <Badge variant="outline" className="text-xs">
-                                    {selectedRecipe.ayurvedicProperties.virya}
-                                  </Badge>
+                              
+                              <div className="space-y-2">
+                                <span className="text-muted-foreground">Virya (Energy):</span>
+                                <div className="flex items-center gap-2">
+                                  <Flame className="w-4 h-4 text-orange-500" />
+                                  <span className="capitalize font-medium">
+                                    {selectedRecipe.ayurvedicProperties?.virya || 'N/A'}
+                                  </span>
                                 </div>
                               </div>
-                              <div>
-                                <span className="text-muted-foreground">Vipaka:</span>
-                                <div className="mt-1">
-                                  <Badge variant="outline" className="text-xs">
-                                    {selectedRecipe.ayurvedicProperties.vipaka}
-                                  </Badge>
+                              
+                              <div className="space-y-2">
+                                <span className="text-muted-foreground">Vipaka (Post-digestive effect):</span>
+                                <div className="capitalize font-medium">
+                                  {selectedRecipe.ayurvedicProperties?.vipaka || 'N/A'}
                                 </div>
                               </div>
-                              <div>
+                              
+                              <div className="space-y-2">
                                 <span className="text-muted-foreground">Digestibility:</span>
-                                <div className="mt-1">
-                                  <Badge variant="outline" className="text-xs">
-                                    {selectedRecipe.ayurvedicProperties.digestibility}
-                                  </Badge>
+                                <div className="capitalize font-medium">
+                                  {selectedRecipe.ayurvedicProperties?.digestibility || 'N/A'}
                                 </div>
                               </div>
                             </div>
                             
                             <Separator />
                             
-                            <div>
+                            <div className="space-y-4">
                               <span className="text-muted-foreground text-sm">Constitution Compatibility:</span>
                               <div className="flex gap-1 mt-2">
-                                {selectedRecipe.ayurvedicProperties.constitution.map((const_) => (
+                                {selectedRecipe.ayurvedicProperties?.constitution?.map((const_: string) => (
                                   <Badge key={const_} variant="secondary">
                                     {const_}
                                   </Badge>
-                                ))}
+                                )) || 'N/A'}
                               </div>
-                            </div>
-                            
-                            <div>
+                              
                               <span className="text-muted-foreground text-sm">Ideal Seasons:</span>
                               <div className="flex gap-1 mt-2">
-                                {selectedRecipe.ayurvedicProperties.season.map((season) => (
+                                {selectedRecipe.ayurvedicProperties?.season?.map((season: string) => (
                                   <Badge key={season} variant="outline">
                                     {season}
                                   </Badge>
-                                ))}
+                                )) || 'N/A'}
                               </div>
                             </div>
-                          </CardContent>
-                        </Card>
-                        
-                        <Card>
-                          <CardHeader>
-                            <CardTitle className="text-sm flex items-center gap-2">
-                              <Heart className="w-4 h-4" />
-                              Health Benefits & Guidelines
-                            </CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-4">
-                            <div>
+                            
+                            <Separator />
+                            
+                            <div className="space-y-4">
                               <span className="text-muted-foreground text-sm">Health Benefits:</span>
                               <ul className="mt-2 space-y-1">
-                                {selectedRecipe.healthBenefits.map((benefit, index) => (
+                                {selectedRecipe.healthBenefits?.map((benefit: string, index: number) => (
                                   <li key={index} className="text-sm flex items-start gap-2">
                                     <div className="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5"></div>
                                     {benefit}
                                   </li>
-                                ))}
+                                )) || <li>No health benefits listed</li>}
                               </ul>
-                            </div>
-                            
-                            <Separator />
-                            
-                            <div>
+                              
                               <span className="text-muted-foreground text-sm">Ayurvedic Guidelines:</span>
                               <div className="mt-3 space-y-3">
-                                {selectedRecipe.ayurvedicGuidelines.map((guideline, index) => (
+                                {selectedRecipe.ayurvedicGuidelines?.map((guideline: any, index: number) => (
                                   <div key={index} className="p-3 bg-orange-50 rounded-lg border">
                                     <div className="font-medium text-sm text-orange-700">{guideline.principle}</div>
                                     <div className="text-xs text-orange-600 mt-1">{guideline.description}</div>
-                                    <div className="text-xs text-muted-foreground mt-2">
+                                    <div className="text-xs text-orange-500 mt-2">
                                       <strong>Application:</strong> {guideline.application}
                                     </div>
                                   </div>
-                                ))}
+                                )) || <p>No guidelines available</p>}
                               </div>
                             </div>
-                          </CardContent>
-                        </Card>
-                      </TabsContent>
+                          </div>
+                        </TabsContent>
+                      </ScrollArea>
                     </Tabs>
                   </CardContent>
                 </Card>
               ) : (
-                <Card>
-                  <CardContent className="flex items-center justify-center h-96">
-                    <div className="text-center space-y-3">
-                      <ChefHat className="w-12 h-12 text-muted-foreground mx-auto" />
-                      <div className="text-lg font-medium">Select a Recipe</div>
-                      <p className="text-muted-foreground">
-                        Choose a recipe from the list to view details, ingredients, and cooking instructions
-                      </p>
-                    </div>
-                  </CardContent>
+                <Card className="h-[600px] flex items-center justify-center">
+                  <div className="text-center">
+                    <ChefHat className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                    <h3 className="font-medium mb-2">Select a Recipe</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Choose a recipe from the list to view detailed information, ingredients, and cooking instructions.
+                    </p>
+                  </div>
                 </Card>
               )}
             </div>
           </div>
         </TabsContent>
 
-        <TabsContent value="cooking-guide" className="space-y-6">
+        <TabsContent value="cooking-guide">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BookOpen className="w-5 h-5" />
-                Ayurvedic Cooking Wisdom
-              </CardTitle>
+              <CardTitle>Ayurvedic Cooking Wisdom</CardTitle>
               <CardDescription>
-                Traditional principles and techniques for creating nourishing, healing meals
+                Traditional principles for healthy and harmonious cooking
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              {/* General Principles */}
-              <div>
-                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                  <Star className="w-5 h-5 text-orange-500" />
-                  General Principles
-                </h3>
-                <div className="grid gap-4">
-                  {ayurvedicCookingPrinciples.generalPrinciples.map((principle, index) => (
-                    <Card key={index}>
-                      <CardContent className="p-4">
-                        <h4 className="font-medium text-sm">{principle.title}</h4>
-                        <p className="text-sm text-muted-foreground mt-1">{principle.description}</p>
-                        <div className="mt-2 p-2 bg-green-50 rounded text-xs">
-                          <strong>Practice:</strong> {principle.practical}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              <Separator />
-
-              {/* Cooking Techniques */}
-              <div>
-                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                  <ChefHat className="w-5 h-5 text-orange-500" />
-                  Sacred Cooking Techniques
-                </h3>
-                <div className="grid gap-4">
-                  {ayurvedicCookingPrinciples.cookingTechniques.map((technique, index) => (
-                    <Card key={index}>
-                      <CardContent className="p-4">
-                        <h4 className="font-medium text-sm">{technique.technique}</h4>
-                        <p className="text-sm text-muted-foreground mt-1">{technique.description}</p>
-                        <div className="mt-2 p-2 bg-orange-50 rounded text-xs">
-                          <strong>Ayurvedic Benefit:</strong> {technique.ayurvedicBenefit}
-                        </div>
-                        <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
-                          <strong>Method:</strong> {technique.method}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              <Separator />
-
-              {/* Seasonal Guidelines */}
-              <div>
-                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                  <Leaf className="w-5 h-5 text-orange-500" />
-                  Seasonal Cooking Guidelines
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {Object.entries(ayurvedicCookingPrinciples.seasonalGuidelines).map(([season, guidelines]) => (
-                    <Card key={season}>
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-sm capitalize">{season}</CardTitle>
-                        <CardDescription className="text-xs">{guidelines.focus}</CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-3">
-                        <div>
-                          <span className="text-xs font-medium">Key Ingredients:</span>
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {guidelines.ingredients.map((ingredient) => (
-                              <Badge key={ingredient} variant="secondary" className="text-xs">
-                                {ingredient}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                        <div>
-                          <span className="text-xs font-medium">Cooking Methods:</span>
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {guidelines.cookingMethods.map((method) => (
-                              <Badge key={method} variant="outline" className="text-xs">
-                                {method}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                        <div>
-                          <span className="text-xs font-medium text-red-600">Avoid:</span>
-                          <div className="text-xs text-red-600 mt-1">
-                            {guidelines.avoid.join(', ')}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
+            <CardContent>
+              <p className="text-muted-foreground">Cooking guide content coming soon...</p>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="nutrition-calculator" className="space-y-6">
+        <TabsContent value="nutrition-calculator">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Calculator className="w-5 h-5" />
-                Nutritional Calculator
-              </CardTitle>
+              <CardTitle>Nutritional Calculator</CardTitle>
               <CardDescription>
-                Calculate nutrition and Ayurvedic properties for custom ingredient combinations
+                Calculate nutritional values for your custom recipes
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-12">
-                <Calculator className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium">Custom Nutrition Calculator</h3>
-                <p className="text-muted-foreground mt-2">
-                  This feature allows you to calculate nutrition for custom ingredient combinations.
-                </p>
-                <Button className="mt-4" disabled>
-                  Coming Soon
-                </Button>
-              </div>
+              <p className="text-muted-foreground">Nutrition calculator coming soon...</p>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

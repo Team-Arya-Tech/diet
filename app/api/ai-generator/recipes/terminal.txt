@@ -1,0 +1,1 @@
+pnpm tsx scripts/generate-recipes.ts "high-protein ayurvedic breakfast" 3
