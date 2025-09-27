@@ -2,16 +2,32 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
-function Card({ className, ...props }: React.ComponentProps<'div'>) {
+function Card({ className, children, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="card"
       className={cn(
-        'bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm',
+        'bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-[0_2px_16px_0_rgba(220,150,80,0.06)] relative',
         className,
       )}
       {...props}
-    />
+    >
+      {/* Ayurveda leaf accent, top right */}
+      <svg
+        className="absolute top-4 right-4 w-6 h-6 opacity-20 text-primary pointer-events-none select-none"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
+        <path d="M12 8V14" />
+      </svg>
+      {children}
+    </div>
   )
 }
 

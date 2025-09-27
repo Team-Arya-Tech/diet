@@ -91,8 +91,13 @@ export default function PatientsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center relative">
+        {/* Floating Ayurveda leaf accent */}
+        <svg className="absolute left-8 top-8 w-24 h-24 opacity-10 text-primary animate-float-slow z-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
+          <path d="M12 8V14" />
+        </svg>
+        <div className="text-center relative z-10">
           <Activity className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
           <p>Loading patients...</p>
         </div>
@@ -101,7 +106,16 @@ export default function PatientsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 relative overflow-x-hidden">
+      {/* Floating Ayurveda leaf accents */}
+      <svg className="absolute left-0 top-0 w-32 h-32 opacity-10 text-primary animate-float-slow z-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
+        <path d="M12 8V14" />
+      </svg>
+      <svg className="absolute right-0 bottom-0 w-24 h-24 opacity-10 text-emerald-600 animate-float-slower z-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
+        <path d="M12 8V14" />
+      </svg>
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
@@ -127,7 +141,19 @@ export default function PatientsPage() {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 relative z-10">
+        {/* Practitioner tip */}
+        <div className="mb-8 flex items-center gap-4 animate-fade-in">
+          <svg className="w-7 h-7 text-primary/80 animate-spin-slow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
+            <path d="M12 8V14" />
+          </svg>
+          <div>
+            <h2 className="text-lg font-bold text-primary mb-1">Tip: Quickly filter patients by constitution or condition to personalize diet charts.</h2>
+            <span className="text-sm text-muted-foreground">Efficient workflow for busy practitioners.</span>
+          </div>
+        </div>
+
         {/* Page Header */}
         <div className="mb-8">
           <h1 className={`text-4xl font-bold mb-2 ${language === 'hi' ? 'font-devanagari' : ''}`}>
@@ -182,11 +208,16 @@ export default function PatientsPage() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredPatients.map((patient) => (
-              <Card key={patient.id} className="hover:shadow-lg transition-shadow">
+              <Card
+                key={patient.id}
+                className="hover:shadow-lg transition-shadow focus-within:ring-2 focus-within:ring-primary/40"
+                tabIndex={0}
+                aria-label={`Patient card for ${patient.name}`}
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
-                      <CardTitle className="text-lg">{patient.name}</CardTitle>
+                      <CardTitle className="text-lg group-hover:text-primary transition-colors duration-200">{patient.name}</CardTitle>
                       <CardDescription className="flex items-center space-x-2 mt-1">
                         <span>{currentContent.age}: {patient.age}</span>
                         <span>•</span>
@@ -208,7 +239,6 @@ export default function PatientsPage() {
                         {patient.constitution}
                       </Badge>
                     </div>
-                    
                     {patient.currentConditions.length > 0 && (
                       <div>
                         <p className={`text-sm font-medium mb-1 ${language === 'hi' ? 'font-devanagari' : ''}`}>
@@ -228,38 +258,41 @@ export default function PatientsPage() {
                         </div>
                       </div>
                     )}
-
                     <div className="flex items-center text-xs text-muted-foreground">
                       <Calendar className="h-3 w-3 mr-1" />
                       <span className={language === 'hi' ? 'font-devanagari' : ''}>
                         {currentContent.lastUpdated}: {new Date(patient.updatedAt).toLocaleDateString()}
                       </span>
                     </div>
-
                     <div className="flex space-x-2 pt-2">
-                      <Link href={`/patients/${patient.id}`} className="flex-1">
-                        <Button variant="outline" size="sm" className="w-full bg-transparent">
+                      <Link href={`/patients/${patient.id}`} className="flex-1" aria-label={`View details for ${patient.name}`}> 
+                        <Button variant="outline" size="sm" className="w-full bg-transparent group" aria-label="View patient details">
                           <Eye className="h-3 w-3 mr-1" />
                           <span className={language === 'hi' ? 'font-devanagari' : ''}>
                             {currentContent.view}
                           </span>
+                          <span className="sr-only">View patient details</span>
                         </Button>
                       </Link>
-                      <Link href={`/patients/${patient.id}/edit`} className="flex-1">
-                        <Button variant="outline" size="sm" className="w-full bg-transparent">
+                      <Link href={`/patients/${patient.id}/edit`} className="flex-1" aria-label={`Edit details for ${patient.name}`}> 
+                        <Button variant="outline" size="sm" className="w-full bg-transparent group" aria-label="Edit patient details">
                           <Edit className="h-3 w-3 mr-1" />
                           <span className={language === 'hi' ? 'font-devanagari' : ''}>
                             {currentContent.edit}
                           </span>
+                          <span className="sr-only">Edit patient details</span>
                         </Button>
                       </Link>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleDeletePatient(patient.id)}
-                        className="text-destructive hover:text-destructive"
+                        className="text-destructive hover:text-destructive group"
+                        aria-label="Delete patient"
+                        title="Delete patient"
                       >
                         <Trash2 className="h-3 w-3" />
+                        <span className="sr-only">Delete patient</span>
                       </Button>
                     </div>
                   </div>

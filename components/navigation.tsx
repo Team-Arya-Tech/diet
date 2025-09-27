@@ -50,8 +50,22 @@ export function Navigation({ className = "" }: NavigationProps) {
   ]
 
   return (
-    <nav className={`${className}`}>
-      <div className="flex flex-wrap gap-4">
+    <nav className={`relative ${className}`}>
+      {/* Ayurveda leaf accent, top left */}
+      <svg
+        className="absolute -top-4 -left-4 w-10 h-10 opacity-15 text-primary pointer-events-none select-none z-0"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
+        <path d="M12 8V14" />
+      </svg>
+      <div className="flex flex-wrap gap-4 relative z-10">
         {navItems.map((item) => {
           const Icon = item.icon
           return (
@@ -60,21 +74,21 @@ export function Navigation({ className = "" }: NavigationProps) {
               href={item.href}
               className={`group flex items-center space-x-3 px-7 py-4 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl ${
                 item.current
-                  ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30"
-                  : "bg-white/80 text-gray-700 hover:bg-white hover:text-gray-900 border border-gray-200 hover:border-gray-300 shadow hover:shadow-lg hover:shadow-orange-500/10"
+                  ? "bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/20"
+                  : "bg-white/80 text-foreground hover:bg-accent/10 hover:text-primary border border-accent/30 hover:border-accent/50 shadow hover:shadow-lg hover:shadow-primary/10"
               }`}
             >
               <div className={`p-2.5 rounded-xl transition-all duration-300 ${
                 item.current 
                   ? "bg-white/20 backdrop-blur-sm" 
-                  : "bg-gray-100/80 group-hover:bg-amber-50"
+                  : "bg-accent/10 group-hover:bg-accent/20"
               }`}>
                 <Icon className={`h-5 w-5 transition-colors ${
-                  item.current ? "text-white" : "text-orange-600 group-hover:text-orange-700"
+                  item.current ? "text-white" : "text-primary group-hover:text-primary/80"
                 }`} />
               </div>
               <span className={`text-sm font-semibold transition-colors ${
-                item.current ? "text-white" : "text-gray-700 group-hover:text-orange-800"
+                item.current ? "text-white" : "text-foreground group-hover:text-primary"
               }`}>
                 {item.name}
               </span>

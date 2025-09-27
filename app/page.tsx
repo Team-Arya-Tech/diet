@@ -44,14 +44,23 @@ export default function DashboardPage() {
   })
   const [recentPatients, setRecentPatients] = useState<PatientSummary[]>([])
 
+  // Personalized greeting and Ayurveda tip
+  const greetings = [
+    "Good morning! Start your day with warm water and mindfulness.",
+    "Namaste! Remember to balance all six tastes in your meals today.",
+    "Ayurveda Tip: Eat with gratitude and awareness for better digestion.",
+    "Stay hydrated and take a mindful walk after meals.",
+    "Balance your doshas with seasonal fruits and vegetables."
+  ];
+  const [greeting, setGreeting] = useState("");
+
   useEffect(() => {
-    // Initialize sample data if needed
-    initializeSampleData()
-    
-    // Load dashboard data
-    setStats(getDashboardStats())
-    setRecentPatients(getRecentPatients(3))
-  }, [])
+    initializeSampleData();
+    setStats(getDashboardStats());
+    setRecentPatients(getRecentPatients(3));
+    // Pick a random greeting
+    setGreeting(greetings[Math.floor(Math.random() * greetings.length)]);
+  }, []);
 
   const statCards = [
     {
@@ -86,10 +95,19 @@ export default function DashboardPage() {
       change: "8,000+",
       changeLabel: "Total items"
     }
-  ]
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/30 to-orange-50/20">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/30 to-orange-50/20 relative overflow-x-hidden">
+      {/* Floating Ayurveda leaves background */}
+      <svg className="absolute left-0 top-0 w-40 h-40 opacity-10 text-primary animate-float-slow z-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
+        <path d="M12 8V14" />
+      </svg>
+      <svg className="absolute right-0 bottom-0 w-32 h-32 opacity-10 text-emerald-600 animate-float-slower z-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
+        <path d="M12 8V14" />
+      </svg>
       {/* Header */}
       <header className="bg-white/90 backdrop-blur-xl border-b border-amber-100 shadow-lg shadow-orange-500/5 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -121,9 +139,29 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10">
+        {/* Personalized greeting */}
+        <div className="mb-8 flex items-center gap-4 animate-fade-in">
+          <svg className="w-8 h-8 text-primary/80 animate-spin-slow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
+            <path d="M12 8V14" />
+          </svg>
+          <div>
+            <h2 className="text-xl font-bold text-primary mb-1">{greeting}</h2>
+            <span className="text-sm text-muted-foreground">Your Ayurveda dashboard is ready.</span>
+          </div>
+        </div>
+
+        {/* Animated Ayurveda leaf divider */}
+        <div className="w-full flex justify-center mb-10">
+          <svg className="w-full max-w-2xl h-8" viewBox="0 0 400 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 16 Q100 32 200 16 T400 16" stroke="currentColor" strokeWidth="2" fill="none" className="text-primary/20" />
+            <path d="M200 16 Q210 8 220 16 Q230 24 240 16" stroke="#eab308" strokeWidth="2" fill="none" />
+            <circle cx="200" cy="16" r="4" fill="#eab308" />
+          </svg>
+        </div>
         {/* Management Navigation */}
-        <div className="mb-10">
+  <div className="mb-10">
           <div className="flex items-center space-x-4 mb-6">
             <div className="p-2.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-xl shadow-md">
               <Users className="h-6 w-6 text-white" />
@@ -138,7 +176,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Ayurvedic Principles Section */}
-        <div className="mb-10">
+  <div className="mb-10">
           <div className="flex items-center space-x-4 mb-6">
             <div className="p-2.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-xl shadow-md">
               <Leaf className="h-6 w-6 text-white" />
@@ -202,24 +240,29 @@ export default function DashboardPage() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           {statCards.map((stat, index) => (
-            <Card key={index} className="border border-amber-100 shadow-xl shadow-orange-500/5 bg-white/90 backdrop-blur-sm hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-300 hover:-translate-y-1 rounded-xl overflow-hidden">
+            <Card
+              key={index}
+              className="border border-amber-100 shadow-xl shadow-orange-500/5 bg-white/90 backdrop-blur-sm hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-300 hover:-translate-y-1 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary/40"
+              tabIndex={0}
+              aria-label={stat.title}
+            >
               <CardContent className="p-0">
-                <div className="relative">
+                <div className="relative group">
                   <div className="p-6">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <p className="text-sm font-semibold text-orange-700 uppercase tracking-wide">{stat.title}</p>
-                        <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
+                        <p className="text-3xl font-bold text-gray-900 mt-2 group-hover:scale-105 transition-transform duration-200">{stat.value}</p>
                         <div className="flex items-center space-x-2 mt-3">
-                          <span className="text-sm font-bold text-orange-600 bg-amber-50 px-3 py-1 rounded-lg">
+                          <span className="text-sm font-bold text-orange-600 bg-amber-50 px-3 py-1 rounded-lg group-hover:bg-orange-100 transition-colors duration-200">
                             {stat.change}
                           </span>
                           <span className="text-xs text-gray-500">{stat.changeLabel}</span>
                         </div>
                       </div>
-                      <div className={`p-4 ${stat.color} rounded-xl shadow-lg`}>
+                      <div className={`p-4 ${stat.color} rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-200`}>
                         <stat.icon className="h-6 w-6 text-white" />
                       </div>
                     </div>

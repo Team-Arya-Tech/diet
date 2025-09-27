@@ -23,6 +23,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { type DietPlan, getDietPlans, getPatientById } from "@/lib/database"
+import { getRecommendationsForProfile } from "@/lib/ayurvedic-data"
 
 export default function DietPlanDetailPage() {
   const params = useParams()
@@ -30,18 +31,29 @@ export default function DietPlanDetailPage() {
   const [patient, setPatient] = useState<any>(null)
   const [language, setLanguage] = useState<"en" | "hi">("en")
   const [loading, setLoading] = useState(true)
+  const [recommendations, setRecommendations] = useState<any[]>([])
 
   useEffect(() => {
     if (params.id) {
       const plans = getDietPlans()
       const plan = plans.find(p => p.id === params.id)
       setDietPlan(plan || null)
-      
+      let patientData = null
       if (plan) {
-        const patientData = getPatientById(plan.patientId)
+        patientData = getPatientById(plan.patientId)
         setPatient(patientData)
       }
-      
+      // Smart Recommendations
+      if (patientData) {
+        const recs = getRecommendationsForProfile(
+          patientData.age,
+          patientData.gender,
+          patientData.constitution,
+          patientData.currentConditions,
+          patientData.occupation
+        )
+        setRecommendations(recs)
+      }
       setLoading(false)
     }
   }, [params.id])
@@ -208,7 +220,7 @@ export default function DietPlanDetailPage() {
         </div>
 
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview" className={language === "hi" ? "font-devanagari" : ""}>
               {currentContent.overview}
             </TabsTrigger>
@@ -221,7 +233,51 @@ export default function DietPlanDetailPage() {
             <TabsTrigger value="progress" className={language === "hi" ? "font-devanagari" : ""}>
               {currentContent.progress}
             </TabsTrigger>
+            <TabsTrigger value="smart" className={language === "hi" ? "font-devanagari" : ""}>
+              Smart Recommendations
+            </TabsTrigger>
           </TabsList>
+          {/* Smart Recommendations Tab */}
+          <TabsContent value="smart" className="space-y-6">
+            <div className="grid gap-6">
+              {recommendations.length === 0 ? (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>No smart recommendations found for this profile.</CardTitle>
+                  </CardHeader>
+                </Card>
+              ) : (
+                recommendations.map((rec, idx) => (
+                  <Card key={idx}>
+                    <CardHeader>
+                      <CardTitle className="flex items-center space-x-2">
+                        <span>{rec["Sub-Category"]}</span>
+                        <Badge variant="secondary">{rec["Category Type"]}</Badge>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div>
+                        <span className="font-semibold">Recommended Foods:</span>
+                        <span className="ml-2">{rec["Recommended Foods"]}</span>
+                      </div>
+                      <div>
+                        <span className="font-semibold">Foods to Avoid:</span>
+                        <span className="ml-2">{rec["Avoid Foods"]}</span>
+                      </div>
+                      <div>
+                        <span className="font-semibold">Meal Suggestions:</span>
+                        <span className="ml-2">{rec["Meal Suggestions"]}</span>
+                      </div>
+                      <div>
+                        <span className="font-semibold">Special Notes:</span>
+                        <span className="ml-2">{rec["Special Notes"]}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          </TabsContent>
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">

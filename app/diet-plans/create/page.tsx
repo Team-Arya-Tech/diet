@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { Activity, Languages, ArrowLeft, Save, User, Settings, Target, X } from "lucide-react"
 import Link from "next/link"
 import { type Patient, getPatients, saveDietPlan } from "@/lib/database"
-import { generateDietPlan, type DietPlanOptions } from "@/lib/diet-plan-generator"
+import { type DietPlanOptions } from "@/lib/diet-plan-generator"
 
 export default function CreateDietPlanPage() {
   const router = useRouter()
@@ -21,6 +21,7 @@ export default function CreateDietPlanPage() {
   const [language, setLanguage] = useState<"en" | "hi">("en")
   const [loading, setLoading] = useState(false)
   const [generating, setGenerating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const [options, setOptions] = useState<DietPlanOptions>({
     duration: 7,
@@ -79,14 +80,30 @@ export default function CreateDietPlanPage() {
 
   const handleGeneratePlan = async () => {
     if (!selectedPatient) return
-
+    setError(null)
     setGenerating(true)
     try {
-      const dietPlan = generateDietPlan(selectedPatient, options)
-      saveDietPlan(dietPlan)
-      router.push(`/diet-plans/${dietPlan.id}`)
-    } catch (error) {
-      console.error("Error generating diet plan:", error)
+      const res = await fetch("/api/ai-diet-chart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ patient: selectedPatient, options }),
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || "Failed to generate diet plan")
+      }
+      const { dietPlan } = await res.json()
+      // Save to local storage for now (simulate DB save)
+      if (dietPlan) {
+        // Use dynamic import to avoid SSR issues
+        const { saveDietPlan } = await import("@/lib/database")
+        saveDietPlan(dietPlan)
+        router.push(`/diet-plans/${dietPlan.id}`)
+      } else {
+        throw new Error("No diet plan returned from AI")
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to generate diet plan")
     } finally {
       setGenerating(false)
     }
@@ -194,6 +211,11 @@ export default function CreateDietPlanPage() {
           </p>
         </div>
 
+        {error && (
+          <div className="mb-4 p-4 bg-red-100 text-red-700 rounded border border-red-200 animate-pulse">
+            <span className="font-semibold">Error:</span> {error}
+          </div>
+        )}
         {patients.length === 0 ? (
           <Card className="text-center py-12">
             <CardContent>
@@ -391,7 +413,7 @@ export default function CreateDietPlanPage() {
               <Button
                 onClick={handleGeneratePlan}
                 disabled={!selectedPatient || generating}
-                className="flex items-center space-x-2"
+                className={`flex items-center space-x-2 ${generating ? "animate-pulse" : ""}`}
               >
                 <Save className="h-4 w-4" />
                 <span className={language === "hi" ? "font-devanagari" : ""}>

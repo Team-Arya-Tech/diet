@@ -1,22 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateAIDietChartWithOpenAI } from '@/lib/ai-diet-service'
+
+import { generateAIDietChart } from '@/lib/ai-diet-generator'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     
     // Validate request body
-    if (!body.patientProfile) {
+
+    // Accepts: { patient, options }
+    if (!body.patient) {
       return NextResponse.json(
-        { error: 'Patient profile is required' },
+        { error: 'patient is required' },
         { status: 400 }
       )
     }
 
     // Generate AI diet chart
-    const dietChart = await generateAIDietChartWithOpenAI(body)
+    const dietPlan = await generateAIDietChart(body.patient, body.options)
 
-    return NextResponse.json({ dietChart })
+    if (!dietPlan) {
+      return NextResponse.json({ error: 'AI failed to generate a diet plan' }, { status: 500 })
+    }
+
+    return NextResponse.json({ dietPlan })
 
   } catch (error) {
     console.error('AI Diet Chart Generation Error:', error)

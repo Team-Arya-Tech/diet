@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -30,9 +31,11 @@ import {
   type DietChartFilters
 } from "@/lib/food-database"
 import { getPatients, type Patient, initializeSampleData } from "@/lib/database"
+import { getRecommendationsForProfile } from "@/lib/ayurvedic-data"
 import Link from "next/link"
 
 export default function DietChartsPage() {
+  // All hooks must be inside the function component
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedMeal, setSelectedMeal] = useState<"breakfast" | "lunch" | "dinner" | "snacks">("breakfast")
   const [selectedFoods, setSelectedFoods] = useState<{[key: string]: SelectedFood[]}>({
@@ -47,10 +50,11 @@ export default function DietChartsPage() {
   const [filters, setFilters] = useState<DietChartFilters>({})
   const [showFilters, setShowFilters] = useState(false)
   const [activeTab, setActiveTab] = useState("builder")
-  
   // Patient selection state
   const [patients, setPatients] = useState<Patient[]>([])
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
+  // Smart Recommendations state
+  const [recommendations, setRecommendations] = useState<any[]>([])
 
   // Load food items, saved charts, and patients
   useEffect(() => {
@@ -60,13 +64,28 @@ export default function DietChartsPage() {
     } catch (error) {
       console.error("Error initializing sample data:", error)
     }
-    
     const foods = searchFoodItems("", filters)
     setFoodItems(foods)
     setSavedCharts(getDietCharts())
     const patientsData = getPatients()
     setPatients(patientsData)
   }, [filters])
+
+  // Update recommendations when patient changes
+  useEffect(() => {
+    if (selectedPatient) {
+      const recs = getRecommendationsForProfile(
+        selectedPatient.age,
+        selectedPatient.gender,
+        selectedPatient.constitution,
+        selectedPatient.currentConditions,
+        selectedPatient.occupation
+      )
+      setRecommendations(recs)
+    } else {
+      setRecommendations([])
+    }
+  }, [selectedPatient])
 
   // Search foods
   const handleSearch = (query: string) => {
@@ -298,7 +317,38 @@ export default function DietChartsPage() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/30 to-orange-50/20 relative overflow-x-hidden">
+      {/* AhaarWISE Branding Header */}
+      <header className="bg-white/90 backdrop-blur-xl border-b border-amber-100 shadow-lg shadow-orange-500/5 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-5">
+            <div className="flex items-center">
+              <div className="flex items-center space-x-4">
+                <div className="p-3 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl shadow-lg">
+                  <Calendar className="h-8 w-8 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+                    AhaarWISE
+                  </h1>
+                  <p className="text-sm text-gray-600">Ayurvedic Diet Intelligence System - Modern nutrition with ancient wisdom</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center space-x-5">
+              <LanguageSwitcher />
+              <div className="flex items-center space-x-2 bg-gradient-to-r from-amber-50 to-orange-50 px-5 py-2.5 rounded-xl border border-amber-200 shadow-sm">
+                <div className="w-2.5 h-2.5 bg-orange-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-orange-700">Ayurvedic Practitioner</span>
+              </div>
+              <div className="bg-white p-2.5 rounded-xl shadow-sm border border-gray-100">
+                <p className="text-sm font-medium text-gray-900">Holistic Health & Wellness</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Diet Chart Builder</h1>
@@ -435,6 +485,102 @@ export default function DietChartsPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Smart Recommendations Section (Expandable) */}
+      {selectedPatient && (
+        <Card className="mt-4 border-0 shadow-lg bg-gradient-to-br from-orange-50/30 via-amber-50/20 to-yellow-50/10 backdrop-blur-sm">
+          <Accordion type="single" collapsible>
+            <AccordionItem value="smart-recommendations" className="border-none">
+              <AccordionTrigger className="hover:no-underline px-6 py-4">
+                <div className="flex items-center gap-4 w-full">
+                  <div className="flex items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 p-3 shadow-lg">
+                    <Sparkles className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <h3 className="text-xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+                      Smart Recommendations
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Personalized Ayurvedic insights for {selectedPatient.name}
+                    </p>
+                  </div>
+                  <Badge variant="secondary" className="bg-orange-100 text-orange-700 border-orange-200">
+                    {recommendations.length} suggestions
+                  </Badge>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                {recommendations.length === 0 ? (
+                  <div className="text-center py-8">
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Sparkles className="h-8 w-8 text-gray-400" />
+                    </div>
+                    <p className="text-gray-600 font-medium">No smart recommendations available</p>
+                    <p className="text-sm text-gray-500 mt-1">Recommendations will appear based on patient profile</p>
+                  </div>
+                ) : (
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {recommendations.map((rec, idx) => (
+                      <Card key={idx} className="border border-orange-100/50 shadow-sm hover:shadow-md transition-shadow bg-white/80 backdrop-blur-sm">
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center justify-between">
+                            <CardTitle className="text-lg font-semibold text-gray-900">
+                              {rec["Sub-Category"]}
+                            </CardTitle>
+                            <Badge 
+                              variant="outline" 
+                              className="bg-gradient-to-r from-orange-100 to-amber-100 text-orange-700 border-orange-200"
+                            >
+                              {rec["Category Type"]}
+                            </Badge>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4 text-sm">
+                          <div className="space-y-2">
+                            <div className="flex items-start gap-2">
+                              <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <div>
+                                <span className="font-medium text-green-700">Recommended:</span>
+                                <p className="text-gray-700 mt-1">{rec["Recommended Foods"]}</p>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-start gap-2">
+                              <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <div>
+                                <span className="font-medium text-red-700">Avoid:</span>
+                                <p className="text-gray-700 mt-1">{rec["Avoid Foods"]}</p>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-start gap-2">
+                              <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <div>
+                                <span className="font-medium text-blue-700">Meal Ideas:</span>
+                                <p className="text-gray-700 mt-1">{rec["Meal Suggestions"]}</p>
+                              </div>
+                            </div>
+                            
+                            {rec["Special Notes"] && (
+                              <div className="flex items-start gap-2">
+                                <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0"></div>
+                                <div>
+                                  <span className="font-medium text-amber-700">Notes:</span>
+                                  <p className="text-gray-700 mt-1">{rec["Special Notes"]}</p>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </Card>
+      )}
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3">
@@ -820,6 +966,7 @@ export default function DietChartsPage() {
           </Card>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
-  )
+  );
 }

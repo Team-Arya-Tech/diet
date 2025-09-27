@@ -29,11 +29,33 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable} ${notoSansDevanagari.variable}`}>
-        <TranslationProvider>
-          <Suspense fallback={null}>{children}</Suspense>
-        </TranslationProvider>
-        <Analytics />
+      <body
+        className={`font-sans ${inter.variable} ${notoSansDevanagari.variable} bg-background text-foreground min-h-screen relative`}
+        style={{
+          background:
+            'linear-gradient(120deg, var(--secondary) 0%, var(--background) 100%)',
+        }}
+      >
+        {/* Ayurveda leaf accent, bottom left */}
+        <svg
+          className="fixed bottom-0 left-0 w-32 h-32 opacity-10 text-primary pointer-events-none select-none z-0"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
+          <path d="M12 8V14" />
+        </svg>
+        <div className="relative z-10">
+          <TranslationProvider>
+            <Suspense fallback={null}>{children}</Suspense>
+          </TranslationProvider>
+          <Analytics />
+        </div>
       </body>
     </html>
   )
