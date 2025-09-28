@@ -211,6 +211,77 @@ export default function DietChartsPage() {
     }
   }
 
+  // Generate Weekly Chart and display in table format
+  const handleWeeklyChartGeneration = async () => {
+    if (!selectedPatient) {
+      alert("Please select a patient first")
+      return
+    }
+
+    try {
+      // Call the LLM API to generate the weekly diet chart
+      const res = await fetch("/api/ai-diet-chart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          patient: selectedPatient,
+          options: {
+            duration: 7,
+            focusArea: selectedPatient.currentConditions.length > 0 ? selectedPatient.currentConditions[0] : 'General wellness',
+            dietaryStyle: 'Traditional Ayurvedic'
+          }
+        })
+      })
+      
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || "Failed to generate weekly chart")
+      }
+      
+      const { dietPlan } = await res.json()
+      if (dietPlan) {
+        // Convert DietPlan to DietChart format for UI compatibility
+        const dietChart: DietChart = {
+          id: dietPlan.id,
+          name: dietPlan.planName,
+          description: dietPlan.description,
+          patientId: dietPlan.patientId,
+          startDate: new Date(dietPlan.startDate),
+          endDate: new Date(dietPlan.endDate),
+          weeklyPlan: convertDietPlanToWeeklyPlan(dietPlan),
+          totalCalories: dietPlan.targetCalories,
+          nutritionalSummary: {
+            calories: dietPlan.targetCalories,
+            protein: Math.round(dietPlan.targetCalories * 0.15 / 4),
+            carbohydrates: Math.round(dietPlan.targetCalories * 0.55 / 4),
+            fat: Math.round(dietPlan.targetCalories * 0.30 / 9),
+            fiber: 25,
+            sugar: 50,
+            sodium: 2300,
+            potassium: 3500,
+            calcium: 1000,
+            iron: 15,
+            vitamins: {}
+          },
+          ayurvedicGuidelines: dietPlan.recommendations || [],
+          createdAt: new Date(dietPlan.createdAt),
+          createdBy: dietPlan.createdBy,
+          isAIGenerated: true
+        }
+        
+        setCurrentDietChart(dietChart)
+        setSavedCharts(prev => [...prev, dietChart])
+        
+        // Switch to weekly chart tab to show the table
+        setActiveTab("weekly")
+        alert("Weekly chart generated successfully!")
+      }
+    } catch (error) {
+      console.error("Failed to generate weekly chart:", error)
+      alert("Failed to generate weekly chart. Please try again.")
+    }
+  }
+
   // Calculate target calories based on patient data
   const calculateTargetCalories = (patient: Patient): number => {
     // Basic BMR calculation using Mifflin-St Jeor Equation
@@ -237,60 +308,91 @@ export default function DietChartsPage() {
     const weeklyPlan = []
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     
+    // Sample meal names for fallback when AI doesn't provide complete data
+    const fallbackMeals = {
+      breakfast: ['Oats Porridge', 'Moong Dal Dosa', 'Vegetable Upma', 'Quinoa Kheer', 'Ragi Pancakes', 'Besan Chilla', 'Poha'],
+      lunch: ['Dal Rice', 'Vegetable Khichdi', 'Quinoa Pulao', 'Mixed Dal', 'Vegetable Curry with Rice', 'Sambar Rice', 'Curd Rice'],
+      dinner: ['Light Vegetable Soup', 'Steamed Vegetables', 'Moong Dal Soup', 'Vegetable Stew', 'Millet Porridge', 'Light Khichdi', 'Vegetable Broth'],
+      snacks: ['Roasted Almonds', 'Fresh Fruit', 'Herbal Tea', 'Coconut Water', 'Mixed Nuts', 'Apple Slices', 'Green Tea']
+    }
+    
     for (let i = 1; i <= 7; i++) {
       const dayPlan = dietPlan.dailyMeals?.[i]
-      if (dayPlan) {
-        // Convert each meal to the expected format
-        const convertMeal = (mealData: any) => {
-          if (!mealData) return { items: [], totalCalories: 0, nutrition: {}, ayurvedicBalance: {} }
-          
-          // Create a selected food item from meal data
-          const selectedFood: SelectedFood = {
-            foodId: `meal-${Date.now()}`,
-            name: mealData.recipes?.[0] || 'AI Generated Meal',
-            quantity: 1,
-            unit: "serving",
-            calories: 250, // Default calories
-            ayurvedicScore: 85
-          }
-          
-          return {
-            items: [selectedFood],
-            totalCalories: selectedFood.calories,
-            nutrition: calculateNutritionalSummary([selectedFood]),
-            ayurvedicBalance: {
-              doshaEffect: { vata: 0, pitta: 0, kapha: 0 },
-              rasaBalance: ["sweet"],
-              viryaEffect: "neutral"
-            }
+      
+      // Convert each meal to the expected format
+      const convertMeal = (mealData: any, mealType: string, dayIndex: number) => {
+        let mealName = 'AI Generated Meal'
+        let calories = 250
+        
+        if (mealData && mealData.recipes && mealData.recipes[0]) {
+          mealName = mealData.recipes[0]
+        } else {
+          // Use fallback meals with variety across days
+          const fallbackArray = fallbackMeals[mealType as keyof typeof fallbackMeals] || fallbackMeals.snacks
+          mealName = fallbackArray[dayIndex % fallbackArray.length]
+        }
+        
+        // Vary calories based on meal type
+        switch (mealType) {
+          case 'breakfast': calories = 300; break;
+          case 'lunch': calories = 400; break;
+          case 'dinner': calories = 300; break;
+          case 'snacks': calories = 150; break;
+          default: calories = 250;
+        }
+        
+        const selectedFood: SelectedFood = {
+          foodId: `meal-${i}-${mealType}`,
+          name: mealName,
+          quantity: 1,
+          unit: "serving",
+          calories: calories,
+          ayurvedicScore: 85
+        }
+        
+        return {
+          items: [selectedFood],
+          totalCalories: selectedFood.calories,
+          nutrition: calculateNutritionalSummary([selectedFood]),
+          ayurvedicBalance: {
+            doshaEffect: { vata: 0, pitta: 0, kapha: 0 },
+            rasaBalance: ["sweet"],
+            viryaEffect: "neutral"
           }
         }
-
-        weeklyPlan.push({
-          day: i,
-          dayName: days[i - 1],
-          meals: {
-            breakfast: convertMeal(dayPlan.breakfast),
-            lunch: convertMeal(dayPlan.lunch),
-            dinner: convertMeal(dayPlan.dinner),
-            snacks: convertMeal(dayPlan.midMorning || dayPlan.midAfternoon)
-          },
-          dailyCalories: 2000, // Default daily calories
-          dailyNutrition: {
-            calories: 2000,
-            protein: 75,
-            carbohydrates: 250,
-            fat: 67,
-            fiber: 25,
-            sugar: 50,
-            sodium: 2300,
-            potassium: 3500,
-            calcium: 1000,
-            iron: 15,
-            vitamins: {}
-          }
-        })
       }
+
+      const breakfastMeal = convertMeal(dayPlan?.breakfast, 'breakfast', i - 1)
+      const lunchMeal = convertMeal(dayPlan?.lunch, 'lunch', i - 1)
+      const dinnerMeal = convertMeal(dayPlan?.dinner, 'dinner', i - 1)
+      const snacksMeal = convertMeal(dayPlan?.midMorning || dayPlan?.midAfternoon, 'snacks', i - 1)
+      
+      const dailyCalories = breakfastMeal.totalCalories + lunchMeal.totalCalories + dinnerMeal.totalCalories + snacksMeal.totalCalories
+
+      weeklyPlan.push({
+        day: i,
+        dayName: days[i - 1],
+        meals: {
+          breakfast: breakfastMeal,
+          lunch: lunchMeal,
+          dinner: dinnerMeal,
+          snacks: snacksMeal
+        },
+        dailyCalories: dailyCalories,
+        dailyNutrition: {
+          calories: dailyCalories,
+          protein: Math.round(dailyCalories * 0.15 / 4),
+          carbohydrates: Math.round(dailyCalories * 0.55 / 4),
+          fat: Math.round(dailyCalories * 0.30 / 9),
+          fiber: 25,
+          sugar: 50,
+          sodium: 2300,
+          potassium: 3500,
+          calcium: 1000,
+          iron: 15,
+          vitamins: {}
+        }
+      })
     }
     
     return weeklyPlan
@@ -650,6 +752,14 @@ export default function DietChartsPage() {
                 >
                   Generate AI Chart
                 </Button>
+                <Button 
+                  onClick={handleWeeklyChartGeneration} 
+                  variant="outline"
+                  className="w-full border-purple-200 text-purple-700 hover:bg-purple-50"
+                  disabled={!selectedPatient}
+                >
+                  Generate Weekly Chart
+                </Button>
               </CardContent>
             </Card>
           </CardContent>
@@ -753,8 +863,9 @@ export default function DietChartsPage() {
       )}
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="builder">Diet Builder</TabsTrigger>
+          <TabsTrigger value="weekly">Weekly Chart</TabsTrigger>
           <TabsTrigger value="saved">Saved Charts</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
@@ -1024,6 +1135,172 @@ export default function DietChartsPage() {
               </div>
             </div>
           </div>
+        </TabsContent>
+
+        <TabsContent value="weekly" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Calendar className="h-5 w-5" />
+                7-Day Weekly Meal Plan
+                {selectedPatient && (
+                  <Badge variant="outline" className="ml-2">
+                    {selectedPatient.name}
+                  </Badge>
+                )}
+              </CardTitle>
+              <CardDescription>
+                {currentDietChart ? (
+                  <>AI-generated Ayurvedic meal plan based on {selectedPatient?.constitution} constitution</>
+                ) : (
+                  "Generate a weekly chart to view the 7-day meal plan table"
+                )}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {currentDietChart && currentDietChart.weeklyPlan ? (
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse border border-gray-200 text-sm">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="border border-gray-200 px-4 py-3 text-left font-semibold">Day</th>
+                        <th className="border border-gray-200 px-4 py-3 text-left font-semibold">Breakfast</th>
+                        <th className="border border-gray-200 px-4 py-3 text-left font-semibold">Lunch</th>
+                        <th className="border border-gray-200 px-4 py-3 text-left font-semibold">Dinner</th>
+                        <th className="border border-gray-200 px-4 py-3 text-left font-semibold">Snacks</th>
+                        <th className="border border-gray-200 px-4 py-3 text-left font-semibold">Total Calories</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {currentDietChart.weeklyPlan.map((day, index) => (
+                        <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
+                          <td className="border border-gray-200 px-4 py-3 font-medium">
+                            <div className="flex flex-col">
+                              <span className="font-semibold text-gray-900">Day {day.day}</span>
+                              <span className="text-xs text-gray-500">{day.dayName}</span>
+                            </div>
+                          </td>
+                          <td className="border border-gray-200 px-4 py-3">
+                            <div className="space-y-1">
+                              {day.meals.breakfast.items.map((item, idx) => (
+                                <div key={idx} className="text-gray-800">
+                                  <div className="font-medium">{item.name}</div>
+                                  <div className="text-xs text-gray-500">{item.calories} cal</div>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="border border-gray-200 px-4 py-3">
+                            <div className="space-y-1">
+                              {day.meals.lunch.items.map((item, idx) => (
+                                <div key={idx} className="text-gray-800">
+                                  <div className="font-medium">{item.name}</div>
+                                  <div className="text-xs text-gray-500">{item.calories} cal</div>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="border border-gray-200 px-4 py-3">
+                            <div className="space-y-1">
+                              {day.meals.dinner.items.map((item, idx) => (
+                                <div key={idx} className="text-gray-800">
+                                  <div className="font-medium">{item.name}</div>
+                                  <div className="text-xs text-gray-500">{item.calories} cal</div>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="border border-gray-200 px-4 py-3">
+                            <div className="space-y-1">
+                              {day.meals.snacks.items.map((item, idx) => (
+                                <div key={idx} className="text-gray-800">
+                                  <div className="font-medium">{item.name}</div>
+                                  <div className="text-xs text-gray-500">{item.calories} cal</div>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="border border-gray-200 px-4 py-3 text-center">
+                            <div className="font-semibold text-lg text-blue-600">
+                              {day.dailyCalories}
+                            </div>
+                            <div className="text-xs text-gray-500">calories</div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  
+                  {/* Weekly Summary */}
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Card className="p-4">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-green-600">
+                          {currentDietChart.totalCalories}
+                        </div>
+                        <div className="text-sm text-gray-600">Daily Target Calories</div>
+                      </div>
+                    </Card>
+                    <Card className="p-4">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-purple-600">
+                          {currentDietChart.weeklyPlan.length}
+                        </div>
+                        <div className="text-sm text-gray-600">Days Planned</div>
+                      </div>
+                    </Card>
+                    <Card className="p-4">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-orange-600">
+                          {selectedPatient?.constitution || 'N/A'}
+                        </div>
+                        <div className="text-sm text-gray-600">Constitution Type</div>
+                      </div>
+                    </Card>
+                  </div>
+
+                  {/* Ayurvedic Guidelines */}
+                  {currentDietChart.ayurvedicGuidelines && currentDietChart.ayurvedicGuidelines.length > 0 && (
+                    <Card className="mt-6 bg-amber-50/50 border-amber-200">
+                      <CardHeader>
+                        <CardTitle className="text-amber-800 flex items-center gap-2">
+                          <Sparkles className="h-5 w-5" />
+                          Ayurvedic Guidelines
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-2">
+                          {currentDietChart.ayurvedicGuidelines.map((guideline, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-amber-700">
+                              <div className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <span>{guideline}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Calendar className="h-8 w-8 text-gray-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No Weekly Chart Generated</h3>
+                  <p className="text-gray-600 mb-6">Generate a weekly meal plan to view the 7-day table</p>
+                  {selectedPatient && (
+                    <Button 
+                      onClick={handleWeeklyChartGeneration}
+                      className="bg-gradient-to-r from-purple-600 to-pink-600"
+                    >
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Generate Weekly Chart
+                    </Button>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="saved" className="space-y-6">

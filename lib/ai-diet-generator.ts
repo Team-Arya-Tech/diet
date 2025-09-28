@@ -218,11 +218,23 @@ const convertAIDailyPlans = (aiDailyPlans: any): DietPlan['dailyMeals'] => {
     const mealTypes = ['breakfast', 'midMorning', 'lunch', 'midAfternoon', 'dinner', 'bedtime'] as const
     
     mealTypes.forEach(mealType => {
-      if (dayPlan[mealType]) {
+      if (dayPlan[mealType] && typeof dayPlan[mealType] === 'object') {
         const meal = dayPlan[mealType]
+        
+        // Safe access to meal properties with fallbacks
+        const mealName = meal.name || 'AI Generated Meal'
+        const cookingMethod = meal.cookingMethod || 'No cooking instructions provided'
+        const ayurvedicBenefits = meal.ayurvedicBenefits || 'Ayurvedic benefits not specified'
+        const ingredients = Array.isArray(meal.ingredients) ? meal.ingredients.join(', ') : 'Ingredients not specified'
+        const cookingTime = meal.cookingTime || 'Time not specified'
+        const difficulty = meal.difficulty || 'Not specified'
+        const servings = meal.servings || 1
+        const calories = meal.nutritionalInfo?.calories || 'N/A'
+        const protein = meal.nutritionalInfo?.protein || 'N/A'
+        
         const mealData = {
-          recipes: [meal.name],
-          notes: `${meal.cookingMethod}\n\nAyurvedic Benefits: ${meal.ayurvedicBenefits}\n\nIngredients: ${meal.ingredients.join(', ')}\n\nCooking Time: ${meal.cookingTime}\nDifficulty: ${meal.difficulty}\nServings: ${meal.servings}\n\nNutrition (per serving): ${meal.nutritionalInfo?.calories || 'N/A'} cal, ${meal.nutritionalInfo?.protein || 'N/A'}g protein`
+          recipes: [mealName],
+          notes: `${cookingMethod}\n\nAyurvedic Benefits: ${ayurvedicBenefits}\n\nIngredients: ${ingredients}\n\nCooking Time: ${cookingTime}\nDifficulty: ${difficulty}\nServings: ${servings}\n\nNutrition (per serving): ${calories} cal, ${protein}g protein`
         }
         
         // Type-safe assignment
