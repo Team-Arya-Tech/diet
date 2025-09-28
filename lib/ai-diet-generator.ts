@@ -124,7 +124,7 @@ Format the response as a JSON object with this structure:
 }`
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt }
@@ -186,7 +186,7 @@ Format the response as a JSON object with this structure:
         symptomsImprovement: [],
         notes: [`AI-generated plan created on ${new Date().toLocaleDateString()}`]
       },
-      createdBy: "AI Diet Generator (GPT-4)",
+      createdBy: "AI Diet Generator (GPT-3.5-turbo)",
       createdAt: new Date(),
       updatedAt: new Date(),
       isActive: true
@@ -349,7 +349,7 @@ Respond in JSON format:
 
     console.log('Making OpenAI API call...')
     const completion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt }

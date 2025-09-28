@@ -181,7 +181,7 @@ export default function ChatPage() {
           <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             <span className={language === "hi" ? "font-devanagari" : ""}>
-              {language === "en" ? "Powered by OpenAI GPT-4" : "OpenAI GPT-4 द्वारा संचालित"}
+              {language === "en" ? "Powered by OpenAI GPT-3.5-turbo" : "OpenAI GPT-3.5-turbo द्वारा संचालित"}
             </span>
           </div>
         </div>

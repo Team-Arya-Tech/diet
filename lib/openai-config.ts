@@ -9,7 +9,7 @@ export const openai = new OpenAI({
 });
 
 export const OPENAI_CONFIG = {
-  model: 'gpt-4', // Using GPT-4 for better medical/health responses
+  model: 'gpt-3.5-turbo', // Using GPT-3.5-turbo for cost-effective responses
   maxTokens: 1000,
   temperature: 0.7, // Balanced creativity while maintaining accuracy
   systemPrompt: `You are an expert Ayurvedic practitioner and nutritionist with deep knowledge of traditional Indian medicine. 

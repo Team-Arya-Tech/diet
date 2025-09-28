@@ -136,7 +136,7 @@ Strictly output only a valid, compact, minified JSON array of Recipe objects, fo
       'Authorization': `Bearer ${OPENAI_API_KEY}`
     },
     body: JSON.stringify({
-      model: 'gpt-4',
+      model: 'gpt-3.5-turbo',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Generate ${count} full, unique, authentic Ayurvedic recipes as a JSON array of Recipe objects, not just ingredients. Each object must have all required fields as per the interface. Do not output only ingredients or partial recipes. ${prompt ? `Focus on: ${prompt}` : ''}` }
