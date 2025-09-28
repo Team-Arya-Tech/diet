@@ -105,14 +105,22 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className={`
-        fixed inset-y-0 left-0 z-50 w-64 lg:w-72 bg-white shadow-xl transform transition-transform duration-300 ease-in-out
-        lg:translate-x-0 lg:static lg:inset-0
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+      <div 
+        className={`
+          fixed inset-y-0 left-0 z-50 w-64 lg:w-72 shadow-xl transform transition-transform duration-300 ease-in-out
+          lg:translate-x-0 lg:static lg:inset-0
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}
+        style={{
+          backgroundImage: 'url("/nbg.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center justify-between h-16 px-6 bg-gradient-to-r from-orange-500 to-amber-500">
+          <div className="flex items-center justify-between h-16 px-6 bg-black/30">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
                 <Activity className="h-6 w-6 text-white" />
@@ -144,15 +152,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   className={`
                     flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200
                     ${item.current
-                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md'
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-orange-600'
+                      ? 'bg-white/20 text-white shadow-md backdrop-blur-sm'
+                      : 'text-gray-100 hover:bg-white/10 hover:text-white'
                     }
                   `}
                 >
                   <Icon className={`mr-3 h-5 w-5 ${item.current ? 'text-white' : ''}`} />
                   <span className="flex-1">{item.name}</span>
                   {item.badge && (
-                    <span className="ml-2 px-2 py-0.5 text-xs bg-orange-100 text-orange-700 rounded-full">
+                    <span className="ml-2 px-2 py-0.5 text-xs bg-white/30 text-white rounded-full backdrop-blur-sm">
                       {item.badge}
                     </span>
                   )}
@@ -165,13 +173,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </nav>
 
           {/* Ayurvedic Principles Quick Access */}
-          <div className="px-4 py-4 border-t border-gray-200">
-            <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg p-3 lg:p-4">
+          <div className="px-4 py-4 border-t border-white/20">
+            <div className="bg-white/10 rounded-lg p-3 lg:p-4 backdrop-blur-sm">
               <div className="flex items-center space-x-2 mb-2">
-                <Leaf className="h-4 w-4 text-orange-600 flex-shrink-0" />
-                <span className="text-sm font-medium text-orange-800">Ayurvedic Wisdom</span>
+                <Leaf className="h-4 w-4 text-gray-100 flex-shrink-0" />
+                <span className="text-sm font-medium text-white">Ayurvedic Wisdom</span>
               </div>
-              <p className="text-xs text-orange-700 leading-relaxed">
+              <p className="text-xs text-gray-100 leading-relaxed">
                 Balance your doshas with seasonal awareness and mindful eating.
               </p>
             </div>
@@ -190,34 +198,43 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Top header */}
-        <header className="bg-white shadow-sm border-b border-gray-200">
-          <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
-            <div className="flex items-center">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="lg:hidden mr-2"
-                onClick={() => setSidebarOpen(true)}
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-              <div className="flex items-center space-x-4">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  {navigation.find(item => item.current)?.name || 'Dashboard'}
-                </h2>
+        <header 
+          className="shadow-sm border-b border-white/20"
+          style={{
+            backgroundImage: 'url("/nbg.png")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          <div className="bg-black/30">
+            <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
+              <div className="flex items-center">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="lg:hidden mr-2 text-white hover:bg-white/20"
+                  onClick={() => setSidebarOpen(true)}
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+                <div className="flex items-center space-x-4">
+                  <h2 className="text-lg font-semibold text-white">
+                    {navigation.find(item => item.current)?.name || 'Dashboard'}
+                  </h2>
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-center space-x-4">
-              <LanguageSwitcher />
-              
-              {/* Notifications */}
-              <Button variant="ghost" size="sm" className="relative">
-                <Bell className="h-5 w-5 text-gray-500" />
-                <span className="absolute -top-1 -right-1 h-4 w-4 bg-orange-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-medium">3</span>
-                </span>
-              </Button>
+              <div className="flex items-center space-x-4">
+                <LanguageSwitcher />
+                
+                {/* Notifications */}
+                <Button variant="ghost" size="sm" className="relative text-white hover:bg-white/20">
+                  <Bell className="h-5 w-5" />
+                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-orange-500 rounded-full flex items-center justify-center">
+                    <span className="text-xs text-white font-medium">3</span>
+                  </span>
+                </Button>
 
               {/* User menu */}
               {user && (
@@ -225,7 +242,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                       <Avatar className="h-8 w-8">
-                        <AvatarFallback className="bg-orange-500 text-white text-sm">
+                        <AvatarFallback className="bg-white/30 text-white text-sm backdrop-blur-sm">
                           {user.fullName?.split(' ').map(n => n[0]).join('') || user.username.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
@@ -268,6 +285,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}
+              </div>
             </div>
           </div>
         </header>
