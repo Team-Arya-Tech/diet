@@ -1321,47 +1321,89 @@ export class WeeklyDietChartPDFExporter {
     this.addSectionTitle('7-DAY MEAL PLAN')
     
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    const tableData: any[][] = []
     
     weeklyPlan.slice(0, 7).forEach((day, index) => {
-      if (this.currentY > 250) {
-        this.addNewPage()
+      const dayName = days[index] || `Day ${index + 1}`
+      
+      // Handle both GPT dailyPlans structure and converted weeklyPlan structure
+      const formatMealName = (mealData: any) => {
+        if (!mealData) return '-'
+        
+        // If it's a GPT meal object with name
+        if (mealData.name) {
+          return mealData.name
+        }
+        
+        // If it's converted weeklyPlan items array
+        if (mealData.items && Array.isArray(mealData.items)) {
+          return mealData.items.map((item: any) => item.name || item).join(', ')
+        }
+        
+        return '-'
       }
       
-      // Day header
-      this.doc.setFillColor(251, 146, 60) // Orange
-      this.doc.rect(this.margin, this.currentY, this.pageWidth - 2 * this.margin, 8, 'F')
+      const breakfast = formatMealName(day.meals?.breakfast)
+      const lunch = formatMealName(day.meals?.lunch)
+      const dinner = formatMealName(day.meals?.dinner)
+      const snacks = formatMealName(day.meals?.snacks || day.meals?.midMorning || day.meals?.midAfternoon)
       
-      this.doc.setTextColor(255, 255, 255)
-      this.doc.setFontSize(11)
-      this.doc.setFont('helvetica', 'bold')
-      this.doc.text(`${days[index]} - Day ${index + 1}`, this.margin + 3, this.currentY + 6)
-      
-      this.doc.setTextColor(0, 0, 0)
-      this.currentY += 12
-      
-      // Meals for this day
-      const meals = ['breakfast', 'midMorning', 'lunch', 'midAfternoon', 'dinner']
-      const mealLabels = ['Breakfast', 'Mid-Morning', 'Lunch', 'Mid-Afternoon', 'Dinner']
-      
-      meals.forEach((mealType, mealIndex) => {
-        if (day.meals?.[mealType]?.items?.length > 0) {
-          this.doc.setFont('helvetica', 'bold')
-          this.doc.setFontSize(9)
-          this.doc.text(`${mealLabels[mealIndex]}:`, this.margin + 5, this.currentY)
-          
-          this.doc.setFont('helvetica', 'normal')
-          this.doc.setFontSize(8)
-          // Extract meal names from the items array (items are objects with 'name' property)
-          const items = day.meals[mealType].items.map((item: any) => item.name || item).join(', ')
-          this.doc.text(items, this.margin + 25, this.currentY, { 
-            maxWidth: this.pageWidth - this.margin - 30 
-          })
-          this.currentY += 6
+      // Calculate total daily calories from individual meals
+      const calculateMealCalories = (mealData: any) => {
+        if (!mealData) return 0
+        if (mealData.nutritionalInfo?.calories) return mealData.nutritionalInfo.calories
+        if (mealData.totalCalories) return mealData.totalCalories
+        if (mealData.items) {
+          return mealData.items.reduce((sum: number, item: any) => sum + (item.calories || 0), 0)
         }
-      })
+        return 0
+      }
       
-      this.currentY += 5
+      const dailyCalories = calculateMealCalories(day.meals?.breakfast) + 
+                           calculateMealCalories(day.meals?.lunch) + 
+                           calculateMealCalories(day.meals?.dinner) + 
+                           calculateMealCalories(day.meals?.snacks || day.meals?.midMorning || day.meals?.midAfternoon)
+      
+      tableData.push([dayName, breakfast, lunch, dinner, snacks, `${dailyCalories} kcal`])
     })
+    
+    this.doc.autoTable({
+      startY: this.currentY,
+      head: [['Day', 'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Total Calories']],
+      body: tableData,
+      theme: 'striped',
+      styles: {
+        fontSize: 7,
+        cellPadding: 4,
+        halign: 'left',
+        valign: 'top',
+        lineWidth: 0.1,
+        lineColor: [200, 200, 200]
+      },
+      headStyles: {
+        fillColor: [251, 146, 60], // Orange
+        textColor: [255, 255, 255],
+        fontSize: 9,
+        fontStyle: 'bold',
+        halign: 'center'
+      },
+      alternateRowStyles: {
+        fillColor: [254, 243, 199] // Light orange
+      },
+      columnStyles: {
+        0: { cellWidth: 25, fontStyle: 'bold', halign: 'center' }, // Day
+        1: { cellWidth: 35 }, // Breakfast
+        2: { cellWidth: 35 }, // Lunch
+        3: { cellWidth: 35 }, // Dinner
+        4: { cellWidth: 30 }, // Snacks
+        5: { cellWidth: 20, halign: 'center' } // Calories
+      },
+      margin: { left: this.margin, right: this.margin },
+      tableWidth: 'auto'
+    })
+    
+    // Update currentY after table
+    this.currentY = (this.doc as any).lastAutoTable.finalY + 15
   }
 
   private addSmartRecommendations(recommendations: any, patient: Patient): void {
@@ -1730,39 +1772,120 @@ export async function exportSimpleWeeklyDietChartPDF(
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
   doc.text('7-DAY MEAL PLAN', 20, currentY)
-  currentY += 10
+  currentY += 15
   
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+  const tableData: any[][] = []
   
   weeklyPlan.slice(0, 7).forEach((day, index) => {
-    if (currentY > 250) {
-      doc.addPage()
-      currentY = 20
+    const dayName = days[index] || `Day ${index + 1}`
+    
+    // Handle both GPT dailyPlans structure and converted weeklyPlan structure
+    const formatMealName = (mealData: any) => {
+      if (!mealData) return '-'
+      
+      // If it's a GPT meal object with name
+      if (mealData.name) {
+        return mealData.name
+      }
+      
+      // If it's converted weeklyPlan items array
+      if (mealData.items && Array.isArray(mealData.items)) {
+        return mealData.items.map((item: any) => item.name || item).join(', ')
+      }
+      
+      return '-'
     }
     
-    doc.setFont('helvetica', 'bold')
-    doc.setFontSize(11)
-    doc.text(`${days[index]} - Day ${index + 1}`, 20, currentY)
-    currentY += 8
+    const breakfast = formatMealName(day.meals?.breakfast)
+    const lunch = formatMealName(day.meals?.lunch)
+    const dinner = formatMealName(day.meals?.dinner)
+    const snacks = formatMealName(day.meals?.snacks || day.meals?.midMorning || day.meals?.midAfternoon)
     
-    if (day.meals) {
-      const meals = ['breakfast', 'lunch', 'dinner']
+    // Calculate total daily calories from individual meals
+    const calculateMealCalories = (mealData: any) => {
+      if (!mealData) return 0
+      if (mealData.nutritionalInfo?.calories) return mealData.nutritionalInfo.calories
+      if (mealData.totalCalories) return mealData.totalCalories
+      if (mealData.items) {
+        return mealData.items.reduce((sum: number, item: any) => sum + (item.calories || 0), 0)
+      }
+      return 0
+    }
+    
+    const dailyCalories = calculateMealCalories(day.meals?.breakfast) + 
+                         calculateMealCalories(day.meals?.lunch) + 
+                         calculateMealCalories(day.meals?.dinner) + 
+                         calculateMealCalories(day.meals?.snacks || day.meals?.midMorning || day.meals?.midAfternoon)
+    
+    tableData.push([dayName, breakfast, lunch, dinner, snacks, `${dailyCalories} kcal`])
+  })
+  
+  // Use autoTable for better formatting
+  try {
+    ;(doc as any).autoTable({
+      startY: currentY,
+      head: [['Day', 'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Total Calories']],
+      body: tableData,
+      theme: 'striped',
+      styles: {
+        fontSize: 7,
+        cellPadding: 4,
+        halign: 'left',
+        valign: 'top',
+        lineWidth: 0.1,
+        lineColor: [200, 200, 200]
+      },
+      headStyles: {
+        fillColor: [247, 146, 86], // Orange
+        textColor: [255, 255, 255],
+        fontSize: 9,
+        fontStyle: 'bold',
+        halign: 'center'
+      },
+      alternateRowStyles: {
+        fillColor: [254, 243, 199] // Light orange
+      },
+      columnStyles: {
+        0: { cellWidth: 25, fontStyle: 'bold', halign: 'center' }, // Day
+        1: { cellWidth: 35 }, // Breakfast
+        2: { cellWidth: 35 }, // Lunch
+        3: { cellWidth: 35 }, // Dinner
+        4: { cellWidth: 30 }, // Snacks
+        5: { cellWidth: 20, halign: 'center' } // Calories
+      },
+      margin: { left: 15, right: 15 }
+    })
+    
+    currentY = (doc as any).lastAutoTable.finalY + 15
+  } catch (error) {
+    // Fallback to simple text if autoTable fails
+    console.warn('AutoTable failed, using simple text format:', error)
+    weeklyPlan.slice(0, 7).forEach((day, index) => {
+      if (currentY > 250) {
+        doc.addPage()
+        currentY = 20
+      }
+      
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(11)
+      doc.text(`${days[index]} - Day ${index + 1}`, 20, currentY)
+      currentY += 8
+      
+      const meals = ['breakfast', 'lunch', 'dinner', 'snacks']
       meals.forEach(mealType => {
-        if (day.meals[mealType] && day.meals[mealType].items) {
+        if (day.meals?.[mealType]?.items) {
           doc.setFont('helvetica', 'normal')
           doc.setFontSize(9)
           const mealLabel = mealType.charAt(0).toUpperCase() + mealType.slice(1)
-          // Extract meal names from the items array (items are objects with 'name' property)
           const mealNames = day.meals[mealType].items.map((item: any) => item.name || item).join(', ')
-          doc.text(`${mealLabel}: ${mealNames}`, 25, currentY, {
-            maxWidth: 160
-          })
+          doc.text(`${mealLabel}: ${mealNames}`, 25, currentY, { maxWidth: 160 })
           currentY += 6
         }
       })
-    }
-    currentY += 5
-  })
+      currentY += 5
+    })
+  }
 
   // Nutritional summary
   if (nutritionalSummary && currentY < 240) {
