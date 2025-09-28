@@ -1,10 +1,10 @@
 // Professional PDF export service for Ayurvedic diet charts and analytics
-import jsPDF from 'jspdf'
-import 'jspdf-autotable'
+import { jsPDF } from 'jspdf'
+import autoTable from 'jspdf-autotable'
 import type { Patient, DietPlan, ProgressRecord } from './database'
 import type { EnhancedPatient } from './enhanced-patient-management'
 import type { Recipe, MealPlan } from './recipe-intelligence'
-import type { PopulationHealthMetrics, PatientProgressReport } from './advanced-reporting'
+// Remove unused import for now
 
 // Extend jsPDF interface to include autoTable
 declare module 'jspdf' {
@@ -57,13 +57,34 @@ export const AHAARWISE_BRANDING: PDFBrandingConfig = {
   secondaryColor: '#FB923C', // Orange-400
   accentColor: '#FED7AA', // Orange-200
   companyName: 'AhaarWISE',
-  tagline: 'Intelligent Ayurvedic Nutrition Management',
+  tagline: 'Intelligent Ayurvedic Nutrition Management System',
   website: 'www.ahaarwise.com',
   contactInfo: {
     email: 'support@ahaarwise.com',
-    phone: '+91-XXXX-XXXXX',
-    address: 'Healthcare Technology Center, India'
+    phone: '+91-9876-543210',
+    address: 'Ayurvedic Healthcare Technology Center, New Delhi, India'
   }
+}
+
+export interface WeeklyDietChartData {
+  patient: Patient
+  weeklyPlan: any[]
+  nutritionalSummary?: {
+    totalCalories: number
+    avgProtein: number
+    avgCarbs: number
+    avgFat: number
+    avgFiber: number
+  }
+  ayurvedicRecommendations?: {
+    constitutionGuidance: string[]
+    seasonalTips: string[]
+    lifestyleTips: string[]
+    herbsAndSpices: string[]
+    foodCombinations: string[]
+    mealTiming: string[]
+  }
+  generatedDate: Date
 }
 
 export class DietChartPDFExporter {
@@ -79,6 +100,8 @@ export class DietChartPDFExporter {
   constructor(branding: PDFBrandingConfig = AHAARWISE_BRANDING) {
     this.doc = new jsPDF('p', 'mm', 'a4')
     this.branding = branding
+    // Ensure autoTable is available
+    this.doc.autoTable = (options: any) => autoTable(this.doc, options)
   }
 
   private addBrandedHeader(title: string, subtitle?: string, consultationDate?: Date): void {
@@ -190,7 +213,7 @@ export class DietChartPDFExporter {
     this.currentY = this.headerHeight + 10
   }
 
-  private addFooter(pageNumber: number): void {
+  private addLegacyFooter(pageNumber: number): void {
     const footerY = this.pageHeight - this.footerHeight
 
     // Footer line
@@ -656,7 +679,7 @@ export class DietChartPDFExporter {
       const pageCount = this.doc.getNumberOfPages()
       for (let i = 1; i <= pageCount; i++) {
         this.doc.setPage(i)
-        this.addFooter(i)
+        this.addLegacyFooter(i)
       }
 
       // Generate filename
@@ -786,6 +809,8 @@ export class AnalyticsPDFExporter {
   constructor(branding: PDFBrandingConfig = AHAARWISE_BRANDING) {
     this.doc = new jsPDF('p', 'mm', 'a4')
     this.branding = branding
+    // Ensure autoTable is available
+    this.doc.autoTable = (options: any) => autoTable(this.doc, options)
   }
 
   private addBrandedHeader(title: string, subtitle?: string, date?: Date): void {
@@ -1131,6 +1156,646 @@ export async function exportPatientAnalyticsPDF(
 }
 
 export async function exportPopulationAnalyticsPDF(
+  metrics: any,
+  dateRange: { start: Date; end: Date }
+): Promise<void> {
+  const exporter = new AnalyticsPDFExporter()
+  await exporter.exportPopulationHealthAnalytics(metrics, dateRange)
+}
+
+// Enhanced Weekly Diet Chart PDF Export
+export class WeeklyDietChartPDFExporter {
+  private doc: jsPDF
+  private currentY: number = 20
+  private pageHeight: number = 297 // A4 height in mm
+  private pageWidth: number = 210 // A4 width in mm
+  private margin: number = 15
+  private branding: PDFBrandingConfig
+
+  constructor(branding: PDFBrandingConfig = AHAARWISE_BRANDING) {
+    this.doc = new jsPDF('p', 'mm', 'a4')
+    this.branding = branding
+    // Ensure autoTable is available
+    this.doc.autoTable = (options: any) => autoTable(this.doc, options)
+  }
+
+  async exportWeeklyDietChart(chartData: WeeklyDietChartData): Promise<void> {
+    // Page 1: Header and Patient Info
+    this.addBrandedHeader()
+    this.addPatientSummary(chartData.patient)
+    
+    // Page 2: Weekly Meal Plan
+    this.addNewPage()
+    this.addWeeklyMealPlan(chartData.weeklyPlan)
+    
+    // Page 3: Smart Recommendations
+    this.addNewPage()
+    this.addSmartRecommendations(chartData.ayurvedicRecommendations, chartData.patient)
+    
+    // Page 4: Nutritional Summary
+    if (chartData.nutritionalSummary) {
+      this.addNewPage()
+      this.addNutritionalSummary(chartData.nutritionalSummary)
+    }
+    
+    // Final page setup
+    this.addFooterToAllPages()
+    
+    // Generate filename with patient name and date
+    const fileName = `AhaarWISE-WeeklyDietChart-${chartData.patient.name.replace(/\s+/g, '_')}-${chartData.generatedDate.toISOString().split('T')[0]}.pdf`
+    this.doc.save(fileName)
+  }
+
+  private addBrandedHeader(): void {
+    // AhaarWISE Header with gradient background
+    this.doc.setFillColor(247, 146, 86) // Orange gradient start
+    this.doc.rect(0, 0, this.pageWidth, 40, 'F')
+    
+    // Logo area (placeholder)
+    this.doc.setFillColor(255, 255, 255)
+    this.doc.rect(this.margin, 8, 40, 25, 'F')
+    this.doc.setFillColor(247, 146, 86)
+    this.doc.circle(this.margin + 20, 20, 8, 'F')
+    
+    // AhaarWISE branding
+    this.doc.setTextColor(255, 255, 255)
+    this.doc.setFontSize(24)
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text('AhaarWISE', this.margin + 50, 20)
+    
+    this.doc.setFontSize(12)
+    this.doc.setFont('helvetica', 'normal')
+    this.doc.text('Intelligent Ayurvedic Nutrition Management', this.margin + 50, 28)
+    
+    // Document title
+    this.doc.setFontSize(16)
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text('PERSONALIZED WEEKLY DIET CHART', this.pageWidth/2, 50, { align: 'center' })
+    
+    // Reset text color
+    this.doc.setTextColor(0, 0, 0)
+    this.currentY = 65
+  }
+
+  private addPatientSummary(patient: Patient): void {
+    this.addSectionTitle('PATIENT INFORMATION')
+    
+    // Patient info card
+    this.doc.setFillColor(253, 230, 138) // Light orange
+    this.doc.rect(this.margin, this.currentY, this.pageWidth - 2 * this.margin, 45, 'F')
+    
+    // Patient details in two columns
+    const leftColumn = this.margin + 5
+    const rightColumn = this.pageWidth / 2 + 10
+    
+    this.doc.setFontSize(11)
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text('Name:', leftColumn, this.currentY + 8)
+    this.doc.setFont('helvetica', 'normal')
+    this.doc.text(patient.name, leftColumn + 20, this.currentY + 8)
+    
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text('Age:', rightColumn, this.currentY + 8)
+    this.doc.setFont('helvetica', 'normal')
+    this.doc.text(`${patient.age} years`, rightColumn + 15, this.currentY + 8)
+    
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text('Gender:', leftColumn, this.currentY + 16)
+    this.doc.setFont('helvetica', 'normal')
+    this.doc.text(patient.gender.charAt(0).toUpperCase() + patient.gender.slice(1), leftColumn + 20, this.currentY + 16)
+    
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text('Constitution:', rightColumn, this.currentY + 16)
+    this.doc.setFont('helvetica', 'normal')
+    this.doc.text(patient.constitution.toUpperCase(), rightColumn + 25, this.currentY + 16)
+    
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text('BMI:', leftColumn, this.currentY + 24)
+    this.doc.setFont('helvetica', 'normal')
+    this.doc.text(`${patient.bmi || 'Not calculated'}`, leftColumn + 20, this.currentY + 24)
+    
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text('Activity Level:', rightColumn, this.currentY + 24)
+    this.doc.setFont('helvetica', 'normal')
+    this.doc.text(patient.lifestyle.activityLevel.replace('-', ' ').toUpperCase(), rightColumn + 25, this.currentY + 24)
+    
+    // Chart generation date
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text('Chart Generated:', leftColumn, this.currentY + 32)
+    this.doc.setFont('helvetica', 'normal')
+    this.doc.text(new Date().toLocaleDateString('en-IN', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    }), leftColumn + 35, this.currentY + 32)
+    
+    this.currentY += 55
+    
+    // Health conditions if any
+    if (patient.currentConditions?.length > 0 || patient.dietaryRestrictions?.length > 0) {
+      this.addSectionTitle('HEALTH PROFILE')
+      
+      if (patient.currentConditions?.length > 0) {
+        this.doc.setFont('helvetica', 'bold')
+        this.doc.setFontSize(10)
+        this.doc.text('Current Health Conditions:', this.margin, this.currentY)
+        this.doc.setFont('helvetica', 'normal')
+        this.doc.text(patient.currentConditions.join(', '), this.margin + 50, this.currentY)
+        this.currentY += 8
+      }
+      
+      if (patient.dietaryRestrictions?.length > 0) {
+        this.doc.setFont('helvetica', 'bold')
+        this.doc.text('Dietary Restrictions:', this.margin, this.currentY)
+        this.doc.setFont('helvetica', 'normal')
+        this.doc.text(patient.dietaryRestrictions.join(', '), this.margin + 40, this.currentY)
+        this.currentY += 8
+      }
+      
+      this.currentY += 10
+    }
+  }
+
+  private addWeeklyMealPlan(weeklyPlan: any[]): void {
+    this.addSectionTitle('7-DAY MEAL PLAN')
+    
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    
+    weeklyPlan.slice(0, 7).forEach((day, index) => {
+      if (this.currentY > 250) {
+        this.addNewPage()
+      }
+      
+      // Day header
+      this.doc.setFillColor(251, 146, 60) // Orange
+      this.doc.rect(this.margin, this.currentY, this.pageWidth - 2 * this.margin, 8, 'F')
+      
+      this.doc.setTextColor(255, 255, 255)
+      this.doc.setFontSize(11)
+      this.doc.setFont('helvetica', 'bold')
+      this.doc.text(`${days[index]} - Day ${index + 1}`, this.margin + 3, this.currentY + 6)
+      
+      this.doc.setTextColor(0, 0, 0)
+      this.currentY += 12
+      
+      // Meals for this day
+      const meals = ['breakfast', 'midMorning', 'lunch', 'midAfternoon', 'dinner']
+      const mealLabels = ['Breakfast', 'Mid-Morning', 'Lunch', 'Mid-Afternoon', 'Dinner']
+      
+      meals.forEach((mealType, mealIndex) => {
+        if (day.meals?.[mealType]?.items?.length > 0) {
+          this.doc.setFont('helvetica', 'bold')
+          this.doc.setFontSize(9)
+          this.doc.text(`${mealLabels[mealIndex]}:`, this.margin + 5, this.currentY)
+          
+          this.doc.setFont('helvetica', 'normal')
+          this.doc.setFontSize(8)
+          // Extract meal names from the items array (items are objects with 'name' property)
+          const items = day.meals[mealType].items.map((item: any) => item.name || item).join(', ')
+          this.doc.text(items, this.margin + 25, this.currentY, { 
+            maxWidth: this.pageWidth - this.margin - 30 
+          })
+          this.currentY += 6
+        }
+      })
+      
+      this.currentY += 5
+    })
+  }
+
+  private addSmartRecommendations(recommendations: any, patient: Patient): void {
+    this.addSectionTitle('SMART AYURVEDIC RECOMMENDATIONS')
+    
+    // Constitution-specific guidance
+    this.addSubSectionTitle('Constitutional Guidance for ' + patient.constitution.toUpperCase())
+    
+    const constitutionGuidance = this.getConstitutionGuidance(patient.constitution)
+    constitutionGuidance.forEach(guidance => {
+      this.doc.setFontSize(9)
+      this.doc.text(`• ${guidance}`, this.margin + 3, this.currentY)
+      this.currentY += 6
+    })
+    this.currentY += 8
+    
+    // Seasonal recommendations
+    this.addSubSectionTitle('Seasonal Recommendations')
+    const seasonalTips = this.getSeasonalTips()
+    seasonalTips.forEach(tip => {
+      this.doc.setFontSize(9)
+      this.doc.text(`• ${tip}`, this.margin + 3, this.currentY)
+      this.currentY += 6
+    })
+    this.currentY += 8
+    
+    // Lifestyle recommendations
+    this.addSubSectionTitle('Lifestyle Recommendations')
+    const lifestyleTips = this.getLifestyleTips(patient)
+    lifestyleTips.forEach(tip => {
+      this.doc.setFontSize(9)
+      this.doc.text(`• ${tip}`, this.margin + 3, this.currentY)
+      this.currentY += 6
+    })
+    this.currentY += 8
+    
+    // Herbs and spices
+    this.addSubSectionTitle('Recommended Herbs & Spices')
+    const herbs = this.getRecommendedHerbs(patient.constitution)
+    this.doc.setFontSize(9)
+    this.doc.text(herbs.join(', '), this.margin + 3, this.currentY, { 
+      maxWidth: this.pageWidth - 2 * this.margin 
+    })
+    this.currentY += 15
+    
+    // Food combinations to avoid
+    this.addSubSectionTitle('Food Combinations to Avoid')
+    const avoidCombinations = [
+      'Milk with citrus fruits or sour foods',
+      'Fish with milk or dairy products',
+      'Honey with hot or warm foods',
+      'Fruits with meals (eat separately)',
+      'Cold drinks with hot meals'
+    ]
+    avoidCombinations.forEach(combination => {
+      this.doc.setFontSize(9)
+      this.doc.setTextColor(220, 38, 38) // Red
+      this.doc.text(`⚠ ${combination}`, this.margin + 3, this.currentY)
+      this.currentY += 6
+    })
+    this.doc.setTextColor(0, 0, 0) // Reset to black
+    this.currentY += 8
+    
+    // Meal timing guidelines
+    this.addSubSectionTitle('Optimal Meal Timing')
+    const mealTiming = [
+      'Breakfast: 6:00 AM - 8:00 AM (Light and warm)',
+      'Mid-Morning: 10:00 AM - 11:00 AM (Fruits or nuts)',
+      'Lunch: 12:00 PM - 1:00 PM (Largest meal of the day)',
+      'Mid-Afternoon: 3:00 PM - 4:00 PM (Herbal tea)',
+      'Dinner: 6:00 PM - 7:00 PM (Light and early)'
+    ]
+    mealTiming.forEach(timing => {
+      this.doc.setFontSize(9)
+      this.doc.text(`• ${timing}`, this.margin + 3, this.currentY)
+      this.currentY += 6
+    })
+  }
+
+  private addNutritionalSummary(nutritionalSummary: any): void {
+    this.addSectionTitle('NUTRITIONAL ANALYSIS')
+    
+    // Nutritional breakdown table
+    const nutritionData = [
+      ['Total Daily Calories', `${nutritionalSummary.totalCalories} kcal`],
+      ['Average Protein', `${nutritionalSummary.avgProtein}g per day`],
+      ['Average Carbohydrates', `${nutritionalSummary.avgCarbs}g per day`],
+      ['Average Healthy Fats', `${nutritionalSummary.avgFat}g per day`],
+      ['Average Fiber', `${nutritionalSummary.avgFiber}g per day`]
+    ]
+    
+    this.doc.autoTable({
+      startY: this.currentY,
+      head: [['Nutrient', 'Daily Average']],
+      body: nutritionData,
+      theme: 'striped',
+      styles: { fontSize: 10, cellPadding: 4 },
+      headStyles: { 
+        fillColor: [251, 146, 60], 
+        textColor: [255, 255, 255],
+        fontStyle: 'bold' 
+      },
+      margin: { left: this.margin, right: this.margin }
+    })
+    
+    this.currentY += 80
+    
+    // Ayurvedic nutrition principles
+    this.addSubSectionTitle('Ayurvedic Nutrition Principles Applied')
+    const principles = [
+      'Six tastes (Rasa) balanced in each meal',
+      'Foods matched to your constitutional needs',
+      'Seasonal ingredients for optimal digestion',
+      'Proper food combinations for better absorption',
+      'Mindful eating practices integrated'
+    ]
+    
+    principles.forEach(principle => {
+      this.doc.setFontSize(9)
+      this.doc.text(`✓ ${principle}`, this.margin + 3, this.currentY)
+      this.currentY += 6
+    })
+  }
+
+  private getConstitutionGuidance(constitution: string): string[] {
+    const guidance: Record<string, string[]> = {
+      'vata': [
+        'Favor warm, moist, and grounding foods',
+        'Include healthy fats like ghee and nuts',
+        'Avoid raw, cold, and dry foods',
+        'Maintain regular meal times',
+        'Include sweet, sour, and salty tastes'
+      ],
+      'pitta': [
+        'Choose cooling and calming foods',
+        'Avoid spicy, oily, and fried foods',
+        'Include sweet, bitter, and astringent tastes',
+        'Eat meals at moderate temperature',
+        'Stay hydrated with cool (not iced) water'
+      ],
+      'kapha': [
+        'Choose light, warm, and stimulating foods',
+        'Include pungent, bitter, and astringent tastes',
+        'Avoid heavy, oily, and sweet foods',
+        'Eat lighter portions, especially dinner',
+        'Include warming spices like ginger and black pepper'
+      ]
+    }
+    
+    const constitutionKey = constitution.split('-')[0].toLowerCase()
+    return guidance[constitutionKey] || guidance['vata']
+  }
+
+  private getSeasonalTips(): string[] {
+    const month = new Date().getMonth()
+    
+    if (month >= 3 && month <= 6) { // Spring/Summer
+      return [
+        'Include cooling foods like cucumber and mint',
+        'Favor fresh seasonal fruits and vegetables',
+        'Drink plenty of water and coconut water',
+        'Avoid excessive heating spices',
+        'Include leafy greens and light grains'
+      ]
+    } else if (month >= 7 && month <= 10) { // Monsoon/Early Winter  
+      return [
+        'Include warming spices to aid digestion',
+        'Favor cooked foods over raw foods',
+        'Include ginger tea for immunity',
+        'Avoid heavy and oily foods',
+        'Focus on easily digestible meals'
+      ]
+    } else { // Winter
+      return [
+        'Include warming and nourishing foods',
+        'Favor hot soups and stews',
+        'Include healthy fats and nuts',
+        'Add warming spices like cinnamon',
+        'Avoid cold and frozen foods'
+      ]
+    }
+  }
+
+  private getLifestyleTips(patient: Patient): string[] {
+    const baseTips = [
+      'Eat in a calm and peaceful environment',
+      'Chew your food thoroughly (20-30 times)',
+      'Avoid drinking large amounts of water with meals',
+      'Take a short walk after meals to aid digestion',
+      'Practice gratitude before eating'
+    ]
+    
+    if (patient.lifestyle.stressLevel === 'high') {
+      baseTips.push('Practice deep breathing before meals')
+      baseTips.push('Consider meditation to reduce stress')
+    }
+    
+    if (patient.lifestyle.activityLevel === 'sedentary') {
+      baseTips.push('Include gentle physical activity daily')
+      baseTips.push('Try yoga or walking for 30 minutes')
+    }
+    
+    return baseTips
+  }
+
+  private getRecommendedHerbs(constitution: string): string[] {
+    const herbs: Record<string, string[]> = {
+      'vata': ['Ginger', 'Cinnamon', 'Cardamom', 'Fennel', 'Cumin'],
+      'pitta': ['Coriander', 'Mint', 'Coconut', 'Rose', 'Fennel'],
+      'kapha': ['Ginger', 'Black Pepper', 'Turmeric', 'Cloves', 'Mustard Seeds']
+    }
+    
+    const constitutionKey = constitution.split('-')[0].toLowerCase()
+    return herbs[constitutionKey] || herbs['vata']
+  }
+
+  private addSectionTitle(title: string): void {
+    if (this.currentY > 270) {
+      this.addNewPage()
+    }
+    
+    this.doc.setFillColor(251, 146, 60) // Orange
+    this.doc.rect(this.margin, this.currentY, this.pageWidth - 2 * this.margin, 10, 'F')
+    
+    this.doc.setTextColor(255, 255, 255)
+    this.doc.setFontSize(12)
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text(title, this.margin + 3, this.currentY + 7)
+    
+    this.doc.setTextColor(0, 0, 0)
+    this.currentY += 15
+  }
+
+  private addSubSectionTitle(title: string): void {
+    if (this.currentY > 275) {
+      this.addNewPage()
+    }
+    
+    this.doc.setFontSize(10)
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.setTextColor(251, 146, 60)
+    this.doc.text(title, this.margin, this.currentY)
+    
+    this.doc.setTextColor(0, 0, 0)
+    this.currentY += 8
+  }
+
+  private addNewPage(): void {
+    this.doc.addPage()
+    this.currentY = 20
+  }
+
+  private addFooterToAllPages(): void {
+    const pageCount = this.doc.internal.pages.length - 1
+    
+    for (let i = 1; i <= pageCount; i++) {
+      this.doc.setPage(i)
+      this.addPageFooter(i, pageCount)
+    }
+  }
+
+  private addPageFooter(pageNumber: number, totalPages: number): void {
+    const footerY = this.pageHeight - 15
+    
+    // AhaarWISE footer
+    this.doc.setDrawColor(251, 146, 60)
+    this.doc.setLineWidth(0.5)
+    this.doc.line(this.margin, footerY - 5, this.pageWidth - this.margin, footerY - 5)
+    
+    this.doc.setFontSize(8)
+    this.doc.setTextColor(100, 100, 100)
+    this.doc.text(
+      `${this.branding.website} | ${this.branding.contactInfo.email} | ${this.branding.contactInfo.phone}`,
+      this.pageWidth / 2,
+      footerY,
+      { align: 'center' }
+    )
+    
+    this.doc.text(`Page ${pageNumber} of ${totalPages}`, this.pageWidth - this.margin, footerY, { align: 'right' })
+    
+    // Disclaimer
+    this.doc.setFontSize(7)
+    this.doc.text(
+      'This personalized diet chart is based on Ayurvedic principles. Consult your healthcare provider for medical conditions.',
+      this.pageWidth / 2,
+      footerY + 6,
+      { align: 'center' }
+    )
+  }
+}
+
+// Enhanced export function for weekly diet charts
+export async function exportEnhancedWeeklyDietChartPDF(
+  patient: Patient,
+  weeklyPlan: any[],
+  nutritionalSummary?: any,
+  ayurvedicRecommendations?: any
+): Promise<void> {
+  try {
+    const chartData: WeeklyDietChartData = {
+      patient,
+      weeklyPlan,
+      nutritionalSummary,
+      ayurvedicRecommendations,
+      generatedDate: new Date()
+    }
+    
+    const exporter = new WeeklyDietChartPDFExporter()
+    await exporter.exportWeeklyDietChart(chartData)
+  } catch (error) {
+    console.error('PDF Export Error:', error)
+    // Fallback to simple PDF export
+    await exportSimpleWeeklyDietChartPDF(patient, weeklyPlan, nutritionalSummary)
+  }
+}
+
+// Simple fallback PDF export without complex autoTable usage
+export async function exportSimpleWeeklyDietChartPDF(
+  patient: Patient,
+  weeklyPlan: any[],
+  nutritionalSummary?: any
+): Promise<void> {
+  const doc = new jsPDF('p', 'mm', 'a4')
+  let currentY = 20
+
+  // Header
+  doc.setFillColor(247, 146, 86) // Orange
+  doc.rect(0, 0, 210, 40, 'F')
+  
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(24)
+  doc.setFont('helvetica', 'bold')
+  doc.text('AhaarWISE', 20, 25)
+  
+  doc.setFontSize(12)
+  doc.text('Intelligent Ayurvedic Nutrition Management', 20, 32)
+  
+  // Document title
+  doc.setTextColor(0, 0, 0)
+  doc.setFontSize(16)
+  doc.text('PERSONALIZED WEEKLY DIET CHART', 105, 55, { align: 'center' })
+  
+  currentY = 70
+
+  // Patient info
+  doc.setFontSize(12)
+  doc.setFont('helvetica', 'bold')
+  doc.text('PATIENT INFORMATION', 20, currentY)
+  currentY += 10
+  
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(10)
+  doc.text(`Name: ${patient.name}`, 20, currentY)
+  doc.text(`Age: ${patient.age} years`, 110, currentY)
+  currentY += 7
+  
+  doc.text(`Gender: ${patient.gender}`, 20, currentY)
+  doc.text(`Constitution: ${patient.constitution.toUpperCase()}`, 110, currentY)
+  currentY += 7
+  
+  doc.text(`BMI: ${patient.bmi || 'Not calculated'}`, 20, currentY)
+  doc.text(`Activity: ${patient.lifestyle.activityLevel}`, 110, currentY)
+  currentY += 15
+
+  // Weekly plan
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(12)
+  doc.text('7-DAY MEAL PLAN', 20, currentY)
+  currentY += 10
+  
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+  
+  weeklyPlan.slice(0, 7).forEach((day, index) => {
+    if (currentY > 250) {
+      doc.addPage()
+      currentY = 20
+    }
+    
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(11)
+    doc.text(`${days[index]} - Day ${index + 1}`, 20, currentY)
+    currentY += 8
+    
+    if (day.meals) {
+      const meals = ['breakfast', 'lunch', 'dinner']
+      meals.forEach(mealType => {
+        if (day.meals[mealType] && day.meals[mealType].items) {
+          doc.setFont('helvetica', 'normal')
+          doc.setFontSize(9)
+          const mealLabel = mealType.charAt(0).toUpperCase() + mealType.slice(1)
+          // Extract meal names from the items array (items are objects with 'name' property)
+          const mealNames = day.meals[mealType].items.map((item: any) => item.name || item).join(', ')
+          doc.text(`${mealLabel}: ${mealNames}`, 25, currentY, {
+            maxWidth: 160
+          })
+          currentY += 6
+        }
+      })
+    }
+    currentY += 5
+  })
+
+  // Nutritional summary
+  if (nutritionalSummary && currentY < 240) {
+    currentY += 10
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(12)
+    doc.text('NUTRITIONAL SUMMARY', 20, currentY)
+    currentY += 10
+    
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(10)
+    doc.text(`Daily Calories: ${nutritionalSummary.totalCalories} kcal`, 20, currentY)
+    currentY += 6
+    doc.text(`Protein: ${nutritionalSummary.avgProtein}g`, 20, currentY)
+    currentY += 6
+    doc.text(`Carbohydrates: ${nutritionalSummary.avgCarbs}g`, 20, currentY)
+    currentY += 6
+    doc.text(`Fats: ${nutritionalSummary.avgFat}g`, 20, currentY)
+  }
+
+  // Footer
+  const footerY = 280
+  doc.setFontSize(8)
+  doc.setTextColor(100, 100, 100)
+  doc.text('AhaarWISE - Intelligent Ayurvedic Nutrition Management', 105, footerY, { align: 'center' })
+  doc.text('Generated: ' + new Date().toLocaleDateString(), 105, footerY + 5, { align: 'center' })
+
+  // Download
+  const fileName = `AhaarWISE-WeeklyDietChart-${patient.name.replace(/\s+/g, '_')}-${new Date().toISOString().split('T')[0]}.pdf`
+  doc.save(fileName)
+}
+
+export async function exportPopulationAnalyticsPDFLegacy(
   metrics: any,
   dateRange: { start: Date; end: Date }
 ): Promise<void> {

@@ -24,7 +24,10 @@ import {
   BarChart3,
   Leaf,
   User as UserIcon,
-  LogOut
+  LogOut,
+  Bot,
+  Sparkles,
+  Eye
 } from "lucide-react"
 import Link from "next/link"
 import { 
@@ -348,9 +351,96 @@ function DashboardPage() {
           ))}
         </div>
 
+        {/* Feature Dashboard Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+          {/* AI Assistant Widget */}
+          <Card className="lg:col-span-1 border border-purple-100 shadow-xl shadow-purple-500/5 bg-white/90 backdrop-blur-md rounded-xl overflow-hidden">
+            <CardHeader className="pb-4 bg-gradient-to-r from-purple-50 to-violet-50 rounded-t-xl border-b border-purple-100">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-gradient-to-r from-purple-500 to-violet-600 rounded-lg shadow-md">
+                  <Sparkles className="h-4 w-4 text-white" />
+                </div>
+                <CardTitle className="text-lg font-bold text-gray-900">AI Assistant</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="p-4">
+              <p className="text-sm text-gray-600 mb-4">Get AI-powered Ayurvedic guidance and recommendations</p>
+              <Link href="/chat">
+                <Button className="w-full bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700">
+                  <Bot className="h-4 w-4 mr-2" />
+                  Start Chat
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Diet Charts Widget */}
+          <Card className="lg:col-span-1 border border-emerald-100 shadow-xl shadow-emerald-500/5 bg-white/90 backdrop-blur-md rounded-xl overflow-hidden">
+            <CardHeader className="pb-4 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-t-xl border-b border-emerald-100">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg shadow-md">
+                  <ChefHat className="h-4 w-4 text-white" />
+                </div>
+                <CardTitle className="text-lg font-bold text-gray-900">Diet Charts</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="p-4">
+              <p className="text-sm text-gray-600 mb-4">Build AI-powered personalized diet charts</p>
+              <Link href="/diet-charts">
+                <Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700">
+                  <ChefHat className="h-4 w-4 mr-2" />
+                  Build Charts
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Recipes Widget */}
+          <Card className="lg:col-span-1 border border-orange-100 shadow-xl shadow-orange-500/5 bg-white/90 backdrop-blur-md rounded-xl overflow-hidden">
+            <CardHeader className="pb-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-t-xl border-b border-orange-100">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg shadow-md">
+                  <BookOpen className="h-4 w-4 text-white" />
+                </div>
+                <CardTitle className="text-lg font-bold text-gray-900">Recipes</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="p-4">
+              <p className="text-sm text-gray-600 mb-4">Explore Ayurvedic recipes and meal ideas</p>
+              <Link href="/recipes">
+                <Button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600">
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  View Recipes
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Reports Widget */}
+          <Card className="lg:col-span-1 border border-blue-100 shadow-xl shadow-blue-500/5 bg-white/90 backdrop-blur-md rounded-xl overflow-hidden">
+            <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-xl border-b border-blue-100">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg shadow-md">
+                  <BarChart3 className="h-4 w-4 text-white" />
+                </div>
+                <CardTitle className="text-lg font-bold text-gray-900">Analytics</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="p-4">
+              <p className="text-sm text-gray-600 mb-4">View patient progress and system reports</p>
+              <Link href="/reports">
+                <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700">
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  View Reports
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Recent Patients and Practitioner Info */}
+          {/* Recent Patients and Quick Actions */}
           <div className="lg:col-span-2 space-y-8">
             {/* Recent Patients */}
             <Card className="border border-emerald-100 shadow-xl shadow-emerald-500/5 bg-white/90 backdrop-blur-md rounded-xl overflow-hidden">
@@ -402,20 +492,17 @@ function DashboardPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <Badge 
-                          variant={patient.status === "active" ? "default" : "secondary"}
-                          className={`mb-2 px-4 py-1 ${patient.status === "active" 
-                            ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm" 
-                            : "bg-gray-100 text-gray-600"
-                          } rounded-lg`}
-                        >
-                          {patient.constitution}
-                        </Badge>
-                        <p className="text-xs text-gray-500 flex items-center justify-end mt-2">
-                          <Activity className="h-3 w-3 mr-1.5" />
-                          {patient.activeDietPlan ? "Active plan" : "No active plan"}
-                        </p>
+                      <div className="flex space-x-2">
+                        <Link href={`/patients/${patient.id}`}>
+                          <Button size="sm" variant="outline">
+                            <Eye className="h-3 w-3" />
+                          </Button>
+                        </Link>
+                        <Link href="/diet-charts">
+                          <Button size="sm" variant="outline">
+                            <ChefHat className="h-3 w-3" />
+                          </Button>
+                        </Link>
                       </div>
                     </div>
                   ))}
@@ -431,88 +518,134 @@ function DashboardPage() {
               </CardContent>
             </Card>
 
-            {/* Practitioner Info - Horizontal Layout in Bottom Left */}
+            {/* Quick Action Shortcuts */}
+            <Card className="border border-amber-100 shadow-xl shadow-amber-500/5 bg-white/90 backdrop-blur-md rounded-xl overflow-hidden">
+              <CardHeader className="pb-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-t-xl border-b border-amber-100">
+                <div className="flex items-center space-x-4">
+                  <div className="p-3 bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl shadow-md">
+                    <Zap className="h-5 w-5 text-white" />
+                  </div>
+                  <CardTitle className="text-xl font-bold text-gray-900">Quick Actions</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <Link href="/patients/new">
+                    <Button variant="outline" className="w-full h-16 flex flex-col space-y-1 border-blue-200 hover:bg-blue-50">
+                      <UserPlus className="h-5 w-5 text-blue-600" />
+                      <span className="text-sm font-medium">Add Patient</span>
+                    </Button>
+                  </Link>
+                  <Link href="/diet-plans/create">
+                    <Button variant="outline" className="w-full h-16 flex flex-col space-y-1 border-emerald-200 hover:bg-emerald-50">
+                      <Calendar className="h-5 w-5 text-emerald-600" />
+                      <span className="text-sm font-medium">Create Plan</span>
+                    </Button>
+                  </Link>
+                  <Link href="/foods">
+                    <Button variant="outline" className="w-full h-16 flex flex-col space-y-1 border-cyan-200 hover:bg-cyan-50">
+                      <Utensils className="h-5 w-5 text-cyan-600" />
+                      <span className="text-sm font-medium">Manage Foods</span>
+                    </Button>
+                  </Link>
+                  <Link href="/category-recommendations">
+                    <Button variant="outline" className="w-full h-16 flex flex-col space-y-1 border-green-200 hover:bg-green-50">
+                      <Leaf className="h-5 w-5 text-green-600" />
+                      <span className="text-sm font-medium">Recommendations</span>
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* System Status and Features */}
+          <div className="space-y-8">
+            {/* System Status */}
             <Card className="border border-emerald-100 shadow-xl shadow-emerald-500/5 bg-white/90 backdrop-blur-md rounded-xl overflow-hidden">
               <CardContent className="p-0">
                 <div className="bg-gradient-to-r from-emerald-500 to-teal-600 h-2 w-full"></div>
                 <div className="p-6">
-                  <div className="flex items-center space-x-6">
-                    <div className="flex-shrink-0">
-                      <div className="p-5 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl shadow-xl">
-                        <Activity className="h-8 w-8 text-white" />
+                  <div className="flex items-center space-x-4 mb-4">
+                    <div className="p-3 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl shadow-xl">
+                      <Activity className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900">System Status</h3>
+                      <p className="text-sm text-gray-600">All services operational</p>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                      <span className="text-sm font-medium text-green-800">AI Assistant</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span className="text-xs text-green-700">Online</span>
                       </div>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900">AhaarWISE Practitioner</h3>
-                      <p className="text-sm text-gray-600 mb-3">Holistic Health & Wellness Specialist</p>
-                      <div className="flex items-center space-x-2 px-3 py-1.5 bg-emerald-50 rounded-lg border border-emerald-100 max-w-fit">
-                        <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                        <span className="text-xs text-emerald-700 font-medium">System Online & Operational</span>
+                    <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <span className="text-sm font-medium text-blue-800">Database</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                        <span className="text-xs text-blue-700">Connected</span>
                       </div>
                     </div>
-                    <div className="flex space-x-4">
-                      <div className="text-center bg-gradient-to-br from-emerald-50 to-teal-50 p-4 rounded-xl border border-emerald-200 min-w-[90px] shadow-md">
-                        <p className="text-2xl font-bold text-emerald-600">{stats.totalPatients}</p>
-                        <p className="text-xs text-emerald-700 font-medium uppercase tracking-wide">Patients</p>
-                      </div>
-                      <div className="text-center bg-gradient-to-br from-emerald-50 to-teal-50 p-4 rounded-xl border border-emerald-200 min-w-[90px] shadow-md">
-                        <p className="text-2xl font-bold text-emerald-600">{stats.activeDietPlans}</p>
-                        <p className="text-xs text-emerald-700 font-medium uppercase tracking-wide">Plans</p>
+                    <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg border border-purple-200">
+                      <span className="text-sm font-medium text-purple-800">OpenAI API</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                        <span className="text-xs text-purple-700">Active</span>
                       </div>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
 
-          {/* Quick Actions */}
-          <div>
-            <Card className="border border-emerald-100 shadow-xl shadow-emerald-500/5 bg-white/90 backdrop-blur-md rounded-xl overflow-hidden">
-              <CardHeader className="pb-6 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-t-xl border-b border-emerald-100">
+            {/* Feature Access */}
+            <Card className="border border-purple-100 shadow-xl shadow-purple-500/5 bg-white/90 backdrop-blur-md rounded-xl overflow-hidden">
+              <CardHeader className="pb-4 bg-gradient-to-r from-purple-50 to-violet-50 rounded-t-xl border-b border-purple-100">
                 <div className="flex items-center space-x-4">
-                  <div className="p-3 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl shadow-md">
-                    <Zap className="h-5 w-5 text-white" />
+                  <div className="p-3 bg-gradient-to-r from-purple-500 to-violet-600 rounded-xl shadow-md">
+                    <Sparkles className="h-5 w-5 text-white" />
                   </div>
-                  <CardTitle className="text-xl font-bold text-gray-900">Quick Actions</CardTitle>
+                  <CardTitle className="text-xl font-bold text-gray-900">Advanced Features</CardTitle>
                 </div>
               </CardHeader>
-              <CardContent className="p-6 space-y-5">
-                <QuickActionButton
-                  href="/patients/new"
-                  icon={UserPlus}
-                  title="Add New Patient"
-                  description="Register a new patient and assess their Prakriti"
-                  colorClass="bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 border-blue-200 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-500/20"
-                />
-                <QuickActionButton
-                  href="/diet-charts"
-                  icon={ChefHat}
-                  title="Diet Chart Builder"
-                  description="Build comprehensive diet charts with AI assistance"
-                  colorClass="bg-gradient-to-r from-emerald-50 to-green-50 hover:from-emerald-100 hover:to-green-100 border-emerald-200 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-500/20"
-                />
-                <QuickActionButton
-                  href="/diet-plans/create"
-                  icon={Calendar}
-                  title="Create Diet Plan"
-                  description="Design personalized Ayurvedic meal plans"
-                  colorClass="bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 border-amber-200 hover:border-amber-300 hover:shadow-lg hover:shadow-amber-500/20"
-                />
-                <QuickActionButton
-                  href="/foods"
-                  icon={Plus}
-                  title="Manage Food Database"
-                  description="Add and manage food items in the database"
-                  colorClass="bg-gradient-to-r from-cyan-50 to-blue-50 hover:from-cyan-100 hover:to-blue-100 border-cyan-200 hover:border-cyan-300 hover:shadow-lg hover:shadow-cyan-500/20"
-                />
-                <QuickActionButton
-                  href="/category-recommendations"
-                  icon={Leaf}
-                  title="Category Recommendations"
-                  description="Get personalized Ayurvedic recommendations"
-                  colorClass="bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-green-200 hover:border-green-300 hover:shadow-lg hover:shadow-green-500/20"
-                />
+              <CardContent className="p-6 space-y-4">
+                <Link href="/chat">
+                  <Button variant="outline" className="w-full justify-start p-4 h-auto border-purple-200 hover:bg-purple-50">
+                    <div className="flex items-center space-x-3">
+                      <Bot className="h-5 w-5 text-purple-600" />
+                      <div className="text-left">
+                        <p className="font-medium text-gray-900">AI Consultation</p>
+                        <p className="text-sm text-gray-600">Chat with AI assistant</p>
+                      </div>
+                    </div>
+                  </Button>
+                </Link>
+                <Link href="/diet-chart">
+                  <Button variant="outline" className="w-full justify-start p-4 h-auto border-emerald-200 hover:bg-emerald-50">
+                    <div className="flex items-center space-x-3">
+                      <Sparkles className="h-5 w-5 text-emerald-600" />
+                      <div className="text-left">
+                        <p className="font-medium text-gray-900">AI Diet Generator</p>
+                        <p className="text-sm text-gray-600">Generate smart diet plans</p>
+                      </div>
+                    </div>
+                  </Button>
+                </Link>
+                <Link href="/recipes/ai-generator">
+                  <Button variant="outline" className="w-full justify-start p-4 h-auto border-orange-200 hover:bg-orange-50">
+                    <div className="flex items-center space-x-3">
+                      <ChefHat className="h-5 w-5 text-orange-600" />
+                      <div className="text-left">
+                        <p className="font-medium text-gray-900">Recipe Generator</p>
+                        <p className="text-sm text-gray-600">AI-powered recipe creation</p>
+                      </div>
+                    </div>
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>

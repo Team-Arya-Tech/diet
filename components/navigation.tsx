@@ -10,7 +10,11 @@ import {
   FileText, 
   ChefHat,
   LogOut,
-  User as UserIcon
+  User as UserIcon,
+  Bot,
+  BarChart3,
+  Leaf,
+  Calendar
 } from "lucide-react"
 import { useAuth } from "./auth-context"
 import { Button } from "./ui/button"
@@ -46,6 +50,24 @@ export function Navigation({ className = "" }: NavigationProps) {
       current: pathname.startsWith("/patients")
     },
     {
+      name: "AI Assistant",
+      href: "/chat",
+      icon: Bot,
+      current: pathname.startsWith("/chat")
+    },
+    {
+      name: "Diet Charts",
+      href: "/diet-charts",
+      icon: ChefHat,
+      current: pathname.startsWith("/diet-charts") || pathname.startsWith("/diet-chart")
+    },
+    {
+      name: "Diet Plans",
+      href: "/diet-plans",
+      icon: Calendar,
+      current: pathname.startsWith("/diet-plans")
+    },
+    {
       name: "Recipes",
       href: "/recipes",
       icon: BookOpen,
@@ -58,10 +80,16 @@ export function Navigation({ className = "" }: NavigationProps) {
       current: pathname.startsWith("/foods")
     },
     {
-      name: "Diet Charts",
-      href: "/diet-plans",
-      icon: FileText,
-      current: pathname.startsWith("/diet-plans")
+      name: "Reports",
+      href: "/reports",
+      icon: BarChart3,
+      current: pathname.startsWith("/reports")
+    },
+    {
+      name: "Recommendations",
+      href: "/category-recommendations",
+      icon: Leaf,
+      current: pathname.startsWith("/category-recommendations")
     }
   ]
 

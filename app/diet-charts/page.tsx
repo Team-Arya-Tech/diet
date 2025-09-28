@@ -32,6 +32,7 @@ import {
 } from "@/lib/food-database"
 import { getPatients, type Patient, initializeSampleData } from "@/lib/database"
 import { getRecommendationsForProfile } from "@/lib/ayurvedic-data"
+import { exportEnhancedWeeklyDietChartPDF } from "@/lib/pdf-export"
 import Link from "next/link"
 
 export default function DietChartsPage() {
@@ -274,11 +275,125 @@ export default function DietChartsPage() {
         
         // Switch to weekly chart tab to show the table
         setActiveTab("weekly")
-        alert("Weekly chart generated successfully!")
+        // Show success message with PDF option
+        setActiveTab("weekly")
+        
+        // Show success notification
+        const userChoice = confirm(
+          "Weekly chart generated successfully! 🎉\n\nWould you like to download the PDF with AhaarWISE branding and smart Ayurvedic recommendations?"
+        )
+        
+        if (userChoice) {
+          handleEnhancedPDFExport()
+        }
       }
     } catch (error) {
       console.error("Failed to generate weekly chart:", error)
       alert("Failed to generate weekly chart. Please try again.")
+    }
+  }
+
+  // Enhanced PDF export with AhaarWISE branding and smart recommendations
+  const handleEnhancedPDFExport = async () => {
+    if (!selectedPatient || !currentDietChart) {
+      alert("Please generate a weekly chart first")
+      return
+    }
+
+    try {
+      // Show loading notification
+      const loadingNotification = confirm(
+        "🔄 Generating your AhaarWISE branded PDF with smart Ayurvedic recommendations...\n\n" +
+        "This includes:\n" +
+        `• Constitutional guidance for ${selectedPatient.constitution} type\n` +
+        "• Seasonal recommendations\n" +
+        "• Personalized lifestyle tips\n" +
+        "• Recommended herbs and spices\n" +
+        "• Professional AhaarWISE branding\n\n" +
+        "Click OK to continue..."
+      )
+
+      if (!loadingNotification) return
+
+      // Calculate nutritional summary from actual meal data
+      let totalCalories = 0
+      let totalProtein = 0
+      let totalCarbs = 0
+      let totalFat = 0
+      let totalFiber = 0
+
+      // If we have weekly plan data, calculate from it
+      if (currentDietChart.weeklyPlan && currentDietChart.weeklyPlan.length > 0) {
+        currentDietChart.weeklyPlan.forEach(day => {
+          if (day.meals) {
+            Object.values(day.meals).forEach((meal: any) => {
+              if (meal.items) {
+                meal.items.forEach((item: any) => {
+                  totalCalories += item.calories || 0
+                  totalProtein += item.protein || 0
+                  totalCarbs += item.carbs || 0
+                  totalFat += item.fat || 0
+                  totalFiber += item.fiber || 0
+                })
+              }
+            })
+          }
+        })
+        
+        // Average per day
+        const days = currentDietChart.weeklyPlan.length
+        totalCalories = Math.round(totalCalories / days)
+        totalProtein = Math.round(totalProtein / days)
+        totalCarbs = Math.round(totalCarbs / days)
+        totalFat = Math.round(totalFat / days)
+        totalFiber = Math.round(totalFiber / days)
+      } else {
+        // Fallback calculations
+        totalCalories = calculateTargetCalories(selectedPatient)
+        totalProtein = Math.round(totalCalories * 0.2 / 4) // 20% protein
+        totalCarbs = Math.round(totalCalories * 0.5 / 4) // 50% carbs
+        totalFat = Math.round(totalCalories * 0.3 / 9) // 30% fat
+        totalFiber = Math.round(totalCalories / 60) // ~35g for 2000 cal
+      }
+
+      const nutritionalSummary = {
+        totalCalories,
+        avgProtein: totalProtein,
+        avgCarbs: totalCarbs,
+        avgFat: totalFat,
+        avgFiber: totalFiber
+      }
+
+      // Get smart Ayurvedic recommendations (these will be generated in the PDF exporter)
+      const ayurvedicRecommendations = {
+        constitutionGuidance: [],
+        seasonalTips: [],
+        lifestyleTips: [],
+        herbsAndSpices: [],
+        foodCombinations: [],
+        mealTiming: []
+      }
+
+      // Export enhanced PDF
+      await exportEnhancedWeeklyDietChartPDF(
+        selectedPatient,
+        currentDietChart.weeklyPlan || [],
+        nutritionalSummary,
+        ayurvedicRecommendations
+      )
+
+      alert("🎉 SUCCESS! Your AhaarWISE Enhanced PDF has been downloaded!\n\n" +
+            "✨ Features included:\n" +
+            "• Professional AhaarWISE branding\n" +
+            `• Constitutional guidance for ${selectedPatient.constitution}\n` +
+            "• Smart Ayurvedic recommendations\n" +
+            "• Nutritional analysis\n" +
+            "• Personalized lifestyle tips\n\n" +
+            "📁 Check your downloads folder for the PDF file.")
+    } catch (error) {
+      console.error("Failed to export enhanced PDF:", error)
+      alert("❌ Failed to export PDF. Please try again.\n\n" +
+            "Error details: " + (error instanceof Error ? error.message : 'Unknown error'))
     }
   }
 
@@ -758,8 +873,12 @@ export default function DietChartsPage() {
                   className="w-full border-purple-200 text-purple-700 hover:bg-purple-50"
                   disabled={!selectedPatient}
                 >
-                  Generate Weekly Chart
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Generate Weekly Chart + PDF
                 </Button>
+                <div className="text-xs text-purple-600 text-center mt-2 bg-purple-50 p-2 rounded">
+                  ✨ Includes option to download AhaarWISE branded PDF with smart recommendations
+                </div>
               </CardContent>
             </Card>
           </CardContent>
@@ -1280,6 +1399,63 @@ export default function DietChartsPage() {
                       </CardContent>
                     </Card>
                   )}
+
+                  {/* Enhanced PDF Export Section */}
+                  <Card className="mt-6 bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200">
+                    <CardHeader>
+                      <CardTitle className="text-orange-800 flex items-center gap-2">
+                        <Download className="h-5 w-5" />
+                        Export Weekly Diet Chart
+                      </CardTitle>
+                      <CardDescription className="text-orange-600">
+                        Download your personalized weekly meal plan with AhaarWISE branding and smart Ayurvedic recommendations
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <Button 
+                          onClick={handleEnhancedPDFExport}
+                          className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                          size="lg"
+                        >
+                          <Download className="h-5 w-5 mr-2" />
+                          Download Enhanced PDF
+                        </Button>
+                        <div className="flex gap-2">
+                          <Button 
+                            variant="outline" 
+                            size="lg"
+                            onClick={handleExportPDF}
+                            className="border-orange-300 text-orange-700 hover:bg-orange-50"
+                          >
+                            Standard PDF
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="lg"
+                            onClick={handleExportCSV}
+                            className="border-orange-300 text-orange-700 hover:bg-orange-50"
+                          >
+                            CSV
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-4 p-4 bg-white/60 rounded-lg border border-orange-200">
+                        <h4 className="font-semibold text-orange-800 mb-2 flex items-center gap-2">
+                          ✨ Enhanced PDF Features:
+                        </h4>
+                        <ul className="text-sm text-orange-700 space-y-1">
+                          <li>• AhaarWISE professional branding and design</li>
+                          <li>• Constitutional guidance for {selectedPatient?.constitution} type</li>
+                          <li>• Seasonal Ayurvedic recommendations</li>
+                          <li>• Personalized lifestyle and meal timing tips</li>
+                          <li>• Recommended herbs, spices, and food combinations</li>
+                          <li>• Nutritional analysis and compliance tracking</li>
+                        </ul>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
               ) : (
                 <div className="text-center py-12">
