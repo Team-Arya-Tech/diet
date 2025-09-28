@@ -129,7 +129,7 @@ export default function DietChartsPage() {
     }))
   }
 
-  // Generate AI diet chart
+  // Generate AI diet chart using API
   const handleAIGeneration = async () => {
     if (!selectedPatient) {
       alert("Please select a patient first")
@@ -137,38 +137,77 @@ export default function DietChartsPage() {
     }
 
     try {
-      const aiChart = await generateAIDietChart({
-        patientProfile: {
-          age: selectedPatient.age,
-          gender: selectedPatient.gender,
-          constitution: selectedPatient.constitution,
-          healthConditions: selectedPatient.currentConditions,
-          dietaryRestrictions: selectedPatient.dietaryRestrictions,
-          activityLevel: selectedPatient.lifestyle.activityLevel,
-          currentWeight: selectedPatient.weight,
-          targetWeight: selectedPatient.weight, // Could be customized
-          targetCalories: calculateTargetCalories(selectedPatient)
-        },
-        preferences: {
-          cuisine: ["indian", "western"],
-          avoidFoods: selectedPatient.allergies || [],
-          preferredMeals: ["breakfast", "lunch", "dinner"]
-        },
-        duration: 7,
-        goals: ["balanced-nutrition", "health-optimization"]
+      // Call the LLM API to generate the diet chart
+      const res = await fetch("/api/ai-diet-chart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          patient: selectedPatient,
+          options: {
+            duration: 7,
+            focusArea: selectedPatient.currentConditions.length > 0 ? selectedPatient.currentConditions[0] : 'General wellness',
+            dietaryStyle: 'Traditional Ayurvedic'
+          }
+        })
       })
-      setCurrentDietChart(aiChart)
-      // Convert AI chart to selected foods format
-      const convertedFoods = {
-        breakfast: aiChart.weeklyPlan[0]?.meals.breakfast.items || [],
-        lunch: aiChart.weeklyPlan[0]?.meals.lunch.items || [],
-        dinner: aiChart.weeklyPlan[0]?.meals.dinner.items || [],
-        snacks: aiChart.weeklyPlan[0]?.meals.snacks.items || []
+      
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || "Failed to generate AI diet chart")
       }
-      setSelectedFoods(convertedFoods)
-      setActiveTab("builder")
+      
+      const { dietPlan } = await res.json()
+      if (dietPlan) {
+        // Convert DietPlan to DietChart format for UI compatibility
+        const dietChart: DietChart = {
+          id: dietPlan.id,
+          name: dietPlan.planName,
+          description: dietPlan.description,
+          patientId: dietPlan.patientId,
+          startDate: new Date(dietPlan.startDate),
+          endDate: new Date(dietPlan.endDate),
+          weeklyPlan: convertDietPlanToWeeklyPlan(dietPlan),
+          totalCalories: dietPlan.targetCalories,
+          nutritionalSummary: {
+            calories: dietPlan.targetCalories,
+            protein: Math.round(dietPlan.targetCalories * 0.15 / 4),
+            carbohydrates: Math.round(dietPlan.targetCalories * 0.55 / 4),
+            fat: Math.round(dietPlan.targetCalories * 0.30 / 9),
+            fiber: 25,
+            sugar: 50,
+            sodium: 2300,
+            potassium: 3500,
+            calcium: 1000,
+            iron: 15,
+            vitamins: {}
+          },
+          ayurvedicGuidelines: dietPlan.recommendations || [],
+          createdAt: new Date(dietPlan.createdAt),
+          createdBy: dietPlan.createdBy,
+          isAIGenerated: true
+        }
+        
+        setCurrentDietChart(dietChart)
+        setSavedCharts(prev => [...prev, dietChart])
+        
+        // Convert first day's meals to selected foods format for display
+        const firstDay = dietChart.weeklyPlan[0]
+        if (firstDay) {
+          const convertedFoods = {
+            breakfast: firstDay.meals.breakfast.items || [],
+            lunch: firstDay.meals.lunch.items || [],
+            dinner: firstDay.meals.dinner.items || [],
+            snacks: firstDay.meals.snacks.items || []
+          }
+          setSelectedFoods(convertedFoods)
+        }
+        
+        setActiveTab("builder")
+        alert("AI diet chart generated successfully!")
+      }
     } catch (error) {
       console.error("Failed to generate AI diet chart:", error)
+      alert("Failed to generate AI diet chart. Please try again.")
     }
   }
 
@@ -193,28 +232,73 @@ export default function DietChartsPage() {
     return Math.round(bmr * activityMultipliers[patient.lifestyle.activityLevel])
   }
 
-  // Save current diet chart
-  const handleSaveDietChart = () => {
-    if (!selectedPatient) {
-      alert("Please select a patient first")
-      return
+  // Convert DietPlan to WeeklyMealPlan format
+  const convertDietPlanToWeeklyPlan = (dietPlan: any): any[] => {
+    const weeklyPlan = []
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    
+    for (let i = 1; i <= 7; i++) {
+      const dayPlan = dietPlan.dailyMeals?.[i]
+      if (dayPlan) {
+        // Convert each meal to the expected format
+        const convertMeal = (mealData: any) => {
+          if (!mealData) return { items: [], totalCalories: 0, nutrition: {}, ayurvedicBalance: {} }
+          
+          // Create a selected food item from meal data
+          const selectedFood: SelectedFood = {
+            foodId: `meal-${Date.now()}`,
+            name: mealData.recipes?.[0] || 'AI Generated Meal',
+            quantity: 1,
+            unit: "serving",
+            calories: 250, // Default calories
+            ayurvedicScore: 85
+          }
+          
+          return {
+            items: [selectedFood],
+            totalCalories: selectedFood.calories,
+            nutrition: calculateNutritionalSummary([selectedFood]),
+            ayurvedicBalance: {
+              doshaEffect: { vata: 0, pitta: 0, kapha: 0 },
+              rasaBalance: ["sweet"],
+              viryaEffect: "neutral"
+            }
+          }
+        }
+
+        weeklyPlan.push({
+          day: i,
+          dayName: days[i - 1],
+          meals: {
+            breakfast: convertMeal(dayPlan.breakfast),
+            lunch: convertMeal(dayPlan.lunch),
+            dinner: convertMeal(dayPlan.dinner),
+            snacks: convertMeal(dayPlan.midMorning || dayPlan.midAfternoon)
+          },
+          dailyCalories: 2000, // Default daily calories
+          dailyNutrition: {
+            calories: 2000,
+            protein: 75,
+            carbohydrates: 250,
+            fat: 67,
+            fiber: 25,
+            sugar: 50,
+            sodium: 2300,
+            potassium: 3500,
+            calcium: 1000,
+            iron: 15,
+            vitamins: {}
+          }
+        })
+      }
     }
     
-    if (Object.values(selectedFoods).some(meals => meals.length > 0)) {
-      // Create a proper DietChart object
-      const dietChart = createDietChartFromSelectedFoods(selectedPatient, selectedFoods)
-      
-      // Set as current diet chart to enable export buttons
-      setCurrentDietChart(dietChart)
-      
-      // Save to saved charts list
-      setSavedCharts(prev => [...prev, dietChart])
-      
-      console.log("Saving diet chart:", dietChart)
-      alert("Diet chart saved successfully! Export buttons are now enabled.")
-    } else {
-      alert("Please add some foods to the diet chart before saving.")
-    }
+    return weeklyPlan
+  }
+
+  // Save current diet chart
+  const handleSaveDietChart = async () => {
+    await generateDietChartFromSelectedFoods();
   }
 
   // Calculate daily totals
@@ -223,60 +307,49 @@ export default function DietChartsPage() {
     return calculateNutritionalSummary(allFoods)
   }
 
-  // Create a proper DietChart object from manually selected foods
-  const createDietChartFromSelectedFoods = (patient: Patient, foods: typeof selectedFoods): DietChart => {
-    const chartName = `${patient.name} - Diet Chart ${new Date().toLocaleDateString()}`
-    const chartId = `chart_${Date.now()}`
-    
-    // Helper function to create MealPlan from selected foods
-    const createMealPlan = (mealFoods: SelectedFood[]): MealPlan => {
-      const totalCalories = mealFoods.reduce((sum, food) => sum + (food.calories || 0), 0)
-      const nutritionSummary = calculateNutritionalSummary(mealFoods)
-      
-      return {
-        items: mealFoods,
-        totalCalories,
-        nutrition: nutritionSummary,
-        ayurvedicBalance: {
-          doshaEffect: { vata: 0, pitta: 0, kapha: 0 },
-          rasaBalance: ["Sweet", "Sour", "Salty"],
-          viryaEffect: "Neutral"
-        }
-      }
-    }
-    
-    // Convert selected foods to the expected format
-    const weeklyPlan = [{
-      day: 1,
-      dayName: 'Daily Plan',
-      meals: {
-        breakfast: createMealPlan(foods.breakfast),
-        lunch: createMealPlan(foods.lunch),
-        dinner: createMealPlan(foods.dinner),
-        snacks: createMealPlan(foods.snacks)
-      },
-      dailyCalories: dailyTotals.calories,
-      dailyNutrition: dailyTotals
-    }]
 
-    return {
-      id: chartId,
-      name: chartName,
-      description: `Manually created diet chart for ${patient.constitution} constitution`,
-      patientId: patient.id,
-      startDate: new Date(),
-      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
-      weeklyPlan,
-      totalCalories: dailyTotals.calories,
-      nutritionalSummary: dailyTotals,
-      ayurvedicGuidelines: [
-        `Suitable for ${patient.constitution} constitution`,
-        'Follow regular meal timings',
-        'Eat in a peaceful environment'
-      ],
-      createdAt: new Date(),
-      createdBy: 'Manual Selection',
-      isAIGenerated: false
+  // Generate a DietChart using LLM for selected foods
+  const generateDietChartFromSelectedFoods = async () => {
+    if (!selectedPatient) {
+      alert("Please select a patient first")
+      return
+    }
+    if (!Object.values(selectedFoods).some(meals => meals.length > 0)) {
+      alert("Please add some foods to the diet chart before saving.")
+      return
+    }
+    try {
+      // Call the LLM API with selected foods as preferences
+      const res = await fetch("/api/ai-diet-chart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          patient: selectedPatient,
+          options: {
+            preferences: {
+              preferredMeals: ["breakfast", "lunch", "dinner", "snacks"],
+              avoidFoods: [],
+              cuisine: [],
+              selectedFoods // pass the selected foods for LLM context
+            },
+            duration: 7,
+            goals: ["balanced-nutrition", "health-optimization"]
+          }
+        })
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || "Failed to generate diet chart")
+      }
+      const { dietPlan } = await res.json()
+      if (dietPlan) {
+        setCurrentDietChart(dietPlan)
+        setSavedCharts(prev => [...prev, dietPlan])
+        alert("Diet chart saved successfully! Export buttons are now enabled.")
+      }
+    } catch (error) {
+      alert("Failed to generate diet chart via AI. Please try again.")
+      console.error(error)
     }
   }
 
@@ -286,30 +359,36 @@ export default function DietChartsPage() {
   const canExport = currentDietChart || (selectedPatient && Object.values(selectedFoods).some(meals => meals.length > 0))
 
   // Handle export functions - create chart on-the-fly if needed
-  const handleExportPDF = () => {
+
+  const handleExportPDF = async () => {
     let chartToExport = currentDietChart
     if (!chartToExport && selectedPatient && Object.values(selectedFoods).some(meals => meals.length > 0)) {
-      chartToExport = createDietChartFromSelectedFoods(selectedPatient, selectedFoods)
+      await generateDietChartFromSelectedFoods()
+      chartToExport = currentDietChart
     }
     if (chartToExport) {
       exportDietChartToPDF(chartToExport)
     }
   }
 
-  const handleExportCSV = () => {
+
+  const handleExportCSV = async () => {
     let chartToExport = currentDietChart
     if (!chartToExport && selectedPatient && Object.values(selectedFoods).some(meals => meals.length > 0)) {
-      chartToExport = createDietChartFromSelectedFoods(selectedPatient, selectedFoods)
+      await generateDietChartFromSelectedFoods()
+      chartToExport = currentDietChart
     }
     if (chartToExport) {
       exportDietChartToCSV(chartToExport)
     }
   }
 
-  const handleExportJSON = () => {
+
+  const handleExportJSON = async () => {
     let chartToExport = currentDietChart
     if (!chartToExport && selectedPatient && Object.values(selectedFoods).some(meals => meals.length > 0)) {
-      chartToExport = createDietChartFromSelectedFoods(selectedPatient, selectedFoods)
+      await generateDietChartFromSelectedFoods()
+      chartToExport = currentDietChart
     }
     if (chartToExport) {
       exportDietChartToJSON(chartToExport)
@@ -359,14 +438,6 @@ export default function DietChartsPage() {
           <Button variant="outline" onClick={() => setShowFilters(!showFilters)}>
             <Filter className="h-4 w-4 mr-2" />
             Filters
-          </Button>
-          <Button 
-            onClick={handleAIGeneration} 
-            className="bg-gradient-to-r from-purple-500 to-pink-500"
-            disabled={!selectedPatient}
-          >
-            <Sparkles className="h-4 w-4 mr-2" />
-            AI Generate
           </Button>
         </div>
       </div>
@@ -485,6 +556,105 @@ export default function DietChartsPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Chart Creation Options */}
+      {selectedPatient && (
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50/30 via-purple-50/20 to-indigo-50/10 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3">
+              <div className="flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 p-3 shadow-lg">
+                <Sparkles className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Chart Creation Options
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Choose how you want to create your diet chart for {selectedPatient.name}
+                </p>
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Manual Chart Building Option */}
+            <Card className="border border-green-200 hover:border-green-300 transition-colors cursor-pointer group">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center justify-center rounded-xl bg-green-100 p-3 group-hover:bg-green-200 transition-colors">
+                    <User className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-green-800">Manual Selection</h4>
+                    <p className="text-sm text-green-600">Build your chart step by step</p>
+                  </div>
+                </div>
+                <p className="text-gray-700 text-sm mb-4">
+                  Select foods manually from our database and create a personalized diet chart. You have full control over each meal and portion.
+                </p>
+                <div className="space-y-2 text-sm text-gray-600 mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                    <span>Browse food database</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                    <span>Customize portions and meals</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                    <span>Real-time nutritional tracking</span>
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => setActiveTab("builder")} 
+                  className="w-full bg-green-600 hover:bg-green-700"
+                >
+                  Start Manual Selection
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* AI Generation Option */}
+            <Card className="border border-purple-200 hover:border-purple-300 transition-colors cursor-pointer group">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center justify-center rounded-xl bg-purple-100 p-3 group-hover:bg-purple-200 transition-colors">
+                    <Sparkles className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-purple-800">AI Generation</h4>
+                    <p className="text-sm text-purple-600">Let AI create your chart</p>
+                  </div>
+                </div>
+                <p className="text-gray-700 text-sm mb-4">
+                  Generate a complete 7-day Ayurvedic diet plan using AI based on patient's constitution, health conditions, and preferences.
+                </p>
+                <div className="space-y-2 text-sm text-gray-600 mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                    <span>Constitution-based recommendations</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                    <span>Ayurvedic principles integration</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                    <span>Complete weekly meal plan</span>
+                  </div>
+                </div>
+                <Button 
+                  onClick={handleAIGeneration} 
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                  disabled={!selectedPatient}
+                >
+                  Generate AI Chart
+                </Button>
+              </CardContent>
+            </Card>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Smart Recommendations Section (Expandable) */}
       {selectedPatient && (
@@ -874,10 +1044,10 @@ export default function DietChartsPage() {
                     <CardContent className="p-4">
                       <h3 className="font-semibold mb-2">{chart.name}</h3>
                       <p className="text-sm text-muted-foreground mb-3">
-                        Created: {chart.createdAt.toLocaleDateString()}
+                        Created: {new Date(chart.createdAt).toLocaleDateString()}
                       </p>
                       <div className="flex justify-between text-sm">
-                        <span>Created: {chart.createdAt.toLocaleDateString()}</span>
+                        <span>Created: {new Date(chart.createdAt).toLocaleDateString()}</span>
                         <Badge variant={chart.isAIGenerated ? "default" : "secondary"}>
                           {chart.isAIGenerated ? "AI" : "Manual"}
                         </Badge>

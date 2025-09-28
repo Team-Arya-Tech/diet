@@ -137,12 +137,18 @@ Format the response as a JSON object with this structure:
     if (!response) {
       throw new Error('No response from OpenAI')
     }
+    // Print the raw LLM response for debugging
+    console.log('Raw LLM response:', response)
 
-    // Parse the JSON response
+    // Parse the JSON response robustly
     let aiPlan
     try {
-      // Clean the response in case there's markdown formatting
-      const cleanedResponse = response.replace(/```json\n?|\n?```/g, '').trim()
+      // Extract the first {...} block from the response
+      const match = response.match(/\{[\s\S]*\}/)
+      if (!match) throw new Error('No JSON object found in AI response')
+      let cleanedResponse = match[0]
+        .replace(/\/\/.*$/gm, '') // Remove JS-style comments
+        .replace(/,\s*([}\]])/g, '$1') // Remove trailing commas
       aiPlan = JSON.parse(cleanedResponse)
     } catch (parseError) {
       console.error('Failed to parse AI response:', parseError)
