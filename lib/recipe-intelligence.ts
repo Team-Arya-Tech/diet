@@ -1,12 +1,18 @@
-import foodDatabase from '@/data/food-database.json'
+import { EnhancedFood, EnhancedFoodDatabase } from './enhanced-food-database'
+import { EnhancedPatient } from './enhanced-patient-management'
+import { SixTastesAnalyzer, TasteAnalysis } from './six-tastes-analyzer'
+import { SeasonalContext } from './seasonal-diet-adaptation'
 
 export interface RecipeIngredient {
   id: string
   name: string
+  food?: EnhancedFood
   quantity: number
   unit: string
   notes?: string
   ayurvedicRole?: 'main' | 'spice' | 'garnish' | 'base'
+  preparation?: string
+  optional?: boolean
 }
 
 export interface CookingStep {
@@ -650,6 +656,429 @@ export const ayurvedicCookingPrinciples = {
       cookingMethods: ["Long cooking", "Warming spices", "Nourishing preparations"],
       avoid: ["Cold foods", "Raw foods", "Light meals"]
     }
+  }
+}
+
+// Enhanced Recipe Intelligence Engine
+
+export interface MealPlan {
+  id: string
+  patientId: string
+  startDate: Date
+  endDate: Date
+  name: string
+  description: string
+  
+  meals: {
+    [date: string]: {
+      breakfast: Recipe[]
+      lunch: Recipe[]
+      dinner: Recipe[]
+      snacks: Recipe[]
+    }
+  }
+  
+  weeklyGoals: {
+    nutritional: { [key: string]: number }
+    ayurvedic: string[]
+    lifestyle: string[]
+  }
+  
+  shoppingList: {
+    ingredient: string
+    quantity: number
+    unit: string
+    category: string
+    priority: 'essential' | 'recommended' | 'optional'
+  }[]
+  
+  adherence?: {
+    date: string
+    meal: string
+    followed: boolean
+    modifications: string[]
+    rating: number
+  }[]
+}
+
+export interface RecipeRecommendationCriteria {
+  patient: EnhancedPatient
+  mealType: 'breakfast' | 'lunch' | 'dinner' | 'snacks'
+  seasonalContext: SeasonalContext
+  preferences: {
+    cuisine?: string[]
+    cookingTime?: number
+    difficulty?: Recipe['difficulty']
+    avoidIngredients?: string[]
+    emphasizeIngredients?: string[]
+  }
+  therapeuticGoals?: string[]
+  previousMeals?: Recipe[]
+}
+
+export class RecipeIntelligenceEngine {
+  private static mealPlans: MealPlan[] = []
+
+  // Enhanced Recipe Generation
+  static generatePersonalizedRecipe(criteria: RecipeRecommendationCriteria): Recipe {
+    const { patient, mealType, seasonalContext, preferences, therapeuticGoals } = criteria
+    
+    // Get suitable base recipe
+    const baseRecipe = this.findBestBaseRecipe(patient, mealType, seasonalContext)
+    
+    // Personalize the recipe
+    const personalizedRecipe = this.personalizeRecipe(baseRecipe, patient, therapeuticGoals || [])
+    
+    return personalizedRecipe
+  }
+
+  private static findBestBaseRecipe(
+    patient: EnhancedPatient,
+    mealType: string,
+    seasonalContext: SeasonalContext
+  ): Recipe {
+    let suitableRecipes = recipesDatabase.filter(recipe => {
+      // Match meal type
+      if (recipe.category !== mealType) return false
+      
+      // Check constitution compatibility
+      const constitutionMatch = recipe.ayurvedicProperties.constitution.includes(patient.constitution) ||
+                              recipe.ayurvedicProperties.constitution.includes('tridoshic')
+      if (!constitutionMatch) return false
+      
+      // Check seasonal appropriateness
+      const seasonMatch = recipe.ayurvedicProperties.season.includes(seasonalContext.season) ||
+                         recipe.ayurvedicProperties.season.includes('all')
+      if (!seasonMatch) return false
+      
+      return true
+    })
+    
+    // If no perfect matches, use more flexible criteria
+    if (suitableRecipes.length === 0) {
+      suitableRecipes = recipesDatabase.filter(recipe => recipe.category === mealType)
+    }
+    
+    // Return the most suitable recipe (first match for now)
+    return suitableRecipes[0] || recipesDatabase[0]
+  }
+
+  private static personalizeRecipe(
+    baseRecipe: Recipe,
+    patient: EnhancedPatient,
+    therapeuticGoals: string[]
+  ): Recipe {
+    const personalizedRecipe = { ...baseRecipe }
+    
+    // Add personalized modifications based on patient needs
+    const modifications = this.generatePersonalizedModifications(patient, therapeuticGoals)
+    
+    if (modifications.length > 0) {
+      personalizedRecipe.variations = personalizedRecipe.variations || []
+      personalizedRecipe.variations.push({
+        name: `Personalized for ${patient.name}`,
+        changes: modifications,
+        ayurvedicBenefit: `Customized for ${patient.constitution} constitution and current health goals`
+      })
+    }
+    
+    return personalizedRecipe
+  }
+
+  private static generatePersonalizedModifications(
+    patient: EnhancedPatient,
+    therapeuticGoals: string[]
+  ): string[] {
+    const modifications = []
+    
+    // Constitution-based modifications
+    if (patient.constitution.includes('vata')) {
+      modifications.push('Add extra ghee for grounding')
+      modifications.push('Include warming spices like ginger')
+    }
+    if (patient.constitution.includes('pitta')) {
+      modifications.push('Reduce heating spices')
+      modifications.push('Add cooling herbs like cilantro')
+    }
+    if (patient.constitution.includes('kapha')) {
+      modifications.push('Add stimulating spices like black pepper')
+      modifications.push('Reduce heavy ingredients')
+    }
+    
+    // Health goal modifications
+    therapeuticGoals.forEach(goal => {
+      switch (goal.toLowerCase()) {
+        case 'weight loss':
+          modifications.push('Reduce oil content')
+          modifications.push('Add metabolism-boosting spices')
+          break
+        case 'digestion':
+          modifications.push('Add digestive spices like cumin')
+          modifications.push('Cook ingredients thoroughly')
+          break
+        case 'immunity':
+          modifications.push('Add turmeric and ginger')
+          modifications.push('Include antioxidant-rich ingredients')
+          break
+      }
+    })
+    
+    // Symptom-based modifications
+    if (patient.currentSymptoms.includes('acidity')) {
+      modifications.push('Avoid sour and spicy ingredients')
+      modifications.push('Add cooling ingredients')
+    }
+    if (patient.currentSymptoms.includes('bloating')) {
+      modifications.push('Add digestive spices')
+      modifications.push('Avoid heavy combinations')
+    }
+    
+    return modifications
+  }
+
+  // Meal Planning Intelligence
+  static generateWeeklyMealPlan(
+    patient: EnhancedPatient,
+    seasonalContext: SeasonalContext,
+    preferences: any = {}
+  ): MealPlan {
+    const startDate = new Date()
+    const endDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000)
+    
+    const mealPlan: MealPlan = {
+      id: `meal_plan_${patient.id}_${Date.now()}`,
+      patientId: patient.id,
+      startDate,
+      endDate,
+      name: `Weekly Ayurvedic Meal Plan for ${patient.name}`,
+      description: `Personalized weekly meal plan based on ${patient.constitution} constitution`,
+      meals: {},
+      weeklyGoals: this.generateWeeklyGoals(patient),
+      shoppingList: []
+    }
+    
+    // Generate meals for each day
+    for (let i = 0; i < 7; i++) {
+      const currentDate = new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000)
+      const dateStr = currentDate.toISOString().split('T')[0]
+      
+      const criteria: RecipeRecommendationCriteria = {
+        patient,
+        mealType: 'breakfast',
+        seasonalContext,
+        preferences,
+        therapeuticGoals: patient.healthGoals
+      }
+      
+      mealPlan.meals[dateStr] = {
+        breakfast: [this.selectMealRecipe({ ...criteria, mealType: 'breakfast' })],
+        lunch: [this.selectMealRecipe({ ...criteria, mealType: 'lunch' })],
+        dinner: [this.selectMealRecipe({ ...criteria, mealType: 'dinner' })],
+        snacks: [this.selectMealRecipe({ ...criteria, mealType: 'snacks' })]
+      }
+    }
+    
+    // Generate shopping list
+    mealPlan.shoppingList = this.generateShoppingList(mealPlan)
+    
+    this.saveMealPlan(mealPlan)
+    return mealPlan
+  }
+
+  private static selectMealRecipe(criteria: RecipeRecommendationCriteria): Recipe {
+    const availableRecipes = recipesDatabase.filter(recipe => recipe.category === criteria.mealType)
+    
+    // Score and select the best recipe
+    const scoredRecipes = availableRecipes.map(recipe => ({
+      recipe,
+      score: this.calculateRecipeScore(recipe, criteria.patient, criteria)
+    }))
+    
+    scoredRecipes.sort((a, b) => b.score - a.score)
+    return scoredRecipes[0]?.recipe || availableRecipes[0]
+  }
+
+  private static calculateRecipeScore(
+    recipe: Recipe,
+    patient: EnhancedPatient,
+    criteria: RecipeRecommendationCriteria
+  ): number {
+    let score = 50 // base score
+    
+    // Constitution compatibility
+    if (recipe.ayurvedicProperties.constitution.includes(patient.constitution)) {
+      score += 30
+    }
+    
+    // Seasonal appropriateness
+    if (recipe.ayurvedicProperties.season.includes(criteria.seasonalContext.season)) {
+      score += 20
+    }
+    
+    // Therapeutic alignment
+    if (criteria.therapeuticGoals) {
+      const alignmentCount = criteria.therapeuticGoals.filter(goal =>
+        recipe.healthBenefits.some(benefit =>
+          benefit.toLowerCase().includes(goal.toLowerCase())
+        )
+      ).length
+      score += alignmentCount * 10
+    }
+    
+    // Digestive compatibility
+    if (patient.digestiveStrength === 'weak' && recipe.ayurvedicProperties.digestibility === 'easy') {
+      score += 15
+    }
+    
+    // Preferences
+    if (criteria.preferences.difficulty && recipe.difficulty === criteria.preferences.difficulty) {
+      score += 10
+    }
+    
+    if (criteria.preferences.cookingTime && recipe.totalTime <= criteria.preferences.cookingTime) {
+      score += 10
+    }
+    
+    return Math.max(0, Math.min(100, score))
+  }
+
+  private static generateWeeklyGoals(patient: EnhancedPatient) {
+    return {
+      nutritional: {
+        calories: patient.activityLevel === 'very-active' ? 2200 : patient.activityLevel === 'active' ? 2000 : 1800,
+        protein: 50,
+        fiber: 25,
+        vitamins: 100
+      },
+      ayurvedic: [
+        'Balance six tastes daily',
+        'Eat according to constitution',
+        'Follow seasonal guidelines'
+      ],
+      lifestyle: [
+        'Eat at regular times',
+        'Practice mindful eating',
+        'Stay hydrated throughout day'
+      ]
+    }
+  }
+
+  private static generateShoppingList(mealPlan: MealPlan) {
+    const ingredientCount: { [key: string]: { quantity: number; unit: string; category: string } } = {}
+    
+    Object.values(mealPlan.meals).forEach(dayMeals => {
+      Object.values(dayMeals).forEach(mealRecipes => {
+        mealRecipes.forEach(recipe => {
+          recipe.ingredients.forEach(ingredient => {
+            const key = ingredient.name
+            if (ingredientCount[key]) {
+              ingredientCount[key].quantity += ingredient.quantity
+            } else {
+              ingredientCount[key] = {
+                quantity: ingredient.quantity,
+                unit: ingredient.unit,
+                category: ingredient.ayurvedicRole || 'misc'
+              }
+            }
+          })
+        })
+      })
+    })
+    
+    return Object.entries(ingredientCount).map(([ingredient, data]) => ({
+      ingredient,
+      quantity: Math.round(data.quantity * 10) / 10,
+      unit: data.unit,
+      category: data.category,
+      priority: data.category === 'spice' ? 'optional' as const : 'essential' as const
+    }))
+  }
+
+  // Recipe Analysis and Recommendations
+  static analyzeRecipeNutrition(recipe: Recipe): {
+    tasteBalance: any // Simplified for compatibility
+    constitutionalSuitability: { [constitution: string]: number }
+    therapeuticProperties: string[]
+    recommendations: string[]
+  } {
+    // This would integrate with the enhanced food database for detailed analysis
+    const analysis = {
+      tasteBalance: {
+        tastes: { sweet: 30, sour: 10, salty: 15, pungent: 20, bitter: 15, astringent: 10 },
+        dominantTaste: recipe.ayurvedicProperties.primaryRasa[0] || 'sweet',
+        balance: 85,
+        recommendations: [
+          'Well-balanced across most tastes',
+          'Good for daily consumption'
+        ]
+      },
+      constitutionalSuitability: {
+        vata: recipe.ayurvedicProperties.constitution.includes('vata') ? 90 : 60,
+        pitta: recipe.ayurvedicProperties.constitution.includes('pitta') ? 90 : 60,
+        kapha: recipe.ayurvedicProperties.constitution.includes('kapha') ? 90 : 60
+      },
+      therapeuticProperties: recipe.healthBenefits,
+      recommendations: [
+        `Best consumed during ${recipe.ayurvedicProperties.timeOfDay.join(' or ')}`,
+        `Suitable for ${recipe.ayurvedicProperties.season.join(', ')} seasons`,
+        `${recipe.ayurvedicProperties.digestibility} to digest`
+      ]
+    }
+    
+    return analysis
+  }
+
+  static recommendRecipeModifications(
+    recipe: Recipe,
+    patient: EnhancedPatient,
+    targetGoals: string[]
+  ): {
+    modifications: string[]
+    benefits: string[]
+    newNutritionalProfile: Partial<Recipe['nutritionalInfo']>
+  } {
+    const modifications = this.generatePersonalizedModifications(patient, targetGoals)
+    
+    return {
+      modifications,
+      benefits: [
+        'Better suited to your constitution',
+        'Aligned with your health goals',
+        'Optimized digestibility'
+      ],
+      newNutritionalProfile: {
+        // This would calculate based on modifications
+        caloriesPerServing: recipe.nutritionalInfo.caloriesPerServing * 0.95,
+        protein: recipe.nutritionalInfo.protein * 1.1,
+        fiber: recipe.nutritionalInfo.fiber * 1.2
+      }
+    }
+  }
+
+  // Storage and retrieval methods
+  private static saveMealPlan(mealPlan: MealPlan): void {
+    this.mealPlans.push(mealPlan)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('meal_plans', JSON.stringify(this.mealPlans))
+    }
+  }
+
+  static getAllMealPlans(): MealPlan[] {
+    if (typeof window !== 'undefined' && this.mealPlans.length === 0) {
+      const stored = localStorage.getItem('meal_plans')
+      if (stored) {
+        this.mealPlans = JSON.parse(stored)
+      }
+    }
+    return this.mealPlans
+  }
+
+  static getMealPlanById(id: string): MealPlan | undefined {
+    return this.getAllMealPlans().find(plan => plan.id === id)
+  }
+
+  static getMealPlansForPatient(patientId: string): MealPlan[] {
+    return this.getAllMealPlans().filter(plan => plan.patientId === patientId)
   }
 }
 

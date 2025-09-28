@@ -1,7 +1,10 @@
-// Professional PDF export service for Ayurvedic diet charts
+// Professional PDF export service for Ayurvedic diet charts and analytics
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 import type { Patient, DietPlan, ProgressRecord } from './database'
+import type { EnhancedPatient } from './enhanced-patient-management'
+import type { Recipe, MealPlan } from './recipe-intelligence'
+import type { PopulationHealthMetrics, PatientProgressReport } from './advanced-reporting'
 
 // Extend jsPDF interface to include autoTable
 declare module 'jspdf' {
@@ -34,6 +37,35 @@ export interface MedicalReportOptions {
   watermark?: string
 }
 
+export interface PDFBrandingConfig {
+  logoUrl?: string
+  primaryColor: string
+  secondaryColor: string
+  accentColor: string
+  companyName: string
+  tagline: string
+  website: string
+  contactInfo: {
+    email: string
+    phone: string
+    address: string
+  }
+}
+
+export const AHAARWISE_BRANDING: PDFBrandingConfig = {
+  primaryColor: '#F97316', // Orange-500
+  secondaryColor: '#FB923C', // Orange-400
+  accentColor: '#FED7AA', // Orange-200
+  companyName: 'AhaarWISE',
+  tagline: 'Intelligent Ayurvedic Nutrition Management',
+  website: 'www.ahaarwise.com',
+  contactInfo: {
+    email: 'support@ahaarwise.com',
+    phone: '+91-XXXX-XXXXX',
+    address: 'Healthcare Technology Center, India'
+  }
+}
+
 export class DietChartPDFExporter {
   private doc: jsPDF
   private currentY: number = 20
@@ -42,13 +74,80 @@ export class DietChartPDFExporter {
   private margin: number = 20
   private headerHeight: number = 40
   private footerHeight: number = 20
+  private branding: PDFBrandingConfig
 
-  constructor() {
+  constructor(branding: PDFBrandingConfig = AHAARWISE_BRANDING) {
     this.doc = new jsPDF('p', 'mm', 'a4')
+    this.branding = branding
   }
 
+  private addBrandedHeader(title: string, subtitle?: string, consultationDate?: Date): void {
+    // Branded header background
+    this.doc.setFillColor(this.branding.primaryColor)
+    this.doc.rect(0, 0, this.pageWidth, 35, 'F')
+    
+    // Company logo placeholder
+    this.doc.setFillColor(255, 255, 255)
+    this.doc.rect(this.margin, 8, 35, 20, 'F')
+    
+    // Company name in logo area
+    this.doc.setTextColor(this.branding.primaryColor)
+    this.doc.setFontSize(12)
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text(this.branding.companyName, this.margin + 2, 18)
+    
+    // Main title
+    this.doc.setTextColor(255, 255, 255)
+    this.doc.setFontSize(18)
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text(title, this.margin + 45, 18)
+    
+    // Subtitle
+    if (subtitle) {
+      this.doc.setFontSize(11)
+      this.doc.setFont('helvetica', 'normal')
+      this.doc.text(subtitle, this.margin + 45, 25)
+    }
+    
+    // Date
+    if (consultationDate) {
+      this.doc.setFontSize(10)
+      this.doc.text(`Date: ${consultationDate.toLocaleDateString()}`, this.pageWidth - this.margin - 40, 18)
+    }
+    
+    // Tagline
+    this.doc.setFontSize(8)
+    this.doc.text(this.branding.tagline, this.pageWidth - this.margin - 70, 25)
+    
+    this.currentY = 45
+  }
+
+  private addFooter(pageNumber: number, totalPages: number): void {
+    const footerY = this.pageHeight - 15
+    
+    // Footer line
+    this.doc.setDrawColor(this.branding.secondaryColor)
+    this.doc.setLineWidth(0.5)
+    this.doc.line(this.margin, footerY - 5, this.pageWidth - this.margin, footerY - 5)
+    
+    // Contact info
+    this.doc.setFontSize(8)
+    this.doc.setTextColor(100, 100, 100)
+    this.doc.text(`${this.branding.website} | ${this.branding.contactInfo.email} | ${this.branding.contactInfo.phone}`, this.margin, footerY)
+    
+    // Page number
+    this.doc.text(`Page ${pageNumber} of ${totalPages}`, this.pageWidth - this.margin - 20, footerY)
+    
+    // Generation timestamp
+    const timestamp = new Date().toLocaleString()
+    this.doc.setFontSize(7)
+    this.doc.text(`Generated: ${timestamp}`, this.pageWidth - this.margin - 50, footerY + 5)
+  }
+
+  // Original header method for backward compatibility
   private addHeader(consultationDate: Date, clinicInfo?: DietChartPDFData['clinicInfo']): void {
-    // Header background
+    this.addBrandedHeader('Ayurvedic Diet Chart', undefined, consultationDate)
+    // Original header background logic preserved
     this.doc.setFillColor(245, 247, 250)
     this.doc.rect(0, 0, this.pageWidth, this.headerHeight, 'F')
 
@@ -673,4 +772,385 @@ export const exportProgressReportToPDF = async (
 
   const filename = `ProgressReport_${timeRange}_${new Date().toISOString().split('T')[0]}.pdf`
   doc.save(filename)
+}
+
+// Enhanced Analytics Export Functions with Comprehensive Branding
+export class AnalyticsPDFExporter {
+  private doc: jsPDF
+  private currentY: number = 20
+  private pageHeight: number = 297
+  private pageWidth: number = 210
+  private margin: number = 20
+  private branding: PDFBrandingConfig
+
+  constructor(branding: PDFBrandingConfig = AHAARWISE_BRANDING) {
+    this.doc = new jsPDF('p', 'mm', 'a4')
+    this.branding = branding
+  }
+
+  private addBrandedHeader(title: string, subtitle?: string, date?: Date): void {
+    // Header background
+    this.doc.setFillColor(this.branding.primaryColor)
+    this.doc.rect(0, 0, this.pageWidth, 35, 'F')
+    
+    // Company logo area
+    this.doc.setFillColor(255, 255, 255)
+    this.doc.rect(this.margin, 8, 35, 20, 'F')
+    this.doc.setTextColor(this.branding.primaryColor)
+    this.doc.setFontSize(12)
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text(this.branding.companyName, this.margin + 2, 18)
+    
+    // Title
+    this.doc.setTextColor(255, 255, 255)
+    this.doc.setFontSize(18)
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text(title, this.margin + 45, 18)
+    
+    if (subtitle) {
+      this.doc.setFontSize(11)
+      this.doc.setFont('helvetica', 'normal')
+      this.doc.text(subtitle, this.margin + 45, 25)
+    }
+    
+    if (date) {
+      this.doc.setFontSize(10)
+      this.doc.text(`Date: ${date.toLocaleDateString()}`, this.pageWidth - this.margin - 40, 18)
+    }
+    
+    this.doc.setFontSize(8)
+    this.doc.text(this.branding.tagline, this.pageWidth - this.margin - 70, 25)
+    
+    this.currentY = 45
+  }
+
+  private addFooter(pageNumber: number): void {
+    const footerY = this.pageHeight - 15
+    this.doc.setDrawColor(this.branding.secondaryColor)
+    this.doc.setLineWidth(0.5)
+    this.doc.line(this.margin, footerY - 5, this.pageWidth - this.margin, footerY - 5)
+    
+    this.doc.setFontSize(8)
+    this.doc.setTextColor(100, 100, 100)
+    this.doc.text(`${this.branding.website} | ${this.branding.contactInfo.email}`, this.margin, footerY)
+    this.doc.text(`Page ${pageNumber}`, this.pageWidth - this.margin - 20, footerY)
+  }
+
+  private addSection(title: string): void {
+    this.doc.setFontSize(14)
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.setTextColor(0, 0, 0)
+    this.doc.text(title, this.margin, this.currentY)
+    this.doc.setDrawColor(this.branding.primaryColor)
+    this.doc.setLineWidth(0.5)
+    this.doc.line(this.margin, this.currentY + 2, this.margin + this.doc.getTextWidth(title), this.currentY + 2)
+    this.currentY += 10
+  }
+
+  private addTable(headers: string[], data: string[][]): void {
+    this.doc.autoTable({
+      startY: this.currentY,
+      head: [headers],
+      body: data,
+      theme: 'striped',
+      styles: { fontSize: 9 },
+      headStyles: { 
+        fillColor: [247, 115, 22], // Orange-500
+        textColor: [255, 255, 255] 
+      },
+      margin: { left: this.margin, right: this.margin }
+    })
+    this.currentY = (this.doc as any).lastAutoTable.finalY + 10
+  }
+
+  // Patient Progress Analytics Report
+  async exportPatientProgressAnalytics(
+    patient: EnhancedPatient,
+    progressData: any,
+    options: MedicalReportOptions = {
+      includeNutritionalAnalysis: true,
+      includeAyurvedicGuidelines: true,
+      includeProgressCharts: true,
+      includeRecommendations: true,
+      language: 'en'
+    }
+  ): Promise<void> {
+    this.addBrandedHeader(
+      'Patient Progress Analytics',
+      `Comprehensive Health Analysis for ${patient.name}`,
+      new Date()
+    )
+
+    // Patient Overview
+    this.addSection('Patient Information')
+    const patientInfo = [
+      ['Name', patient.name],
+      ['Age', `${patient.age} years`],
+      ['Gender', patient.gender],
+      ['Constitution', patient.constitution],
+      ['Current Health Score', `${progressData.healthScore}/100`],
+      ['BMI', `${progressData.currentBMI} (${progressData.bmiCategory})`]
+    ]
+    this.addTable(['Attribute', 'Value'], patientInfo)
+
+    // Progress Metrics
+    this.addSection('Key Progress Indicators')
+    const progressMetrics = [
+      ['Weight Change', `${progressData.weightChange} kg`],
+      ['Energy Level Improvement', `+${progressData.energyImprovement}%`],
+      ['Symptom Reduction', `${progressData.symptomReduction}%`],
+      ['Diet Compliance', `${progressData.dietCompliance}%`],
+      ['Exercise Adherence', `${progressData.exerciseAdherence}%`]
+    ]
+    this.addTable(['Metric', 'Progress'], progressMetrics)
+
+    // Ayurvedic Assessment
+    if (options.includeAyurvedicGuidelines) {
+      this.addSection('Ayurvedic Constitution Analysis')
+      const ayurvedicData = [
+        ['Constitution', patient.constitution],
+        ['Current Imbalance', patient.currentImbalance?.join(', ') || 'None'],
+        ['Activity Level', patient.activityLevel],
+        ['Stress Level', `${patient.stressLevel}/5`],
+        ['Sleep Quality', patient.sleepPattern.quality]
+      ]
+      this.addTable(['Dosha/Aspect', 'Current State'], ayurvedicData)
+    }
+
+    // Nutritional Analysis
+    if (options.includeNutritionalAnalysis) {
+      this.addSection('Nutritional Analysis')
+      const nutritionData = [
+        ['Daily Calories', `${progressData.avgCalories} kcal`],
+        ['Protein Intake', `${progressData.proteinIntake}g (${progressData.proteinPercentage}%)`],
+        ['Carbohydrate Intake', `${progressData.carbIntake}g (${progressData.carbPercentage}%)`],
+        ['Fat Intake', `${progressData.fatIntake}g (${progressData.fatPercentage}%)`],
+        ['Fiber Intake', `${progressData.fiberIntake}g`],
+        ['Hydration Level', `${progressData.hydrationLevel}%`]
+      ]
+      this.addTable(['Nutrient', 'Daily Average'], nutritionData)
+    }
+
+    // Recommendations
+    if (options.includeRecommendations && progressData.recommendations) {
+      this.addSection('Personalized Recommendations')
+      this.doc.setFontSize(10)
+      progressData.recommendations.forEach((rec: string, index: number) => {
+        this.doc.text(`${index + 1}. ${rec}`, this.margin + 5, this.currentY)
+        this.currentY += 6
+      })
+    }
+
+    this.addFooter(1)
+    this.doc.save(`patient-analytics-${patient.name.replace(/\s+/g, '-')}.pdf`)
+  }
+
+  // Population Health Analytics Report
+  async exportPopulationHealthAnalytics(metrics: any, dateRange: { start: Date; end: Date }): Promise<void> {
+    this.addBrandedHeader(
+      'Population Health Analytics',
+      'Healthcare Insights & Trends Analysis',
+      new Date()
+    )
+
+    // Executive Summary
+    this.addSection('Executive Summary')
+    const summary = [
+      ['Total Patients', metrics.totalPatients.toString()],
+      ['Active Consultations', metrics.activeConsultations.toString()],
+      ['Average Health Score', `${metrics.avgHealthScore}/100`],
+      ['Overall Compliance Rate', `${metrics.overallCompliance}%`],
+      ['Patient Satisfaction', `${metrics.patientSatisfaction}%`]
+    ]
+    this.addTable(['Metric', 'Value'], summary)
+
+    // Demographics
+    this.addSection('Patient Demographics')
+    const demographics = [
+      ['Age 18-30', `${metrics.demographics.age1830}%`],
+      ['Age 31-45', `${metrics.demographics.age3145}%`],
+      ['Age 46-60', `${metrics.demographics.age4660}%`],
+      ['Age 60+', `${metrics.demographics.age60plus}%`],
+      ['Male Patients', `${metrics.demographics.male}%`],
+      ['Female Patients', `${metrics.demographics.female}%`]
+    ]
+    this.addTable(['Category', 'Percentage'], demographics)
+
+    // Top Health Conditions
+    this.addSection('Common Health Conditions')
+    const conditions = metrics.topConditions.map((condition: any) => [
+      condition.name,
+      `${condition.prevalence}%`,
+      `${condition.improvementRate}%`,
+      condition.avgTreatmentDuration
+    ])
+    this.addTable(['Condition', 'Prevalence', 'Improvement Rate', 'Avg Treatment Duration'], conditions)
+
+    // Treatment Effectiveness
+    this.addSection('Treatment Effectiveness Metrics')
+    const effectiveness = [
+      ['Average Recovery Time', `${metrics.avgRecoveryTime} days`],
+      ['Symptom Improvement', `${metrics.symptomImprovement}%`],
+      ['Weight Management Success', `${metrics.weightManagementSuccess}%`],
+      ['Lifestyle Adherence', `${metrics.lifestyleAdherence}%`],
+      ['Follow-up Compliance', `${metrics.followUpCompliance}%`]
+    ]
+    this.addTable(['Metric', 'Rate/Duration'], effectiveness)
+
+    this.addFooter(1)
+    this.doc.save(`population-health-analytics-${dateRange.start.toISOString().split('T')[0]}.pdf`)
+  }
+
+  // Meal Plan Analytics Report
+  async exportMealPlanAnalytics(mealPlan: any, patient: EnhancedPatient, nutritionalAnalysis: any): Promise<void> {
+    this.addBrandedHeader(
+      'Personalized Meal Plan Report',
+      `Ayurvedic Nutrition Guide for ${patient.name}`,
+      new Date()
+    )
+
+    // Meal Plan Overview
+    this.addSection('Meal Plan Summary')
+    const planInfo = [
+      ['Plan Duration', `${mealPlan.duration} days`],
+      ['Daily Calories Target', `${mealPlan.dailyCalories} kcal`],
+      ['Dominant Rasa (Taste)', mealPlan.dominantTaste],
+      ['Seasonal Adaptation', mealPlan.seasonalAdaptation],
+      ['Dosha Focus', mealPlan.doshaFocus],
+      ['Created Date', new Date(mealPlan.createdAt).toLocaleDateString()]
+    ]
+    this.addTable(['Attribute', 'Details'], planInfo)
+
+    // Nutritional Breakdown
+    this.addSection('Daily Nutritional Analysis')
+    const nutrition = [
+      ['Calories', `${nutritionalAnalysis.calories} kcal`],
+      ['Protein', `${nutritionalAnalysis.protein}g (${nutritionalAnalysis.proteinPercent}%)`],
+      ['Carbohydrates', `${nutritionalAnalysis.carbs}g (${nutritionalAnalysis.carbPercent}%)`],
+      ['Healthy Fats', `${nutritionalAnalysis.fats}g (${nutritionalAnalysis.fatPercent}%)`],
+      ['Dietary Fiber', `${nutritionalAnalysis.fiber}g`],
+      ['Vitamin C', `${nutritionalAnalysis.vitaminC}mg`],
+      ['Iron', `${nutritionalAnalysis.iron}mg`],
+      ['Calcium', `${nutritionalAnalysis.calcium}mg`]
+    ]
+    this.addTable(['Nutrient', 'Daily Amount'], nutrition)
+
+    // Six Tastes Analysis
+    this.addSection('Ayurvedic Six Tastes Distribution')
+    const tastes = [
+      ['Sweet (Madhura)', `${nutritionalAnalysis.tastes.sweet}%`],
+      ['Sour (Amla)', `${nutritionalAnalysis.tastes.sour}%`],
+      ['Salty (Lavana)', `${nutritionalAnalysis.tastes.salty}%`],
+      ['Pungent (Katu)', `${nutritionalAnalysis.tastes.pungent}%`],
+      ['Bitter (Tikta)', `${nutritionalAnalysis.tastes.bitter}%`],
+      ['Astringent (Kashaya)', `${nutritionalAnalysis.tastes.astringent}%`]
+    ]
+    this.addTable(['Taste', 'Percentage'], tastes)
+
+    // Meal Schedule
+    this.addSection('Daily Meal Schedule')
+    mealPlan.meals.forEach((meal: any, index: number) => {
+      this.doc.setFontSize(11)
+      this.doc.setFont('helvetica', 'bold')
+      this.doc.text(`${meal.name} (${meal.time})`, this.margin, this.currentY)
+      this.currentY += 6
+      
+      this.doc.setFontSize(9)
+      this.doc.setFont('helvetica', 'normal')
+      this.doc.text(`Ingredients: ${meal.ingredients.join(', ')}`, this.margin + 5, this.currentY)
+      this.currentY += 5
+      this.doc.text(`Preparation: ${meal.preparation}`, this.margin + 5, this.currentY)
+      this.currentY += 8
+    })
+
+    this.addFooter(1)
+    this.doc.save(`meal-plan-${patient.name.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`)
+  }
+
+  // Compliance Analytics Report
+  async exportComplianceAnalytics(complianceData: any, dateRange: { start: Date; end: Date }): Promise<void> {
+    this.addBrandedHeader(
+      'Treatment Compliance Analytics',
+      'Patient Adherence & Engagement Analysis',
+      new Date()
+    )
+
+    // Overall Compliance Metrics
+    this.addSection('Compliance Overview')
+    const complianceOverview = [
+      ['Overall Compliance Rate', `${complianceData.overallRate}%`],
+      ['Diet Plan Adherence', `${complianceData.dietAdherence}%`],
+      ['Medication Compliance', `${complianceData.medicationCompliance}%`],
+      ['Exercise Adherence', `${complianceData.exerciseAdherence}%`],
+      ['Follow-up Attendance', `${complianceData.followUpAttendance}%`],
+      ['Lifestyle Modifications', `${complianceData.lifestyleCompliance}%`]
+    ]
+    this.addTable(['Compliance Area', 'Rate'], complianceOverview)
+
+    // Compliance by Demographics
+    this.addSection('Compliance by Demographics')
+    const demographics = [
+      ['Age 18-30', `${complianceData.byAge.age1830}%`],
+      ['Age 31-45', `${complianceData.byAge.age3145}%`],
+      ['Age 46-60', `${complianceData.byAge.age4660}%`],
+      ['Age 60+', `${complianceData.byAge.age60plus}%`],
+      ['Male Patients', `${complianceData.byGender.male}%`],
+      ['Female Patients', `${complianceData.byGender.female}%`]
+    ]
+    this.addTable(['Demographic', 'Compliance Rate'], demographics)
+
+    // Risk Factors for Non-Compliance
+    this.addSection('Non-Compliance Risk Factors')
+    complianceData.riskFactors.forEach((factor: any, index: number) => {
+      this.doc.setFontSize(10)
+      this.doc.text(`• ${factor.name}: ${factor.impact} (affects ${factor.frequency}% of cases)`, this.margin + 5, this.currentY)
+      this.currentY += 6
+    })
+
+    // Improvement Strategies
+    this.addSection('Recommended Improvement Strategies')
+    complianceData.improvementStrategies.forEach((strategy: string, index: number) => {
+      this.doc.setFontSize(10)
+      this.doc.text(`${index + 1}. ${strategy}`, this.margin + 5, this.currentY)
+      this.currentY += 6
+    })
+
+    this.addFooter(1)
+    this.doc.save(`compliance-analytics-${dateRange.start.toISOString().split('T')[0]}.pdf`)
+  }
+}
+
+// Convenience Export Functions
+export async function exportPatientAnalyticsPDF(
+  patient: EnhancedPatient,
+  progressData: any,
+  options?: MedicalReportOptions
+): Promise<void> {
+  const exporter = new AnalyticsPDFExporter()
+  await exporter.exportPatientProgressAnalytics(patient, progressData, options)
+}
+
+export async function exportPopulationAnalyticsPDF(
+  metrics: any,
+  dateRange: { start: Date; end: Date }
+): Promise<void> {
+  const exporter = new AnalyticsPDFExporter()
+  await exporter.exportPopulationHealthAnalytics(metrics, dateRange)
+}
+
+export async function exportMealPlanAnalyticsPDF(
+  mealPlan: any,
+  patient: EnhancedPatient,
+  nutritionalAnalysis: any
+): Promise<void> {
+  const exporter = new AnalyticsPDFExporter()
+  await exporter.exportMealPlanAnalytics(mealPlan, patient, nutritionalAnalysis)
+}
+
+export async function exportComplianceAnalyticsPDF(
+  complianceData: any,
+  dateRange: { start: Date; end: Date }
+): Promise<void> {
+  const exporter = new AnalyticsPDFExporter()
+  await exporter.exportComplianceAnalytics(complianceData, dateRange)
 }
