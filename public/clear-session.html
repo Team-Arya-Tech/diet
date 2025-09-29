@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Session - AhaarWISE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #FEF7ED, #FED7AA);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        button {
+            background: #EA580C;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button:hover {
+            background: #DC2626;
+        }
+        .success {
+            color: #059669;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧘‍♀️ AhaarWISE Session Manager</h1>
+        <p>Use this page to clear your session and test the login flow</p>
+        
+        <button onclick="clearSession()">Clear Session & Logout</button>
+        <button onclick="goToApp()">Go to App</button>
+        
+        <div id="message"></div>
+        
+        <h3>Demo Credentials:</h3>
+        <div style="text-align: left; display: inline-block; margin: 20px;">
+            <p><strong>Admin:</strong> admin / admin123</p>
+            <p><strong>Doctor:</strong> doctor / doctor123</p>
+            <p><strong>Assistant:</strong> assistant / assist123</p>
+        </div>
+    </div>
+
+    <script>
+        async function clearSession() {
+            try {
+                // Clear localStorage
+                localStorage.removeItem('ayurvedic_user');
+                localStorage.removeItem('remembered_username');
+                localStorage.removeItem('remember_me');
+                localStorage.removeItem('login_attempts');
+                localStorage.removeItem('login_block_expiry');
+                
+                // Call logout API to clear server session
+                await fetch('/api/auth/logout', {
+                    method: 'POST'
+                });
+                
+                document.getElementById('message').innerHTML = 
+                    '<div class="success">✅ Session cleared! You can now test the login flow.</div>';
+                
+                // Redirect to main page after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+                
+            } catch (error) {
+                document.getElementById('message').innerHTML = 
+                    '<div style="color: red;">❌ Error clearing session: ' + error.message + '</div>';
+            }
+        }
+        
+        function goToApp() {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

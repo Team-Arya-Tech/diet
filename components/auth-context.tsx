@@ -9,6 +9,13 @@ interface User {
   role: "admin" | "practitioner" | "assistant"
   fullName: string
   email?: string
+  phone?: string
+  address?: string
+  bio?: string
+  department?: string
+  experience?: string
+  specialization?: string
+  profilePicture?: string
 }
 
 interface AuthContextType {
@@ -17,6 +24,8 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<void>
   logout: () => Promise<void>
   isAuthenticated: boolean
+  updateUserProfile?: (profileData: any) => Promise<void>
+  refreshUser?: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -101,7 +110,54 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setUser(null)
     localStorage.removeItem('ayurvedic_user')
-    router.push('/auth/login')
+    router.push('/')
+  }
+
+  const updateUserProfile = async (profileData: any) => {
+    try {
+      const response = await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update profile')
+      }
+
+      const updatedUser = await response.json()
+      
+      // Update user state with new profile data
+      const newUserData = {
+        ...user,
+        ...profileData,
+        userId: user?.userId || updatedUser.userId,
+      }
+      
+      setUser(newUserData)
+      localStorage.setItem('ayurvedic_user', JSON.stringify(newUserData))
+      
+    } catch (error) {
+      console.error('Profile update error:', error)
+      throw error
+    }
+  }
+
+  const refreshUser = async () => {
+    if (!user) return
+    
+    try {
+      const response = await fetch('/api/auth/me')
+      if (response.ok) {
+        const userData = await response.json()
+        setUser(userData)
+        localStorage.setItem('ayurvedic_user', JSON.stringify(userData))
+      }
+    } catch (error) {
+      console.error('Failed to refresh user data:', error)
+    }
   }
 
   const value = {
@@ -109,7 +165,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading,
     login,
     logout,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
+    updateUserProfile,
+    refreshUser
   }
 
   return (

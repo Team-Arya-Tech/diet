@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Activity, Eye, EyeOff, Shield, Lock, User, Languages, UserPlus } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Activity, Eye, EyeOff, Shield, Lock, User, Languages, UserPlus, AlertTriangle, CheckCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/components/auth-context"
 
@@ -60,6 +61,11 @@ export default function AuthPage() {
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
   const [language, setLanguage] = useState<"en" | "hi">("en")
+  const [rememberMe, setRememberMe] = useState(false)
+  const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({})
+  const [loginAttempts, setLoginAttempts] = useState(0)
+  const [isBlocked, setIsBlocked] = useState(false)
+  const [blockTimeRemaining, setBlockTimeRemaining] = useState(0)
   
   // Sign up form state
   const [signUpData, setSignUpData] = useState<SignUpData>({
@@ -75,8 +81,75 @@ export default function AuthPage() {
   const [signUpLoading, setSignUpLoading] = useState(false)
   const [activeTab, setActiveTab] = useState("signin")
 
+  // Load saved credentials if remember me was checked
+  useEffect(() => {
+    const savedUsername = localStorage.getItem('remembered_username')
+    const savedRememberMe = localStorage.getItem('remember_me') === 'true'
+    
+    if (savedUsername && savedRememberMe) {
+      setUsername(savedUsername)
+      setRememberMe(true)
+    }
+    
+    // Check for login blocks
+    const blockExpiry = localStorage.getItem('login_block_expiry')
+    if (blockExpiry && Date.now() < parseInt(blockExpiry)) {
+      setIsBlocked(true)
+      setBlockTimeRemaining(Math.ceil((parseInt(blockExpiry) - Date.now()) / 1000))
+    }
+  }, [])
+
+  // Block timer countdown
+  useEffect(() => {
+    if (isBlocked && blockTimeRemaining > 0) {
+      const timer = setTimeout(() => {
+        setBlockTimeRemaining(blockTimeRemaining - 1)
+      }, 1000)
+      
+      if (blockTimeRemaining === 1) {
+        setIsBlocked(false)
+        setLoginAttempts(0)
+        localStorage.removeItem('login_block_expiry')
+        localStorage.removeItem('login_attempts')
+      }
+      
+      return () => clearTimeout(timer)
+    }
+  }, [isBlocked, blockTimeRemaining])
+
+  const validateLoginForm = () => {
+    const errors: {[key: string]: string} = {}
+    
+    if (!username.trim()) {
+      errors.username = language === "en" ? "Username is required" : "उपयोगकर्ता नाम आवश्यक है"
+    } else if (username.length < 3) {
+      errors.username = language === "en" ? "Username must be at least 3 characters" : "उपयोगकर्ता नाम कम से कम 3 अक्षर का होना चाहिए"
+    }
+    
+    if (!password.trim()) {
+      errors.password = language === "en" ? "Password is required" : "पासवर्ड आवश्यक है"
+    } else if (password.length < 6) {
+      errors.password = language === "en" ? "Password must be at least 6 characters" : "पासवर्ड कम से कम 6 अक्षर का होना चाहिए"
+    }
+    
+    setValidationErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (isBlocked) {
+      setError(language === "en" ? 
+        `Too many failed attempts. Please wait ${Math.ceil(blockTimeRemaining / 60)} minutes.` : 
+        `बहुत सारे असफल प्रयास। कृपया ${Math.ceil(blockTimeRemaining / 60)} मिनट प्रतीक्षा करें।`)
+      return
+    }
+    
+    if (!validateLoginForm()) {
+      return
+    }
+    
     setIsLoading(true)
     setError("")
     setSuccess("")
@@ -84,18 +157,53 @@ export default function AuthPage() {
     try {
       await authLogin(username, password)
       
+      // Handle remember me
+      if (rememberMe) {
+        localStorage.setItem('remembered_username', username)
+        localStorage.setItem('remember_me', 'true')
+      } else {
+        localStorage.removeItem('remembered_username')
+        localStorage.removeItem('remember_me')
+      }
+      
+      // Reset failed attempts on successful login
+      setLoginAttempts(0)
+      localStorage.removeItem('login_attempts')
+      localStorage.removeItem('login_block_expiry')
+      
       setSuccess(language === "en" ? "Login successful! Redirecting..." : "लॉगिन सफल! पुनर्निर्देशित कर रहे हैं...")
       
       // Redirect to dashboard after a brief delay
       setTimeout(() => {
-        router.push("/")
+        router.push("/dashboard")
       }, 1500)
       
     } catch (err) {
-      if (err instanceof Error) {
-        setError(language === "en" ? err.message : "गलत उपयोगकर्ता नाम या पासवर्ड")
+      // Increment failed attempts
+      const newAttempts = loginAttempts + 1
+      setLoginAttempts(newAttempts)
+      localStorage.setItem('login_attempts', newAttempts.toString())
+      
+      // Block after 5 failed attempts
+      if (newAttempts >= 5) {
+        const blockExpiry = Date.now() + (15 * 60 * 1000) // 15 minutes
+        localStorage.setItem('login_block_expiry', blockExpiry.toString())
+        setIsBlocked(true)
+        setBlockTimeRemaining(15 * 60)
+        setError(language === "en" ? 
+          "Too many failed attempts. Account blocked for 15 minutes." : 
+          "बहुत सारे असफल प्रयास। खाता 15 मिनट के लिए ब्लॉक किया गया।")
       } else {
-        setError(language === "en" ? "Login failed. Please try again." : "लॉगिन असफल। कृपया पुनः प्रयास करें।")
+        const remainingAttempts = 5 - newAttempts
+        if (err instanceof Error) {
+          setError(language === "en" ? 
+            `${err.message} (${remainingAttempts} attempts remaining)` : 
+            `गलत उपयोगकर्ता नाम या पासवर्ड (${remainingAttempts} प्रयास शेष)`)
+        } else {
+          setError(language === "en" ? 
+            `Login failed. ${remainingAttempts} attempts remaining.` : 
+            `लॉगिन असफल। ${remainingAttempts} प्रयास शेष।`)
+        }
       }
     } finally {
       setIsLoading(false)
@@ -189,6 +297,9 @@ export default function AuthPage() {
       practitioner: "Practitioner", 
       assistant: "Assistant",
       selectRole: "Select your role",
+      rememberMe: "Remember me",
+      forgotPassword: "Forgot password?",
+      secureLogin: "Secure Login",
       features: [
         "Comprehensive patient management",
         "AI-powered dietary recommendations",
@@ -217,6 +328,9 @@ export default function AuthPage() {
       practitioner: "चिकित्सक",
       assistant: "सहायक",
       selectRole: "अपनी भूमिका चुनें",
+      rememberMe: "मुझे याद रखें",
+      forgotPassword: "पासवर्ड भूल गए?",
+      secureLogin: "सुरक्षित लॉगिन",
       features: [
         "व्यापक रोगी प्रबंधन",
         "AI-संचालित आहार सिफारिशें",
@@ -384,11 +498,25 @@ export default function AuthPage() {
                         id="username"
                         type="text"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => {
+                          setUsername(e.target.value)
+                          if (validationErrors.username) {
+                            setValidationErrors(prev => ({ ...prev, username: "" }))
+                          }
+                        }}
                         placeholder={currentContent.username}
                         required
-                        className={language === "hi" ? "font-devanagari" : ""}
+                        className={`${language === "hi" ? "font-devanagari" : ""} ${
+                          validationErrors.username ? "border-red-500 focus:ring-red-500" : ""
+                        }`}
+                        disabled={isBlocked}
                       />
+                      {validationErrors.username && (
+                        <div className="flex items-center space-x-1 text-red-600 text-sm">
+                          <AlertTriangle className="h-4 w-4" />
+                          <span>{validationErrors.username}</span>
+                        </div>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -401,10 +529,18 @@ export default function AuthPage() {
                           id="password"
                           type={showPassword ? "text" : "password"}
                           value={password}
-                          onChange={(e) => setPassword(e.target.value)}
+                          onChange={(e) => {
+                            setPassword(e.target.value)
+                            if (validationErrors.password) {
+                              setValidationErrors(prev => ({ ...prev, password: "" }))
+                            }
+                          }}
                           placeholder={currentContent.password}
                           required
-                          className={language === "hi" ? "font-devanagari" : ""}
+                          className={`${language === "hi" ? "font-devanagari" : ""} ${
+                            validationErrors.password ? "border-red-500 focus:ring-red-500" : ""
+                          }`}
+                          disabled={isBlocked}
                         />
                         <Button
                           type="button"
@@ -412,6 +548,7 @@ export default function AuthPage() {
                           size="sm"
                           className="absolute right-0 top-0 h-full px-3 py-2"
                           onClick={() => setShowPassword(!showPassword)}
+                          disabled={isBlocked}
                         >
                           {showPassword ? (
                             <EyeOff className="h-4 w-4" />
@@ -420,14 +557,76 @@ export default function AuthPage() {
                           )}
                         </Button>
                       </div>
+                      {validationErrors.password && (
+                        <div className="flex items-center space-x-1 text-red-600 text-sm">
+                          <AlertTriangle className="h-4 w-4" />
+                          <span>{validationErrors.password}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Remember Me & Security Info */}
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="rememberMe"
+                          checked={rememberMe}
+                          onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                          disabled={isBlocked}
+                        />
+                        <Label 
+                          htmlFor="rememberMe" 
+                          className={`text-sm ${language === "hi" ? "font-devanagari" : ""}`}
+                        >
+                          {language === "en" ? "Remember me" : "मुझे याद रखें"}
+                        </Label>
+                      </div>
+
+                      {/* Security indicators */}
+                      {loginAttempts > 0 && !isBlocked && (
+                        <div className="flex items-center space-x-2 text-amber-600 text-sm">
+                          <Shield className="h-4 w-4" />
+                          <span className={language === "hi" ? "font-devanagari" : ""}>
+                            {language === "en" ? 
+                              `${5 - loginAttempts} attempts remaining` : 
+                              `${5 - loginAttempts} प्रयास शेष`}
+                          </span>
+                        </div>
+                      )}
+
+                      {isBlocked && (
+                        <div className="flex items-center space-x-2 text-red-600 text-sm">
+                          <Lock className="h-4 w-4" />
+                          <span className={language === "hi" ? "font-devanagari" : ""}>
+                            {language === "en" ? 
+                              `Account blocked. ${Math.floor(blockTimeRemaining / 60)}:${(blockTimeRemaining % 60).toString().padStart(2, '0')} remaining` : 
+                              `खाता ब्लॉक। ${Math.floor(blockTimeRemaining / 60)}:${(blockTimeRemaining % 60).toString().padStart(2, '0')} शेष`}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     <Button 
                       type="submit" 
                       className={`w-full ${language === "hi" ? "font-devanagari" : ""}`}
-                      disabled={isLoading}
+                      disabled={isLoading || isBlocked}
                     >
-                      {isLoading ? currentContent.signingIn : currentContent.signin}
+                      {isLoading ? (
+                        <div className="flex items-center space-x-2">
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                          <span>{currentContent.signingIn}</span>
+                        </div>
+                      ) : isBlocked ? (
+                        <div className="flex items-center space-x-2">
+                          <Lock className="h-4 w-4" />
+                          <span>{language === "en" ? "Account Blocked" : "खाता ब्लॉक"}</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4" />
+                          <span>{currentContent.signin}</span>
+                        </div>
+                      )}
                     </Button>
                   </form>
                 </TabsContent>

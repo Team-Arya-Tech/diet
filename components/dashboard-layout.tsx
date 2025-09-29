@@ -32,8 +32,13 @@ import {
   X,
   Home,
   Settings,
-  Bell
+  Bell,
+  ChevronDown,
+  Shield,
+  HelpCircle
 } from "lucide-react"
+import { Badge } from "./ui/badge"
+import { useTranslation } from "./translation-provider"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -43,13 +48,23 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = usePathname()
   const { user, logout } = useAuth()
+  const { t } = useTranslation()
+
+  const getRoleBadgeColor = (role: string) => {
+    switch (role?.toLowerCase()) {
+      case "admin": return "bg-red-100 text-red-800"
+      case "practitioner": return "bg-green-100 text-green-800"
+      case "assistant": return "bg-blue-100 text-blue-800"
+      default: return "bg-gray-100 text-gray-800"
+    }
+  }
 
   const navigation = [
     {
       name: "Dashboard",
-      href: "/",
+      href: "/dashboard",
       icon: Home,
-      current: pathname === "/"
+      current: pathname === "/dashboard"
     },
     {
       name: "Patients",
@@ -246,48 +261,145 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               {user && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback className="bg-white/30 text-white text-sm backdrop-blur-sm">
-                          {user.fullName?.split(' ').map(n => n[0]).join('') || user.username.slice(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
+                    <Button variant="ghost" className="h-10 w-auto px-3 rounded-lg hover:bg-white/10 backdrop-blur-sm transition-colors">
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="h-8 w-8 ring-2 ring-white/20">
+                          <AvatarFallback className="bg-white/30 text-white text-sm backdrop-blur-sm font-semibold">
+                            {user.fullName ? 
+                              user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) :
+                              user.username.slice(0, 2).toUpperCase()
+                            }
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col items-start">
+                          <span className="text-sm font-medium text-white leading-none">
+                            {user.fullName || user.username}
+                          </span>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <Badge 
+                              variant="secondary" 
+                              className={`text-xs px-2 py-0 ${getRoleBadgeColor(user.role || 'user')}`}
+                            >
+                              {t(user.role || 'user')}
+                            </Badge>
+                            <div className="flex items-center space-x-1">
+                              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                              <span className="text-xs text-white/80">{t('Online')}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <ChevronDown className="h-4 w-4 text-white/70" />
+                      </div>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-64" align="end" forceMount>
-                    <DropdownMenuLabel className="font-normal">
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium">{user.fullName || user.username}</p>
-                        <p className="text-xs text-muted-foreground capitalize">
-                          {user.role} • {user.email || `@${user.username}`}
-                        </p>
+                  <DropdownMenuContent className="w-80" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal p-4">
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="h-12 w-12 ring-2 ring-primary/20">
+                          <AvatarFallback className="bg-primary/10 text-primary font-semibold text-lg">
+                            {user.fullName ? 
+                              user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) :
+                              user.username.slice(0, 2).toUpperCase()
+                            }
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col space-y-1">
+                          <p className="text-sm font-semibold leading-none">
+                            {user.fullName || user.username}
+                          </p>
+                          <p className="text-xs text-muted-foreground leading-none">
+                            {user.email || `@${user.username}`}
+                          </p>
+                          <div className="flex items-center space-x-2 mt-2">
+                            <Badge 
+                              variant="secondary" 
+                              className={`text-xs ${getRoleBadgeColor(user.role || 'user')}`}
+                            >
+                              {t(user.role || 'user')}
+                            </Badge>
+                            <div className="flex items-center space-x-1">
+                              <Activity className="h-3 w-3 text-green-500" />
+                              <span className="text-xs text-green-600">{t('Active')}</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href="/profile" className="cursor-pointer">
-                        <UserIcon className="mr-2 h-4 w-4" />
-                        <span>Profile Settings</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/settings" className="cursor-pointer">
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>Preferences</span>
-                      </Link>
-                    </DropdownMenuItem>
+                    
+                    <div className="p-2">
+                      <DropdownMenuItem asChild>
+                        <Link 
+                          href="/profile" 
+                          className="cursor-pointer flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-accent/50 transition-colors"
+                        >
+                          <UserIcon className="h-4 w-4 text-primary" />
+                          <div className="flex flex-col">
+                            <span className="text-sm font-medium">{t('Profile')}</span>
+                            <span className="text-xs text-muted-foreground">{t('View and edit your profile')}</span>
+                          </div>
+                        </Link>
+                      </DropdownMenuItem>
+                      
+                      <DropdownMenuItem asChild>
+                        <Link 
+                          href="/profile?tab=preferences" 
+                          className="cursor-pointer flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-accent/50 transition-colors"
+                        >
+                          <Settings className="h-4 w-4 text-primary" />
+                          <div className="flex flex-col">
+                            <span className="text-sm font-medium">{t('Preferences')}</span>
+                            <span className="text-xs text-muted-foreground">{t('Language, theme & notifications')}</span>
+                          </div>
+                        </Link>
+                      </DropdownMenuItem>
+                      
+                      <DropdownMenuItem asChild>
+                        <Link 
+                          href="/profile?tab=security" 
+                          className="cursor-pointer flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-accent/50 transition-colors"
+                        >
+                          <Shield className="h-4 w-4 text-primary" />
+                          <div className="flex flex-col">
+                            <span className="text-sm font-medium">{t('Security')}</span>
+                            <span className="text-xs text-muted-foreground">{t('Password & account security')}</span>
+                          </div>
+                        </Link>
+                      </DropdownMenuItem>
+                      
+                      <DropdownMenuItem asChild>
+                        <Link 
+                          href="/help" 
+                          className="cursor-pointer flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-accent/50 transition-colors"
+                        >
+                          <HelpCircle className="h-4 w-4 text-primary" />
+                          <div className="flex flex-col">
+                            <span className="text-sm font-medium">{t('Help & Support')}</span>
+                            <span className="text-xs text-muted-foreground">{t('Get help with your account')}</span>
+                          </div>
+                        </Link>
+                      </DropdownMenuItem>
+                    </div>
+                    
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem 
-                      onClick={() => {
-                        if (confirm('Are you sure you want to logout?')) {
-                          logout()
-                        }
-                      }} 
-                      className="cursor-pointer text-red-600"
-                    >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Sign out</span>
-                    </DropdownMenuItem>
+                    
+                    <div className="p-2">
+                      <DropdownMenuItem
+                        onClick={async () => {
+                          const message = await t('Are you sure you want to sign out?')
+                          if (confirm(message)) {
+                            logout()
+                          }
+                        }} 
+                        className="cursor-pointer flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium">{t('Sign Out')}</span>
+                          <span className="text-xs text-red-500">{t('Sign out of your account')}</span>
+                        </div>
+                      </DropdownMenuItem>
+                    </div>
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}
