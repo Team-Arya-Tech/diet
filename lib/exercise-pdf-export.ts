@@ -95,13 +95,29 @@ export class ExercisePDFGenerator {
       this.pdf.rect(0, 0, 210, 35, 'F')
     }
     
-    // AhaarWISE logo placeholder (overlay on banner)
-    this.pdf.setFillColor(218, 165, 32) // Goldenrod
-    this.pdf.circle(25, 20, 12, 'F')
-    this.pdf.setTextColor(139, 69, 19)
-    this.pdf.setFontSize(10)
-    this.pdf.setFont('helvetica', 'bold')
-    this.pdf.text('A', 22, 24)
+    // AhaarWISE logo (overlay on banner)
+    const logoImage = await loadImageAsBase64('/logo_ahaarwise.png')
+    if (logoImage) {
+      try {
+        this.pdf.addImage(logoImage, 'PNG', 15, 10, 20, 20, '', 'NONE')
+      } catch (error) {
+        // Fallback to placeholder circle
+        this.pdf.setFillColor(218, 165, 32) // Goldenrod
+        this.pdf.circle(25, 20, 12, 'F')
+        this.pdf.setTextColor(139, 69, 19)
+        this.pdf.setFontSize(10)
+        this.pdf.setFont('helvetica', 'bold')
+        this.pdf.text('A', 22, 24)
+      }
+    } else {
+      // Fallback to placeholder circle
+      this.pdf.setFillColor(218, 165, 32) // Goldenrod
+      this.pdf.circle(25, 20, 12, 'F')
+      this.pdf.setTextColor(139, 69, 19)
+      this.pdf.setFontSize(10)
+      this.pdf.setFont('helvetica', 'bold')
+      this.pdf.text('A', 22, 24)
+    }
     
     // AhaarWISE brand name
     this.pdf.setTextColor(255, 255, 255)

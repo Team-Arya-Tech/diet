@@ -239,13 +239,29 @@ export class DietChartPDFExporter {
     this.doc.setFillColor(245, 247, 250)
     this.doc.rect(0, 0, this.pageWidth, this.headerHeight, 'F')
 
-    // Clinic logo placeholder
-    this.doc.setFillColor(34, 197, 94)
-    this.doc.circle(25, 20, 8, 'F')
-    this.doc.setTextColor(255, 255, 255)
-    this.doc.setFontSize(12)
-    this.doc.setFont('helvetica', 'bold')
-    this.doc.text('🌿', 21, 24)
+    // AhaarWISE logo 
+    const logoImage = await loadImageAsBase64('/logo_ahaarwise.png')
+    if (logoImage) {
+      try {
+        this.doc.addImage(logoImage, 'PNG', 17, 12, 16, 16, '', 'NONE')
+      } catch (error) {
+        // Fallback to placeholder circle
+        this.doc.setFillColor(34, 197, 94)
+        this.doc.circle(25, 20, 8, 'F')
+        this.doc.setTextColor(255, 255, 255)
+        this.doc.setFontSize(12)
+        this.doc.setFont('helvetica', 'bold')
+        this.doc.text('🌿', 21, 24)
+      }
+    } else {
+      // Fallback to placeholder circle
+      this.doc.setFillColor(34, 197, 94)
+      this.doc.circle(25, 20, 8, 'F')
+      this.doc.setTextColor(255, 255, 255)
+      this.doc.setFontSize(12)
+      this.doc.setFont('helvetica', 'bold')
+      this.doc.text('🌿', 21, 24)
+    }
 
     // Clinic information
     this.doc.setTextColor(0, 0, 0)
@@ -1354,13 +1370,29 @@ export class WeeklyDietChartPDFExporter {
       this.doc.rect(0, 0, this.pageWidth, 40, 'F')
     }
     
-    // AhaarWISE logo area (placeholder overlay)
-    this.doc.setFillColor(218, 165, 32) // Goldenrod
-    this.doc.circle(this.margin + 20, 20, 10, 'F')
-    this.doc.setTextColor(247, 146, 86)
-    this.doc.setFontSize(12)
-    this.doc.setFont('helvetica', 'bold')
-    this.doc.text('A', this.margin + 17, 24)
+    // AhaarWISE logo area (overlay)
+    const logoImage = await loadImageAsBase64('/logo_ahaarwise.png')
+    if (logoImage) {
+      try {
+        this.doc.addImage(logoImage, 'PNG', this.margin + 10, 10, 20, 20, '', 'NONE')
+      } catch (error) {
+        // Fallback to placeholder circle
+        this.doc.setFillColor(218, 165, 32) // Goldenrod
+        this.doc.circle(this.margin + 20, 20, 10, 'F')
+        this.doc.setTextColor(247, 146, 86)
+        this.doc.setFontSize(12)
+        this.doc.setFont('helvetica', 'bold')
+        this.doc.text('A', this.margin + 17, 24)
+      }
+    } else {
+      // Fallback to placeholder circle
+      this.doc.setFillColor(218, 165, 32) // Goldenrod
+      this.doc.circle(this.margin + 20, 20, 10, 'F')
+      this.doc.setTextColor(247, 146, 86)
+      this.doc.setFontSize(12)
+      this.doc.setFont('helvetica', 'bold')
+      this.doc.text('A', this.margin + 17, 24)
+    }
     
     // AhaarWISE branding (positioned after logo)
     this.doc.setTextColor(0, 0, 0) // Black text for visibility
