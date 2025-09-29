@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { DashboardLayout } from '@/components/dashboard-layout'
+import { useTranslation } from "@/components/translation-provider"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -40,6 +41,7 @@ import { generateExercisePDF } from '@/lib/exercise-pdf-export'
 import { Patient, getPatients, initializeSampleData } from '@/lib/database'
 
 function ExercisesPage() {
+  const { t, language } = useTranslation();
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([])
   const [searchQuery, setSearchQuery] = useState('')

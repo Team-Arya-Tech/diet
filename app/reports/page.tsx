@@ -4,6 +4,7 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { DashboardLayout } from "@/components/dashboard-layout"
+import { useTranslation } from "@/components/translation-provider"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -48,7 +49,7 @@ interface AnalyticsData {
 }
 
 export default function ReportsPage() {
-  const [language, setLanguage] = useState<"en" | "hi">("en")
+  const { t, language, setLanguage } = useTranslation();
   const [timeRange, setTimeRange] = useState("last-30-days")
   const [selectedPatient, setSelectedPatient] = useState<string>("all")
   const [reportType, setReportType] = useState("overview")

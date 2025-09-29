@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { DashboardLayout } from "@/components/dashboard-layout"
+import { useTranslation } from "@/components/translation-provider"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -29,6 +30,7 @@ import {
 } from "lucide-react"
 
 export default function RecipesPage() {
+  const { t, language } = useTranslation();
   const [recipes, setRecipes] = useState<any[]>([]);
   const [selectedRecipe, setSelectedRecipe] = useState<any | null>(null);
   const [searchQuery, setSearchQuery] = useState("");

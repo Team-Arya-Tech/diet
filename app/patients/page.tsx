@@ -10,11 +10,12 @@ import { Users, Plus, Search, Edit, Trash2, Eye, Calendar, Activity, Languages }
 import Link from 'next/link';
 import { Patient, getPatients, deletePatient } from '@/lib/database';
 import { translateText } from '@/lib/ayurvedic-data';
+import { useTranslation } from "@/components/translation-provider";
 
 export default function PatientsPage() {
+  const { t, language, setLanguage } = useTranslation();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [language, setLanguage] = useState<'en' | 'hi'>('en');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -144,15 +145,7 @@ export default function PatientsPage() {
                   {currentContent.subtitle}
                 </p>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
-                className="flex items-center space-x-2 bg-white/80"
-              >
-                <Languages className="h-4 w-4" />
-                <span>{language === 'en' ? 'हिंदी' : 'English'}</span>
-              </Button>
+              {/* Language switcher is provided by DashboardLayout */}
             </div>
           </div>
         </div>

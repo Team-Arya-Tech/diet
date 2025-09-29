@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/components/auth-context"
 import { DashboardLayout } from "@/components/dashboard-layout"
+import { useTranslation } from "@/components/translation-provider"
+import { getTranslation } from "@/hooks/use-simple-translation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -35,6 +37,7 @@ import {
 function DashboardPage() {
   const { user, loading } = useAuth()
   const router = useRouter()
+  const { t, language } = useTranslation()
   
   // All state declarations must come before any conditional returns
   const [stats, setStats] = useState<DashboardStats>({
@@ -91,31 +94,31 @@ function DashboardPage() {
 
   const statCards = [
     {
-      title: "Total Patients",
+      title: language === "hi" ? "कुल रोगी" : "Total Patients",
       value: stats.totalPatients,
       icon: Users,
       color: "text-amber-800",
       change: `+${stats.weeklyGrowth}%`,
-      changeLabel: "This week"
+      changeLabel: language === "hi" ? "इस सप्ताह" : "This week"
     },
     {
-      title: "Active Diet Plans",
+      title: language === "hi" ? "सक्रिय आहार योजनाएं" : "Active Diet Plans",
       value: stats.activeDietPlans,
       icon: Heart,
       color: "text-yellow-800",
       change: "+8%",
-      changeLabel: "This week"
+      changeLabel: language === "hi" ? "इस सप्ताह" : "This week"
     },
     {
-      title: "Recipe Collection",
+      title: language === "hi" ? "व्यंजन संग्रह" : "Recipe Collection",
       value: stats.totalRecipes || 0,
       icon: ChefHat,
       color: "text-orange-800",
-      change: "Traditional",
-      changeLabel: "Ayurvedic recipes"
+      change: language === "hi" ? "पारंपरिक" : "Traditional",
+      changeLabel: language === "hi" ? "आयुर्वेदिक व्यंजन" : "Ayurvedic recipes"
     },
     {
-      title: "Food Database",
+      title: language === "hi" ? "खाद्य डेटाबेस" : "Food Database",
       value: `${stats.totalFoods}+`,
       icon: Database,
       color: "text-stone-800",
@@ -158,10 +161,10 @@ function DashboardPage() {
               </div>
               <div className="flex-1">
                 <h1 className="text-xl sm:text-2xl font-bold text-amber-900">
-                  Welcome back, Dr. Ayurved Practitioner!
+                  {language === "hi" ? "स्वागत वापसी, डॉ. आयुर्वेद चिकित्सक!" : "Welcome back, Dr. Ayurved Practitioner!"}
                 </h1>
                 <p className="text-sm sm:text-base text-amber-800 mt-1">
-                  Balance your doshas with seasonal fruits and vegetables.
+                  {language === "hi" ? "मौसमी फलों और सब्जियों के साथ अपने दोषों को संतुलित करें।" : "Balance your doshas with seasonal fruits and vegetables."}
                 </p>
               </div>
             </div>
@@ -224,10 +227,10 @@ function DashboardPage() {
               <CardHeader className="relative z-10">
                 <CardTitle className="flex items-center space-x-2 text-gray-800">
                   <Users className="h-5 w-5" />
-                  <span>Recent Patients</span>
+                  <span>{language === "hi" ? "हाल के रोगी" : "Recent Patients"}</span>
                 </CardTitle>
                 <CardDescription className="text-gray-700">
-                  Latest patient registrations and updates
+                  {language === "hi" ? "नवीनतम रोगी पंजीकरण और अपडेट" : "Latest patient registrations and updates"}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative z-10">
@@ -251,7 +254,7 @@ function DashboardPage() {
                       <div className="flex space-x-2">
                         <Link href={`/patients/${patient.id}`}>
                           <Button size="sm" variant="outline">
-                            View
+                            {language === "hi" ? "देखें" : "View"}
                           </Button>
                         </Link>
                       </div>
@@ -261,7 +264,7 @@ function DashboardPage() {
                 <div className="mt-6 pt-4 border-t border-gray-300/50">
                   <Link href="/patients">
                     <Button variant="outline" className="w-full">
-                      View All Patients
+                      {language === "hi" ? "सभी रोगी देखें" : "View All Patients"}
                     </Button>
                   </Link>
                 </div>
@@ -276,10 +279,10 @@ function DashboardPage() {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Activity className="h-5 w-5" />
-                  <span>Daily Practices</span>
+                  <span>{language === "hi" ? "दैनिक अभ्यास" : "Daily Practices"}</span>
                 </CardTitle>
                 <CardDescription>
-                  Recommended Ayurvedic exercises for today
+                  {language === "hi" ? "आज के लिए अनुशंसित आयुर्वेदिक व्यायाम" : "Recommended Ayurvedic exercises for today"}
                 </CardDescription>
               </CardHeader>
               <CardContent>

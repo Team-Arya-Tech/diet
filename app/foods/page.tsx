@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { DashboardLayout } from "@/components/dashboard-layout"
+import { useTranslation } from "@/components/translation-provider"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -23,13 +24,13 @@ import Link from "next/link"
 import { type AyurvedicFood, getAyurvedicFoods, searchFoods } from "@/lib/database"
 
 export default function FoodsPage() {
+  const { t, language, setLanguage } = useTranslation();
   const [foods, setFoods] = useState<AyurvedicFood[]>([])
   const [filteredFoods, setFilteredFoods] = useState<AyurvedicFood[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedDosha, setSelectedDosha] = useState("")
   const [selectedTaste, setSelectedTaste] = useState("")
   const [selectedCondition, setSelectedCondition] = useState("")
-  const [language, setLanguage] = useState<"en" | "hi">("en")
   const [loading, setLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
 

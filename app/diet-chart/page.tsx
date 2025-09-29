@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslation } from "@/components/translation-provider"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -30,6 +31,7 @@ import { getPatients, getDietPlans } from "@/lib/database"
 import type { Patient, DietPlan } from "@/lib/database"
 
 export default function DietChartPage() {
+  const { t, language } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedMeal, setSelectedMeal] = useState<"breakfast" | "lunch" | "dinner" | "snacks">("breakfast")
   const [selectedFoods, setSelectedFoods] = useState<{[key: string]: SelectedFood[]}>({
