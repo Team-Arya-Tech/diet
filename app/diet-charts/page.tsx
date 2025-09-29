@@ -57,6 +57,10 @@ export default function DietChartsPage() {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
   // Smart Recommendations state
   const [recommendations, setRecommendations] = useState<any[]>([])
+  // Loading states
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false)
+  const [isGeneratingWeekly, setIsGeneratingWeekly] = useState(false)
+  const [isExportingPDF, setIsExportingPDF] = useState(false)
 
   // Load food items, saved charts, and patients
   useEffect(() => {
@@ -138,6 +142,7 @@ export default function DietChartsPage() {
       return
     }
 
+    setIsGeneratingAI(true)
     try {
       // Call the LLM API to generate the diet chart
       const res = await fetch("/api/ai-diet-chart", {
@@ -210,6 +215,8 @@ export default function DietChartsPage() {
     } catch (error) {
       console.error("Failed to generate AI diet chart:", error)
       alert("Failed to generate AI diet chart. Please try again.")
+    } finally {
+      setIsGeneratingAI(false)
     }
   }
 
@@ -220,6 +227,7 @@ export default function DietChartsPage() {
       return
     }
 
+    setIsGeneratingWeekly(true)
     try {
       // Call the LLM API to generate the weekly diet chart
       const res = await fetch("/api/ai-diet-chart", {
@@ -291,6 +299,8 @@ export default function DietChartsPage() {
     } catch (error) {
       console.error("Failed to generate weekly chart:", error)
       alert("Failed to generate weekly chart. Please try again.")
+    } finally {
+      setIsGeneratingWeekly(false)
     }
   }
 
@@ -301,6 +311,7 @@ export default function DietChartsPage() {
       return
     }
 
+    setIsExportingPDF(true)
     try {
       // Show loading notification
       const loadingNotification = confirm(
@@ -395,6 +406,8 @@ export default function DietChartsPage() {
       console.error("Failed to export enhanced PDF:", error)
       alert("❌ Failed to export PDF. Please try again.\n\n" +
             "Error details: " + (error instanceof Error ? error.message : 'Unknown error'))
+    } finally {
+      setIsExportingPDF(false)
     }
   }
 
@@ -876,18 +889,34 @@ export default function DietChartsPage() {
                 <Button 
                   onClick={handleAIGeneration} 
                   className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-                  disabled={!selectedPatient}
+                  disabled={!selectedPatient || isGeneratingAI}
                 >
-                  Generate AI Chart
+                  {isGeneratingAI ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Generating AI Chart...
+                    </>
+                  ) : (
+                    'Generate AI Chart'
+                  )}
                 </Button>
                 <Button 
                   onClick={handleWeeklyChartGeneration} 
                   variant="outline"
                   className="w-full border-purple-200 text-purple-700 hover:bg-purple-50"
-                  disabled={!selectedPatient}
+                  disabled={!selectedPatient || isGeneratingWeekly}
                 >
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Generate Weekly Chart + PDF
+                  {isGeneratingWeekly ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-700 mr-2"></div>
+                      Generating Weekly Chart...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Generate Weekly Chart + PDF
+                    </>
+                  )}
                 </Button>
                 <div className="text-xs text-purple-600 text-center mt-2 bg-purple-50 p-2 rounded">
                   ✨ Includes option to download AhaarWISE branded PDF with smart recommendations
@@ -1430,9 +1459,19 @@ export default function DietChartsPage() {
                           onClick={handleEnhancedPDFExport}
                           className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-lg hover:shadow-xl transition-all duration-200"
                           size="lg"
+                          disabled={isExportingPDF}
                         >
-                          <Download className="h-5 w-5 mr-2" />
-                          Download Enhanced PDF
+                          {isExportingPDF ? (
+                            <>
+                              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                              Generating PDF...
+                            </>
+                          ) : (
+                            <>
+                              <Download className="h-5 w-5 mr-2" />
+                              Download Enhanced PDF
+                            </>
+                          )}
                         </Button>
                         <div className="flex gap-2">
                           <Button 
@@ -1481,9 +1520,19 @@ export default function DietChartsPage() {
                     <Button 
                       onClick={handleWeeklyChartGeneration}
                       className="bg-gradient-to-r from-purple-600 to-pink-600"
+                      disabled={isGeneratingWeekly}
                     >
-                      <Sparkles className="h-4 w-4 mr-2" />
-                      Generate Weekly Chart
+                      {isGeneratingWeekly ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Generating Weekly Chart...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          Generate Weekly Chart
+                        </>
+                      )}
                     </Button>
                   )}
                 </div>

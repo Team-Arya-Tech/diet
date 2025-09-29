@@ -45,6 +45,7 @@ export default function DietChartPage() {
   const [showFilters, setShowFilters] = useState(false)
   const [activeTab, setActiveTab] = useState("builder")
   const [selectedPatientId, setSelectedPatientId] = useState<string>("")
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false)
 
   // Load food items, saved charts, and patients
   useEffect(() => {
@@ -97,6 +98,7 @@ export default function DietChartPage() {
 
   // Generate AI diet chart
   const handleAIGeneration = async () => {
+    setIsGeneratingAI(true)
     try {
       const aiChart = await generateAIDietChart({
         patientProfile: {
@@ -130,6 +132,8 @@ export default function DietChartPage() {
       setActiveTab("builder")
     } catch (error) {
       console.error("Failed to generate AI diet chart:", error)
+    } finally {
+      setIsGeneratingAI(false)
     }
   }
 
@@ -296,9 +300,22 @@ export default function DietChartPage() {
             <Filter className="h-4 w-4 mr-2" />
             Filters
           </Button>
-          <Button onClick={handleAIGeneration} className="bg-gradient-to-r from-purple-500 to-pink-500">
-            <Sparkles className="h-4 w-4 mr-2" />
-            AI Generate
+          <Button 
+            onClick={handleAIGeneration} 
+            className="bg-gradient-to-r from-purple-500 to-pink-500"
+            disabled={isGeneratingAI}
+          >
+            {isGeneratingAI ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Generating...
+              </>
+            ) : (
+              <>
+                <Sparkles className="h-4 w-4 mr-2" />
+                AI Generate
+              </>
+            )}
           </Button>
         </div>
       </div>
