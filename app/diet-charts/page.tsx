@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { DashboardLayout } from "@/components/dashboard-layout"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
@@ -613,55 +614,67 @@ export default function DietChartsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/30 to-orange-50/20 relative overflow-x-hidden">
-      {/* AhaarWISE Branding Header */}
-      <header className="bg-white/90 backdrop-blur-xl border-b border-amber-100 shadow-lg shadow-orange-500/5 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-5">
-            <div className="flex items-center">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl shadow-lg">
-                  <Calendar className="h-8 w-8 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
-                    AhaarWISE
-                  </h1>
-                  <p className="text-sm text-gray-600">Ayurvedic Diet Intelligence System - Modern nutrition with ancient wisdom</p>
-                </div>
+    <DashboardLayout>
+      <div className="p-6 space-y-6 min-h-screen" style={{
+        backgroundImage: 'url("/main_bg.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}>
+        {/* Header Section */}
+        <div className="mb-6">
+          <div 
+            className="relative rounded-xl overflow-hidden p-6 mb-4 min-h-[120px] border-2"
+            style={{
+              backgroundColor: '#E8E0D0',
+              borderColor: '#D4C4A8',
+              backgroundImage: 'url("/banner_canva.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="relative z-10 flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <div 
+                className="p-3 rounded-xl w-fit border-2"
+                style={{
+                  backgroundColor: '#F0E6D2',
+                  borderColor: '#D4C4A8'
+                }}
+              >
+                <Calendar className="h-6 w-6 text-amber-900" />
               </div>
-            </div>
-            <div className="flex items-center space-x-5">
-              <LanguageSwitcher />
-              <div className="flex items-center space-x-2 bg-gradient-to-r from-amber-50 to-orange-50 px-5 py-2.5 rounded-xl border border-amber-200 shadow-sm">
-                <div className="w-2.5 h-2.5 bg-orange-500 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-orange-700">Ayurvedic Practitioner</span>
+              <div className="flex-1">
+                <h1 className="text-xl sm:text-2xl font-bold text-amber-900">
+                  Diet Chart Builder
+                </h1>
+                <p className="text-sm sm:text-base text-amber-800 mt-1">
+                  Create personalized diet plans with AI assistance
+                </p>
               </div>
-              <div className="bg-white p-2.5 rounded-xl shadow-sm border border-gray-100">
-                <p className="text-sm font-medium text-gray-900">Holistic Health & Wellness</p>
+              <div className="flex gap-2">
+                <LanguageSwitcher />
+                <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className="bg-white/80">
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filters
+                </Button>
               </div>
             </div>
           </div>
         </div>
-      </header>
-      <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Diet Chart Builder</h1>
-          <p className="text-muted-foreground">Create personalized diet plans with AI assistance</p>
-        </div>
-        <div className="flex gap-2">
-          <LanguageSwitcher />
-          <Button variant="outline" onClick={() => setShowFilters(!showFilters)}>
-            <Filter className="h-4 w-4 mr-2" />
-            Filters
-          </Button>
-        </div>
-      </div>
 
-      {/* Patient Selection */}
-      <Card className="shadow-sm border-0 bg-gradient-to-r from-slate-50 to-gray-50">
-        <CardContent className="p-6">
+        {/* Patient Selection */}
+        <Card 
+          className="relative overflow-hidden border-2 border-amber-900/60 shadow-md"
+          style={{
+            backgroundImage: 'url("/bg18.png")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px]"></div>
+          <CardContent className="p-6 relative z-10">
           <div className="flex items-center justify-between gap-6">
             <div className="flex items-center gap-4 flex-1">
               <div className="p-3 rounded-full bg-primary/10">
@@ -1590,6 +1603,6 @@ export default function DietChartsPage() {
         </TabsContent>
       </Tabs>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

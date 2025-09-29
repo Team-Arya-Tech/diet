@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -91,47 +92,63 @@ export default function PatientsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center relative">
-        {/* Floating Ayurveda leaf accent */}
-        <svg className="absolute left-8 top-8 w-24 h-24 opacity-10 text-primary animate-float-slow z-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
-          <path d="M12 8V14" />
-        </svg>
-        <div className="text-center relative z-10">
-          <Activity className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
-          <p>Loading patients...</p>
+      <DashboardLayout>
+        <div className="min-h-screen flex items-center justify-center" style={{
+          backgroundImage: 'url("/main_bg.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
         </div>
-      </div>
+      </DashboardLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 relative overflow-x-hidden">
-      {/* Floating Ayurveda leaf accents */}
-      <svg className="absolute left-0 top-0 w-32 h-32 opacity-10 text-primary animate-float-slow z-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
-        <path d="M12 8V14" />
-      </svg>
-      <svg className="absolute right-0 bottom-0 w-24 h-24 opacity-10 text-emerald-600 animate-float-slower z-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
-        <path d="M12 8V14" />
-      </svg>
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Link href="/" className="flex items-center space-x-2">
-                <Activity className="h-8 w-8 text-primary" />
-                <h1 className="text-2xl font-bold text-primary">AhaarWISE</h1>
-              </Link>
-            </div>
-            <div className="flex items-center space-x-4">
+    <DashboardLayout>
+      <div className="p-6 space-y-6 min-h-screen" style={{
+        backgroundImage: 'url("/main_bg.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}>
+        {/* Header Section with Ayurvedic tip */}
+        <div className="mb-6">
+          <div 
+            className="relative rounded-xl overflow-hidden p-6 mb-4 min-h-[120px] border-2"
+            style={{
+              backgroundColor: '#E8E0D0',
+              borderColor: '#D4C4A8',
+              backgroundImage: 'url("/banner_canva.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="relative z-10 flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <div 
+                className="p-3 rounded-xl w-fit border-2"
+                style={{
+                  backgroundColor: '#F0E6D2',
+                  borderColor: '#D4C4A8'
+                }}
+              >
+                <Users className="h-6 w-6 text-amber-900" />
+              </div>
+              <div className="flex-1">
+                <h1 className={`text-xl sm:text-2xl font-bold text-amber-900 ${language === 'hi' ? 'font-devanagari' : ''}`}>
+                  {currentContent.title}
+                </h1>
+                <p className={`text-sm sm:text-base text-amber-800 mt-1 ${language === 'hi' ? 'font-devanagari' : ''}`}>
+                  {currentContent.subtitle}
+                </p>
+              </div>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 bg-white/80"
               >
                 <Languages className="h-4 w-4" />
                 <span>{language === 'en' ? 'हिंदी' : 'English'}</span>
@@ -139,31 +156,6 @@ export default function PatientsPage() {
             </div>
           </div>
         </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-8 relative z-10">
-        {/* Practitioner tip */}
-        <div className="mb-8 flex items-center gap-4 animate-fade-in">
-          <svg className="w-7 h-7 text-primary/80 animate-spin-slow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M12 2C12 2 20 8 20 14C20 18 16 22 12 22C8 22 4 18 4 14C4 8 12 2 12 2Z" />
-            <path d="M12 8V14" />
-          </svg>
-          <div>
-            <h2 className="text-lg font-bold text-primary mb-1">Tip: Quickly filter patients by constitution or condition to personalize diet charts.</h2>
-            <span className="text-sm text-muted-foreground">Efficient workflow for busy practitioners.</span>
-          </div>
-        </div>
-
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className={`text-4xl font-bold mb-2 ${language === 'hi' ? 'font-devanagari' : ''}`}>
-            {currentContent.title}
-          </h1>
-          <p className={`text-muted-foreground text-lg ${language === 'hi' ? 'font-devanagari' : ''}`}>
-            {currentContent.subtitle}
-          </p>
-        </div>
-
         {/* Actions Bar */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="relative flex-1">
@@ -187,10 +179,19 @@ export default function PatientsPage() {
 
         {/* Patients Grid */}
         {filteredPatients.length === 0 ? (
-          <Card className="text-center py-12">
-            <CardContent>
-              <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className={`text-lg font-semibold mb-2 ${language === 'hi' ? 'font-devanagari' : ''}`}>
+          <Card 
+            className="text-center py-12 border-2 border-amber-900/60 shadow-md"
+            style={{
+              backgroundImage: 'url("/bg10.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px]"></div>
+            <CardContent className="relative z-10">
+              <Users className="h-12 w-12 text-amber-800 mx-auto mb-4" />
+              <h3 className={`text-lg font-semibold mb-2 text-gray-800 ${language === 'hi' ? 'font-devanagari' : ''}`}>
                 {patients.length === 0 ? currentContent.noPatients : currentContent.noResults}
               </h3>
               {patients.length === 0 && (
@@ -210,14 +211,22 @@ export default function PatientsPage() {
             {filteredPatients.map((patient) => (
               <Card
                 key={patient.id}
-                className="hover:shadow-lg transition-shadow focus-within:ring-2 focus-within:ring-primary/40"
+                className="hover:shadow-lg transition-all duration-300 relative overflow-hidden border-2 border-amber-900/60 shadow-md focus-within:ring-2 focus-within:ring-primary/40"
+                style={{
+                  backgroundImage: 'url("/bg3.png")',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  minHeight: '200px'
+                }}
                 tabIndex={0}
                 aria-label={`Patient card for ${patient.name}`}
               >
-                <CardHeader>
+                <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px]"></div>
+                <CardHeader className="relative z-10">
                   <div className="flex items-start justify-between">
                     <div>
-                      <CardTitle className="text-lg group-hover:text-primary transition-colors duration-200">{patient.name}</CardTitle>
+                      <CardTitle className="text-lg text-gray-800 group-hover:text-primary transition-colors duration-200">{patient.name}</CardTitle>
                       <CardDescription className="flex items-center space-x-2 mt-1">
                         <span>{currentContent.age}: {patient.age}</span>
                         <span>•</span>
@@ -229,19 +238,19 @@ export default function PatientsPage() {
                     </Badge>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <div className="space-y-3">
                     <div>
-                      <p className={`text-sm font-medium mb-1 ${language === 'hi' ? 'font-devanagari' : ''}`}>
+                      <p className={`text-sm font-medium mb-1 text-gray-700 ${language === 'hi' ? 'font-devanagari' : ''}`}>
                         {currentContent.constitution}
                       </p>
-                      <Badge variant="outline" className="capitalize">
+                      <Badge variant="outline" className={`capitalize ${getConstitutionColor(patient.constitution)}`}>
                         {patient.constitution}
                       </Badge>
                     </div>
                     {patient.currentConditions.length > 0 && (
                       <div>
-                        <p className={`text-sm font-medium mb-1 ${language === 'hi' ? 'font-devanagari' : ''}`}>
+                        <p className={`text-sm font-medium mb-1 text-gray-700 ${language === 'hi' ? 'font-devanagari' : ''}`}>
                           {currentContent.conditions}
                         </p>
                         <div className="flex flex-wrap gap-1">
@@ -258,7 +267,7 @@ export default function PatientsPage() {
                         </div>
                       </div>
                     )}
-                    <div className="flex items-center text-xs text-muted-foreground">
+                    <div className="flex items-center text-xs text-gray-600">
                       <Calendar className="h-3 w-3 mr-1" />
                       <span className={language === 'hi' ? 'font-devanagari' : ''}>
                         {currentContent.lastUpdated}: {new Date(patient.updatedAt).toLocaleDateString()}
@@ -266,7 +275,7 @@ export default function PatientsPage() {
                     </div>
                     <div className="flex space-x-2 pt-2">
                       <Link href={`/patients/${patient.id}`} className="flex-1" aria-label={`View details for ${patient.name}`}> 
-                        <Button variant="outline" size="sm" className="w-full bg-transparent group" aria-label="View patient details">
+                        <Button variant="outline" size="sm" className="w-full bg-white/80 group" aria-label="View patient details">
                           <Eye className="h-3 w-3 mr-1" />
                           <span className={language === 'hi' ? 'font-devanagari' : ''}>
                             {currentContent.view}
@@ -275,7 +284,7 @@ export default function PatientsPage() {
                         </Button>
                       </Link>
                       <Link href={`/patients/${patient.id}/edit`} className="flex-1" aria-label={`Edit details for ${patient.name}`}> 
-                        <Button variant="outline" size="sm" className="w-full bg-transparent group" aria-label="Edit patient details">
+                        <Button variant="outline" size="sm" className="w-full bg-white/80 group" aria-label="Edit patient details">
                           <Edit className="h-3 w-3 mr-1" />
                           <span className={language === 'hi' ? 'font-devanagari' : ''}>
                             {currentContent.edit}
@@ -287,7 +296,7 @@ export default function PatientsPage() {
                         variant="outline"
                         size="sm"
                         onClick={() => handleDeletePatient(patient.id)}
-                        className="text-destructive hover:text-destructive group"
+                        className="text-destructive hover:text-destructive bg-white/80 group"
                         aria-label="Delete patient"
                         title="Delete patient"
                       >
@@ -302,6 +311,6 @@ export default function PatientsPage() {
           </div>
         )}
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

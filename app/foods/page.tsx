@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -182,23 +183,49 @@ export default function FoodsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Link href="/" className="flex items-center space-x-2">
-                <Activity className="h-8 w-8 text-primary" />
-                <h1 className="text-2xl font-bold text-primary">AhaarWISE</h1>
-              </Link>
-            </div>
-            <div className="flex items-center space-x-4">
+    <DashboardLayout>
+      <div className="p-6 space-y-6 min-h-screen" style={{
+        backgroundImage: 'url("/main_bg.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}>
+        {/* Header Section */}
+        <div className="mb-6">
+          <div 
+            className="relative rounded-xl overflow-hidden p-6 mb-4 min-h-[120px] border-2"
+            style={{
+              backgroundColor: '#E8E0D0',
+              borderColor: '#D4C4A8',
+              backgroundImage: 'url("/banner_canva.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="relative z-10 flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <div 
+                className="p-3 rounded-xl w-fit border-2"
+                style={{
+                  backgroundColor: '#F0E6D2',
+                  borderColor: '#D4C4A8'
+                }}
+              >
+                <Utensils className="h-6 w-6 text-amber-900" />
+              </div>
+              <div className="flex-1">
+                <h1 className={`text-xl sm:text-2xl font-bold text-amber-900 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  {currentContent.title}
+                </h1>
+                <p className={`text-sm sm:text-base text-amber-800 mt-1 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  {currentContent.subtitle}
+                </p>
+              </div>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 bg-white/80"
               >
                 <Languages className="h-4 w-4" />
                 <span>{language === "en" ? "हिंदी" : "English"}</span>
@@ -206,22 +233,19 @@ export default function FoodsPage() {
             </div>
           </div>
         </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-8">
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className={`text-4xl font-bold mb-2 ${language === "hi" ? "font-devanagari" : ""}`}>
-            {currentContent.title}
-          </h1>
-          <p className={`text-muted-foreground text-lg ${language === "hi" ? "font-devanagari" : ""}`}>
-            {currentContent.subtitle}
-          </p>
-        </div>
 
         {/* Search and Filters */}
-        <Card className="mb-6">
-          <CardContent className="pt-6">
+        <Card 
+          className="mb-6 relative overflow-hidden border-2 border-amber-900/60 shadow-md"
+          style={{
+            backgroundImage: 'url("/bg10.png")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px]"></div>
+          <CardContent className="pt-6 relative z-10">
             <div className="space-y-4">
               {/* Search Bar */}
               <div className="relative">
@@ -336,8 +360,19 @@ export default function FoodsPage() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredFoods.map((food, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
+              <Card 
+                key={index} 
+                className="hover:shadow-lg transition-all duration-300 relative overflow-hidden border-2 border-amber-900/60 shadow-md"
+                style={{
+                  backgroundImage: 'url("/bg3.png")',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  minHeight: '200px'
+                }}
+              >
+                <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px]"></div>
+                <CardHeader className="relative z-10">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <CardTitle className="text-lg mb-2">{food.Food}</CardTitle>
@@ -349,7 +384,7 @@ export default function FoodsPage() {
                     <div className="flex items-center space-x-1">{getVeeryaIcon(food.Veerya)}</div>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <div className="space-y-3">
                     {/* Properties */}
                     <div>
@@ -404,6 +439,6 @@ export default function FoodsPage() {
           </div>
         )}
       </div>
-    </div>
+    </DashboardLayout>
   )
 }

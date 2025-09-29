@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
-import { Activity, Languages, ArrowLeft, Save, User, Settings, Target, X } from "lucide-react"
+import { Activity, Languages, ArrowLeft, Save, User, Settings, Target, X, BookOpen } from "lucide-react"
 import Link from "next/link"
 import { type Patient, getPatients, saveDietPlan } from "@/lib/database"
 import { type DietPlanOptions } from "@/lib/diet-plan-generator"
@@ -166,49 +167,67 @@ export default function CreateDietPlanPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Link href="/" className="flex items-center space-x-2">
-                <Activity className="h-8 w-8 text-primary" />
-                <h1 className="text-2xl font-bold text-primary">AhaarWISE</h1>
-              </Link>
-            </div>
-            <div className="flex items-center space-x-4">
+    <DashboardLayout>
+      <div className="p-6 space-y-6 min-h-screen" style={{
+        backgroundImage: 'url("/main_bg.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}>
+        {/* Enhanced Header Section */}
+        <div className="mb-6">
+          <div 
+            className="relative rounded-xl overflow-hidden p-6 mb-4 min-h-[140px] border-2"
+            style={{
+              backgroundColor: '#E8E0D0',
+              borderColor: '#D4C4A8',
+              backgroundImage: 'url("/banner_canva.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="relative z-10 flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <div 
+                className="p-4 rounded-xl w-fit border-2"
+                style={{
+                  backgroundColor: '#F0E6D2',
+                  borderColor: '#D4C4A8'
+                }}
+              >
+                <BookOpen className="h-8 w-8 text-amber-900" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center space-x-4 mb-2">
+                  <Link href="/diet-plans">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="bg-white/80 hover:bg-white border-amber-300 text-amber-800 hover:text-amber-900"
+                    >
+                      <ArrowLeft className="h-4 w-4 mr-2" />
+                      {language === "en" ? "Back to Diet Plans" : "आहार योजना पर वापस"}
+                    </Button>
+                  </Link>
+                </div>
+                <h1 className={`text-2xl sm:text-3xl font-bold text-amber-900 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  {currentContent.title}
+                </h1>
+                <p className={`text-base sm:text-lg text-amber-800 mt-2 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  {currentContent.subtitle}
+                </p>
+              </div>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 bg-white/80 hover:bg-white"
               >
                 <Languages className="h-4 w-4" />
                 <span>{language === "en" ? "हिंदी" : "English"}</span>
               </Button>
             </div>
           </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-8">
-        {/* Page Header */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-4 mb-4">
-            <Link href="/diet-plans">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back
-              </Button>
-            </Link>
-          </div>
-          <h1 className={`text-4xl font-bold mb-2 ${language === "hi" ? "font-devanagari" : ""}`}>
-            {currentContent.title}
-          </h1>
-          <p className={`text-muted-foreground text-lg ${language === "hi" ? "font-devanagari" : ""}`}>
-            {currentContent.subtitle}
-          </p>
         </div>
 
         {error && (
@@ -217,31 +236,51 @@ export default function CreateDietPlanPage() {
           </div>
         )}
         {patients.length === 0 ? (
-          <Card className="text-center py-12">
+          <Card 
+            className="text-center py-12 border-2 border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 backdrop-blur-sm"
+            style={{
+              backgroundImage: 'url("/bg10.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'soft-light'
+            }}
+          >
             <CardContent>
-              <User className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className={`text-lg font-semibold mb-2 ${language === "hi" ? "font-devanagari" : ""}`}>
+              <User className="h-12 w-12 text-amber-700 mx-auto mb-4" />
+              <h3 className={`text-lg font-semibold mb-2 text-amber-900 ${language === "hi" ? "font-devanagari" : ""}`}>
                 {currentContent.noPatients}
               </h3>
               <Link href="/patients/new">
-                <Button className="mt-4">Add Patient</Button>
+                <Button className="mt-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white border-0">
+                  {language === "en" ? "Add Patient" : "नया रोगी जोड़ें"}
+                </Button>
               </Link>
             </CardContent>
           </Card>
         ) : (
           <div className="space-y-8">
             {/* Patient Selection */}
-            <Card>
-              <CardHeader>
-                <CardTitle className={`flex items-center space-x-2 ${language === "hi" ? "font-devanagari" : ""}`}>
-                  <User className="h-5 w-5" />
-                  <span>{currentContent.selectPatient}</span>
+            <Card 
+              className="border-2 border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 backdrop-blur-sm"
+              style={{
+                backgroundImage: 'url("/bg3.png")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundBlendMode: 'soft-light'
+              }}
+            >
+              <CardHeader className="pb-4">
+                <CardTitle className={`flex items-center space-x-3 text-amber-900 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  <div className="p-2 rounded-lg bg-amber-100 border border-amber-300">
+                    <User className="h-5 w-5 text-amber-700" />
+                  </div>
+                  <span className="text-lg font-semibold">{currentContent.selectPatient}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <Select onValueChange={handlePatientSelect}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Choose a patient" />
+                  <SelectTrigger className="h-11 border-2 border-amber-200 focus:border-amber-500 bg-white/80">
+                    <SelectValue placeholder={language === "en" ? "Choose a patient" : "एक रोगी चुनें"} />
                   </SelectTrigger>
                   <SelectContent>
                     {patients.map((patient) => (
@@ -253,8 +292,8 @@ export default function CreateDietPlanPage() {
                 </Select>
 
                 {selectedPatient && (
-                  <div className="mt-4 p-4 bg-muted rounded-lg">
-                    <h4 className="font-semibold mb-2">{selectedPatient.name}</h4>
+                  <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+                    <h4 className="font-semibold mb-2 text-amber-900">{selectedPatient.name}</h4>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
                         <span className="text-muted-foreground">Constitution:</span>
@@ -279,22 +318,32 @@ export default function CreateDietPlanPage() {
             </Card>
 
             {/* Plan Options */}
-            <Card>
-              <CardHeader>
-                <CardTitle className={`flex items-center space-x-2 ${language === "hi" ? "font-devanagari" : ""}`}>
-                  <Settings className="h-5 w-5" />
-                  <span>{currentContent.planOptions}</span>
+            <Card 
+              className="border-2 border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 backdrop-blur-sm"
+              style={{
+                backgroundImage: 'url("/bg18.png")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundBlendMode: 'soft-light'
+              }}
+            >
+              <CardHeader className="pb-4">
+                <CardTitle className={`flex items-center space-x-3 text-amber-900 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  <div className="p-2 rounded-lg bg-amber-100 border border-amber-300">
+                    <Settings className="h-5 w-5 text-amber-700" />
+                  </div>
+                  <span className="text-lg font-semibold">{currentContent.planOptions}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label className={language === "hi" ? "font-devanagari" : ""}>{currentContent.duration}</Label>
+                    <Label className={`font-medium text-amber-900 ${language === "hi" ? "font-devanagari" : ""}`}>{currentContent.duration}</Label>
                     <Select
                       value={options.duration.toString()}
                       onValueChange={(value) => setOptions((prev) => ({ ...prev, duration: Number.parseInt(value) }))}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="h-11 border-2 border-amber-200 focus:border-amber-500 bg-white/80">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -308,7 +357,7 @@ export default function CreateDietPlanPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className={language === "hi" ? "font-devanagari" : ""}>{currentContent.mealsPerDay}</Label>
+                    <Label className={`font-medium text-amber-900 ${language === "hi" ? "font-devanagari" : ""}`}>{currentContent.mealsPerDay}</Label>
                     <Select
                       value={options.mealsPerDay.toString()}
                       onValueChange={(value) =>
@@ -341,18 +390,28 @@ export default function CreateDietPlanPage() {
             </Card>
 
             {/* Focus Areas */}
-            <Card>
-              <CardHeader>
-                <CardTitle className={`flex items-center space-x-2 ${language === "hi" ? "font-devanagari" : ""}`}>
-                  <Target className="h-5 w-5" />
-                  <span>{currentContent.focusAreas}</span>
+            <Card 
+              className="border-2 border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 backdrop-blur-sm"
+              style={{
+                backgroundImage: 'url("/bg14.png")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundBlendMode: 'soft-light'
+              }}
+            >
+              <CardHeader className="pb-4">
+                <CardTitle className={`flex items-center space-x-3 text-amber-900 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  <div className="p-2 rounded-lg bg-amber-100 border border-amber-300">
+                    <Target className="h-5 w-5 text-amber-700" />
+                  </div>
+                  <span className="text-lg font-semibold">{currentContent.focusAreas}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex space-x-2">
                   <Select value={newFocusArea} onValueChange={setNewFocusArea}>
-                    <SelectTrigger className="flex-1">
-                      <SelectValue placeholder="Select focus area" />
+                    <SelectTrigger className="flex-1 h-11 border-2 border-amber-200 focus:border-amber-500 bg-white/80">
+                      <SelectValue placeholder={language === "en" ? "Select focus area" : "फोकस एरिया चुनें"} />
                     </SelectTrigger>
                     <SelectContent>
                       {focusAreaOptions.map((area) => (
@@ -362,7 +421,7 @@ export default function CreateDietPlanPage() {
                       ))}
                     </SelectContent>
                   </Select>
-                  <Button type="button" onClick={addFocusArea} variant="outline">
+                  <Button type="button" onClick={addFocusArea} variant="outline" className="bg-white/80 hover:bg-white border-amber-300 text-amber-800 hover:text-amber-900">
                     {currentContent.addFocusArea}
                   </Button>
                 </div>
@@ -378,11 +437,21 @@ export default function CreateDietPlanPage() {
             </Card>
 
             {/* Foods to Avoid */}
-            <Card>
-              <CardHeader>
-                <CardTitle className={`flex items-center space-x-2 ${language === "hi" ? "font-devanagari" : ""}`}>
-                  <X className="h-5 w-5" />
-                  <span>{currentContent.avoidFoods}</span>
+            <Card 
+              className="border-2 border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 backdrop-blur-sm"
+              style={{
+                backgroundImage: 'url("/bg10.png")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundBlendMode: 'soft-light'
+              }}
+            >
+              <CardHeader className="pb-4">
+                <CardTitle className={`flex items-center space-x-3 text-amber-900 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  <div className="p-2 rounded-lg bg-amber-100 border border-amber-300">
+                    <X className="h-5 w-5 text-amber-700" />
+                  </div>
+                  <span className="text-lg font-semibold">{currentContent.avoidFoods}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -390,10 +459,11 @@ export default function CreateDietPlanPage() {
                   <Input
                     value={newAvoidFood}
                     onChange={(e) => setNewAvoidFood(e.target.value)}
-                    placeholder="Enter food to avoid"
+                    placeholder={language === "en" ? "Enter food to avoid" : "बचने वाला खाद्य दर्ज करें"}
                     onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addAvoidFood())}
+                    className="h-11 border-2 border-amber-200 focus:border-amber-500 bg-white/80"
                   />
-                  <Button type="button" onClick={addAvoidFood} variant="outline">
+                  <Button type="button" onClick={addAvoidFood} variant="outline" className="bg-white/80 hover:bg-white border-amber-300 text-amber-800 hover:text-amber-900">
                     {currentContent.addAvoidFood}
                   </Button>
                 </div>
@@ -409,26 +479,26 @@ export default function CreateDietPlanPage() {
             </Card>
 
             {/* Action Buttons */}
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 pt-6">
               <Button
                 onClick={handleGeneratePlan}
                 disabled={!selectedPatient || generating}
-                className={`flex items-center space-x-2 ${generating ? "animate-pulse" : ""}`}
+                className={`flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white border-0 px-8 py-3 h-12 ${generating ? "animate-pulse" : ""}`}
               >
-                <Save className="h-4 w-4" />
-                <span className={language === "hi" ? "font-devanagari" : ""}>
+                <Save className="h-5 w-5" />
+                <span className={`font-semibold ${language === "hi" ? "font-devanagari" : ""}`}>
                   {generating ? currentContent.generating : currentContent.generate}
                 </span>
               </Button>
               <Link href="/diet-plans">
-                <Button variant="outline">
-                  <span className={language === "hi" ? "font-devanagari" : ""}>{currentContent.cancel}</span>
+                <Button variant="outline" className="bg-white/80 hover:bg-white border-amber-300 text-amber-800 hover:text-amber-900 px-8 py-3 h-12">
+                  <span className={`font-semibold ${language === "hi" ? "font-devanagari" : ""}`}>{currentContent.cancel}</span>
                 </Button>
               </Link>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </DashboardLayout>
   )
 }

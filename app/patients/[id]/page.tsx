@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -178,71 +179,115 @@ export default function PatientDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center">
-        <div className="text-center">
-          <Activity className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
-          <p>Loading patient details...</p>
+      <DashboardLayout>
+        <div className="p-6 min-h-screen flex items-center justify-center" style={{
+          backgroundImage: 'url("/main_bg.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}>
+          <div className="text-center bg-white/80 backdrop-blur-[1px] rounded-xl p-8 border-2 border-amber-900/60">
+            <Activity className="h-8 w-8 animate-spin text-amber-600 mx-auto mb-4" />
+            <p className="text-amber-800">Loading patient details...</p>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
   if (!patient) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Patient not found</h2>
-          <Link href="/patients">
-            <Button>Back to Patients</Button>
-          </Link>
+      <DashboardLayout>
+        <div className="p-6 min-h-screen flex items-center justify-center" style={{
+          backgroundImage: 'url("/main_bg.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}>
+          <div className="text-center bg-white/80 backdrop-blur-[1px] rounded-xl p-8 border-2 border-amber-900/60">
+            <h2 className="text-2xl font-bold mb-4 text-amber-900">Patient not found</h2>
+            <Link href="/patients">
+              <Button className="bg-amber-600 hover:bg-amber-700 text-white">Back to Patients</Button>
+            </Link>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Link href="/" className="flex items-center space-x-2">
-                <Activity className="h-8 w-8 text-primary" />
-                <h1 className="text-2xl font-bold text-primary">AhaarWISE</h1>
-              </Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="flex items-center space-x-2"
+    <DashboardLayout>
+      <div className="p-6 space-y-6 min-h-screen" style={{
+        backgroundImage: 'url("/main_bg.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}>
+        {/* Enhanced Header Section */}
+        <div className="mb-6">
+          <div 
+            className="relative rounded-xl overflow-hidden p-6 mb-4 min-h-[140px] border-2"
+            style={{
+              backgroundColor: '#E8E0D0',
+              borderColor: '#D4C4A8',
+              backgroundImage: 'url("/banner_canva.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="relative z-10 flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <div 
+                className="p-4 rounded-xl w-fit border-2"
+                style={{
+                  backgroundColor: '#F0E6D2',
+                  borderColor: '#D4C4A8'
+                }}
               >
-                <Languages className="h-4 w-4" />
-                <span>{language === "en" ? "हिंदी" : "English"}</span>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-8">
-        {/* Page Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-4">
-              <Link href="/patients">
-                <Button variant="outline" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
+                <User className="h-8 w-8 text-amber-900" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center space-x-4 mb-2">
+                  <Link href="/patients">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="bg-white/80 hover:bg-white border-amber-300 text-amber-800 hover:text-amber-900"
+                    >
+                      <ArrowLeft className="h-4 w-4 mr-2" />
+                      {language === "en" ? "Back to Patients" : "रोगियों पर वापस"}
+                    </Button>
+                  </Link>
+                  <Link href={`/patients/${patient.id}/edit`}>
+                    <Button 
+                      size="sm"
+                      className="bg-amber-600 hover:bg-amber-700 text-white"
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      {language === "en" ? "Edit Patient" : "रोगी संपादित करें"}
+                    </Button>
+                  </Link>
+                </div>
+                <h1 className={`text-2xl sm:text-3xl font-bold text-amber-900 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  {patient.name}
+                </h1>
+                <p className={`text-base sm:text-lg text-amber-800 mt-1 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  Patient Profile & Medical Information
+                </p>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setLanguage(language === "en" ? "hi" : "en")}
+                  className="flex items-center space-x-2 bg-white/80 hover:bg-white"
+                >
+                  <Languages className="h-4 w-4" />
+                  <span>{language === "en" ? "हिंदी" : "English"}</span>
                 </Button>
-              </Link>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Button
-                onClick={handleGenerateAIDietPlan}
-                disabled={generatingAI}
+                <Button
+                  onClick={handleGenerateAIDietPlan}
+                  disabled={generatingAI}
                 className="flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600"
               >
                 <Sparkles className="h-4 w-4" />
@@ -285,7 +330,9 @@ export default function PatientDetailPage() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        {/* Main Content Area */}
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8">
           {/* Personal Information */}
           <Card>
             <CardHeader>
@@ -548,8 +595,10 @@ export default function PatientDetailPage() {
               </div>
             </CardContent>
           </Card>
+          </div>
+        </div>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }

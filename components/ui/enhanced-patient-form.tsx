@@ -149,156 +149,208 @@ export function EnhancedPatientForm({ patient, onSave, onCancel }: EnhancedPatie
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <Card className="border-amber-200 shadow-lg">
-        <CardHeader className="bg-gradient-to-r from-orange-50 to-amber-50 border-b border-amber-200">
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <User className="w-6 h-6 text-orange-600" />
+    <div className="max-w-6xl mx-auto space-y-6">
+      <Card className="border-2 border-amber-900/60 shadow-xl bg-white/95 backdrop-blur-sm">
+        <CardHeader 
+          className="relative rounded-t-lg overflow-hidden p-6 border-b-2 border-amber-200/50"
+          style={{
+            backgroundImage: 'url("/banner_canva.png")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          <div className="absolute inset-0 bg-white/85 backdrop-blur-[1px]"></div>
+          <CardTitle className="relative z-10 flex items-center gap-3 text-2xl text-amber-900 font-bold">
+            <div className="p-2 bg-gradient-to-br from-amber-100 to-orange-100 rounded-lg border border-amber-200">
+              <User className="w-6 h-6 text-amber-700" />
+            </div>
             {patient ? 'Edit Patient Profile' : 'New Patient Registration'}
           </CardTitle>
         </CardHeader>
         
         <CardContent className="p-0">
           <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-6 bg-gray-50">
-              <TabsTrigger value="basic" className="flex items-center gap-2">
+            <TabsList className="grid w-full grid-cols-6 bg-gradient-to-r from-amber-50 to-orange-50 border-b border-amber-200 h-auto p-2 rounded-none">
+              <TabsTrigger value="basic" className="flex items-center gap-2 py-3 px-4 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-amber-900 data-[state=active]:border-amber-300 data-[state=active]:border data-[state=active]:shadow-sm rounded-lg">
                 <User className="w-4 h-4" />
-                Basic Info
+                <span className="hidden sm:inline">Basic Info</span>
+                <span className="sm:hidden">Basic</span>
               </TabsTrigger>
-              <TabsTrigger value="health" className="flex items-center gap-2">
+              <TabsTrigger value="health" className="flex items-center gap-2 py-3 px-4 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-amber-900 data-[state=active]:border-amber-300 data-[state=active]:border data-[state=active]:shadow-sm rounded-lg">
                 <Heart className="w-4 h-4" />
-                Health Metrics
+                <span className="hidden sm:inline">Health Metrics</span>
+                <span className="sm:hidden">Health</span>
               </TabsTrigger>
-              <TabsTrigger value="lifestyle" className="flex items-center gap-2">
+              <TabsTrigger value="lifestyle" className="flex items-center gap-2 py-3 px-4 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-amber-900 data-[state=active]:border-amber-300 data-[state=active]:border data-[state=active]:shadow-sm rounded-lg">
                 <Activity className="w-4 h-4" />
-                Lifestyle
+                <span className="hidden sm:inline">Lifestyle</span>
+                <span className="sm:hidden">Life</span>
               </TabsTrigger>
-              <TabsTrigger value="sleep" className="flex items-center gap-2">
+              <TabsTrigger value="sleep" className="flex items-center gap-2 py-3 px-4 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-amber-900 data-[state=active]:border-amber-300 data-[state=active]:border data-[state=active]:shadow-sm rounded-lg">
                 <Moon className="w-4 h-4" />
-                Sleep & Wellness
+                <span className="hidden sm:inline">Sleep & Wellness</span>
+                <span className="sm:hidden">Sleep</span>
               </TabsTrigger>
-              <TabsTrigger value="nutrition" className="flex items-center gap-2">
+              <TabsTrigger value="nutrition" className="flex items-center gap-2 py-3 px-4 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-amber-900 data-[state=active]:border-amber-300 data-[state=active]:border data-[state=active]:shadow-sm rounded-lg">
                 <Utensils className="w-4 h-4" />
-                Nutrition
+                <span className="hidden sm:inline">Nutrition</span>
+                <span className="sm:hidden">Food</span>
               </TabsTrigger>
-              <TabsTrigger value="goals" className="flex items-center gap-2">
+              <TabsTrigger value="goals" className="flex items-center gap-2 py-3 px-4 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-amber-900 data-[state=active]:border-amber-300 data-[state=active]:border data-[state=active]:shadow-sm rounded-lg">
                 <Brain className="w-4 h-4" />
-                Goals & Preferences
+                <span className="hidden sm:inline">Goals & Preferences</span>
+                <span className="sm:hidden">Goals</span>
               </TabsTrigger>
             </TabsList>
 
             {/* Basic Information */}
-            <TabsContent value="basic" className="p-6 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name *</Label>
+            <TabsContent value="basic" className="p-8 space-y-8 bg-gradient-to-br from-white to-amber-50/30">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <Label htmlFor="name" className="text-sm font-semibold text-amber-900 flex items-center gap-2">
+                    <span className="text-red-500">*</span>
+                    Full Name
+                  </Label>
                   <Input
                     id="name"
                     value={formData.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
-                    className={errors.name ? 'border-red-500' : ''}
+                    className={`border-2 focus:border-amber-500 focus:ring-amber-500/20 rounded-lg h-11 ${errors.name ? 'border-red-500' : 'border-amber-200'}`}
+                    placeholder="Enter full name"
                   />
-                  {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+                  {errors.name && <p className="text-red-500 text-sm flex items-center gap-1"><AlertCircle className="w-4 h-4" />{errors.name}</p>}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="age">Age *</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="age" className="text-sm font-semibold text-amber-900 flex items-center gap-2">
+                    <span className="text-red-500">*</span>
+                    Age
+                  </Label>
                   <Input
                     id="age"
                     type="number"
                     value={formData.age}
                     onChange={(e) => handleInputChange('age', parseInt(e.target.value))}
-                    className={errors.age ? 'border-red-500' : ''}
+                    className={`border-2 focus:border-amber-500 focus:ring-amber-500/20 rounded-lg h-11 ${errors.age ? 'border-red-500' : 'border-amber-200'}`}
+                    placeholder="Enter age"
+                    min="1"
+                    max="120"
                   />
-                  {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
+                  {errors.age && <p className="text-red-500 text-sm flex items-center gap-1"><AlertCircle className="w-4 h-4" />{errors.age}</p>}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="gender">Gender</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="gender" className="text-sm font-semibold text-amber-900">
+                    Gender
+                  </Label>
                   <Select
                     value={formData.gender}
                     onValueChange={(value) => handleInputChange('gender', value)}
                   >
-                    <SelectTrigger>
-                      <SelectValue />
+                    <SelectTrigger className="border-2 border-amber-200 focus:border-amber-500 focus:ring-amber-500/20 rounded-lg h-11">
+                      <SelectValue placeholder="Select gender" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                    <SelectContent className="border-2 border-amber-200">
+                      <SelectItem value="female" className="focus:bg-amber-50">Female</SelectItem>
+                      <SelectItem value="male" className="focus:bg-amber-50">Male</SelectItem>
+                      <SelectItem value="other" className="focus:bg-amber-50">Other</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="constitution">Ayurvedic Constitution</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="constitution" className="text-sm font-semibold text-amber-900">
+                    Ayurvedic Constitution
+                  </Label>
                   <Select
                     value={formData.constitution}
                     onValueChange={(value) => handleInputChange('constitution', value)}
                   >
-                    <SelectTrigger>
-                      <SelectValue />
+                    <SelectTrigger className="border-2 border-amber-200 focus:border-amber-500 focus:ring-amber-500/20 rounded-lg h-11">
+                      <SelectValue placeholder="Select constitution" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="vata">Vata (Air + Ether)</SelectItem>
-                      <SelectItem value="pitta">Pitta (Fire + Water)</SelectItem>
-                      <SelectItem value="kapha">Kapha (Earth + Water)</SelectItem>
-                      <SelectItem value="vata-pitta">Vata-Pitta</SelectItem>
-                      <SelectItem value="pitta-kapha">Pitta-Kapha</SelectItem>
-                      <SelectItem value="vata-kapha">Vata-Kapha</SelectItem>
-                      <SelectItem value="tridoshic">Tridoshic</SelectItem>
+                    <SelectContent className="border-2 border-amber-200">
+                      <SelectItem value="vata" className="focus:bg-amber-50">Vata (Air + Ether)</SelectItem>
+                      <SelectItem value="pitta" className="focus:bg-amber-50">Pitta (Fire + Water)</SelectItem>
+                      <SelectItem value="kapha" className="focus:bg-amber-50">Kapha (Earth + Water)</SelectItem>
+                      <SelectItem value="vata-pitta" className="focus:bg-amber-50">Vata-Pitta</SelectItem>
+                      <SelectItem value="pitta-kapha" className="focus:bg-amber-50">Pitta-Kapha</SelectItem>
+                      <SelectItem value="vata-kapha" className="focus:bg-amber-50">Vata-Kapha</SelectItem>
+                      <SelectItem value="tridoshic" className="focus:bg-amber-50">Tridoshic</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="email" className="text-sm font-semibold text-amber-900">
+                    Email
+                  </Label>
                   <Input
                     id="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
+                    className="border-2 border-amber-200 focus:border-amber-500 focus:ring-amber-500/20 rounded-lg h-11"
+                    placeholder="Enter email address"
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="phone" className="text-sm font-semibold text-amber-900">
+                    Phone
+                  </Label>
                   <Input
                     id="phone"
                     value={formData.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
+                    className="border-2 border-amber-200 focus:border-amber-500 focus:ring-amber-500/20 rounded-lg h-11"
+                    placeholder="Enter phone number"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="address">Address</Label>
+              <div className="space-y-3">
+                <Label htmlFor="address" className="text-sm font-semibold text-amber-900">
+                  Address
+                </Label>
                 <Textarea
                   id="address"
                   value={formData.address}
                   onChange={(e) => handleInputChange('address', e.target.value)}
-                  rows={3}
+                  rows={4}
+                  className="border-2 border-amber-200 focus:border-amber-500 focus:ring-amber-500/20 rounded-lg resize-none"
+                  placeholder="Enter complete address"
                 />
               </div>
             </TabsContent>
 
             {/* Health Metrics */}
-            <TabsContent value="health" className="p-6 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="height">Height (cm) *</Label>
+            <TabsContent value="health" className="p-8 space-y-8 bg-gradient-to-br from-white to-amber-50/30">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="space-y-3">
+                  <Label htmlFor="height" className="text-sm font-semibold text-amber-900 flex items-center gap-2">
+                    <span className="text-red-500">*</span>
+                    Height (cm)
+                  </Label>
                   <Input
                     id="height"
                     type="number"
                     value={formData.height}
                     onChange={(e) => handleInputChange('height', parseFloat(e.target.value))}
-                    className={errors.height ? 'border-red-500' : ''}
+                    className={`border-2 focus:border-amber-500 focus:ring-amber-500/20 rounded-lg h-11 ${errors.height ? 'border-red-500' : 'border-amber-200'}`}
+                    placeholder="Height in cm"
+                    min="50"
+                    max="250"
                   />
-                  {errors.height && <p className="text-red-500 text-sm">{errors.height}</p>}
+                  {errors.height && <p className="text-red-500 text-sm flex items-center gap-1"><AlertCircle className="w-4 h-4" />{errors.height}</p>}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="weight">Weight (kg) *</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="weight" className="text-sm font-semibold text-amber-900 flex items-center gap-2">
+                    <span className="text-red-500">*</span>
+                    Weight (kg)
+                  </Label>
                   <Input
                     id="weight"
                     type="number"
@@ -449,7 +501,7 @@ export function EnhancedPatientForm({ patient, onSave, onCancel }: EnhancedPatie
             </TabsContent>
 
             {/* Lifestyle */}
-            <TabsContent value="lifestyle" className="p-6 space-y-6">
+            <TabsContent value="lifestyle" className="p-8 space-y-8 bg-gradient-to-br from-white to-amber-50/30">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label>Activity Level</Label>
@@ -527,7 +579,7 @@ export function EnhancedPatientForm({ patient, onSave, onCancel }: EnhancedPatie
             </TabsContent>
 
             {/* Sleep & Wellness */}
-            <TabsContent value="sleep" className="p-6 space-y-6">
+            <TabsContent value="sleep" className="p-8 space-y-8 bg-gradient-to-br from-white to-amber-50/30">
               <Card className="border-blue-200 bg-blue-50/30">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
@@ -584,7 +636,7 @@ export function EnhancedPatientForm({ patient, onSave, onCancel }: EnhancedPatie
             </TabsContent>
 
             {/* Nutrition Tab */}
-            <TabsContent value="nutrition" className="p-6 space-y-6">
+            <TabsContent value="nutrition" className="p-8 space-y-8 bg-gradient-to-br from-white to-amber-50/30">
               <div className="space-y-6">
                 {/* Food Preferences */}
                 <div className="space-y-3">
@@ -679,7 +731,7 @@ export function EnhancedPatientForm({ patient, onSave, onCancel }: EnhancedPatie
             </TabsContent>
 
             {/* Goals & Preferences */}
-            <TabsContent value="goals" className="p-6 space-y-6">
+            <TabsContent value="goals" className="p-8 space-y-8 bg-gradient-to-br from-white to-amber-50/30">
               <div className="space-y-6">
                 {/* Health Goals */}
                 <div className="space-y-3">
@@ -747,13 +799,17 @@ export function EnhancedPatientForm({ patient, onSave, onCancel }: EnhancedPatie
       </Card>
 
       {/* Action Buttons */}
-      <div className="flex justify-end space-x-4">
-        <Button variant="outline" onClick={onCancel}>
+      <div className="flex justify-end space-x-4 p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg border-2 border-amber-200/50">
+        <Button 
+          variant="outline" 
+          onClick={onCancel}
+          className="border-2 border-amber-300 text-amber-800 hover:bg-amber-50 hover:text-amber-900 h-11 px-6 font-medium"
+        >
           Cancel
         </Button>
         <Button 
           onClick={handleSave}
-          className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+          className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 h-11 px-8 font-medium"
         >
           <CheckCircle className="w-4 h-4 mr-2" />
           {patient ? 'Update Patient' : 'Save Patient'}

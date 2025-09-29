@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -116,28 +117,57 @@ ${recipe.ayurvedicGuidelines?.map((guideline: any) => `• ${guideline.principle
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-orange-600 bg-clip-text text-transparent">
-            Recipe Intelligence
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Complete recipes with Ayurvedic cooking wisdom and automatic nutritional calculation
-          </p>
+    <DashboardLayout>
+      <div className="p-6 space-y-6 min-h-screen" style={{
+        backgroundImage: 'url("/main_bg.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}>
+        {/* Header Section */}
+        <div className="mb-6">
+          <div 
+            className="relative rounded-xl overflow-hidden p-6 mb-4 min-h-[120px] border-2"
+            style={{
+              backgroundColor: '#E8E0D0',
+              borderColor: '#D4C4A8',
+              backgroundImage: 'url("/banner_canva.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="relative z-10 flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <div 
+                className="p-3 rounded-xl w-fit border-2"
+                style={{
+                  backgroundColor: '#F0E6D2',
+                  borderColor: '#D4C4A8'
+                }}
+              >
+                <ChefHat className="h-6 w-6 text-amber-900" />
+              </div>
+              <div className="flex-1">
+                <h1 className="text-xl sm:text-2xl font-bold text-amber-900">
+                  Recipe Intelligence
+                </h1>
+                <p className="text-sm sm:text-base text-amber-800 mt-1">
+                  Complete recipes with Ayurvedic cooking wisdom and automatic nutritional calculation
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" className="bg-white/80">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Recipe
+                </Button>
+                <Button variant="outline" size="sm" className="bg-white/80">
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  Cooking Guide
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm">
-            <Plus className="w-4 h-4 mr-2" />
-            Add Recipe
-          </Button>
-          <Button variant="outline" size="sm">
-            <BookOpen className="w-4 h-4 mr-2" />
-            Cooking Guide
-          </Button>
-        </div>
-      </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-3">
@@ -157,20 +187,29 @@ ${recipe.ayurvedicGuidelines?.map((guideline: any) => `• ${guideline.principle
 
         <TabsContent value="recipes" className="space-y-6">
           {/* Search and Filters */}
-          <Card>
-            <CardHeader>
+          <Card 
+            className="relative overflow-hidden border-2 border-amber-900/60 shadow-md"
+            style={{
+              backgroundImage: 'url("/bg10.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px]"></div>
+            <CardHeader className="relative z-10">
               <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-gray-800">
                   <Search className="w-5 h-5" />
                   Search & Filter Recipes
                 </CardTitle>
-                <Button variant="ghost" size="sm" onClick={clearFilters}>
+                <Button variant="ghost" size="sm" onClick={clearFilters} className="bg-white/80">
                   <Filter className="w-4 h-4 mr-2" />
                   Clear Filters
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 relative z-10">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <div>
                   <Label htmlFor="search">Search by name</Label>
@@ -255,16 +294,24 @@ ${recipe.ayurvedicGuidelines?.map((guideline: any) => `• ${guideline.principle
                   {filteredRecipes.map((recipe) => (
                     <Card 
                       key={recipe.id} 
-                      className={`cursor-pointer transition-all hover:shadow-md ${
-                        selectedRecipe?.id === recipe.id ? 'ring-2 ring-green-500' : ''
+                      className={`cursor-pointer transition-all hover:shadow-lg relative overflow-hidden border-2 border-amber-900/60 shadow-md ${
+                        selectedRecipe?.id === recipe.id ? 'ring-2 ring-amber-500' : ''
                       }`}
+                      style={{
+                        backgroundImage: 'url("/bg3.png")',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                        minHeight: '140px'
+                      }}
                       onClick={() => setSelectedRecipe(recipe)}
                     >
-                      <CardHeader className="pb-3">
+                      <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px]"></div>
+                      <CardHeader className="pb-3 relative z-10">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <CardTitle className="text-lg leading-tight">{recipe.name}</CardTitle>
-                            <CardDescription className="text-sm mt-1 line-clamp-2">
+                            <CardTitle className="text-lg leading-tight text-gray-800">{recipe.name}</CardTitle>
+                            <CardDescription className="text-sm mt-1 line-clamp-2 text-gray-700">
                               {recipe.description}
                             </CardDescription>
                           </div>
@@ -274,7 +321,7 @@ ${recipe.ayurvedicGuidelines?.map((guideline: any) => `• ${guideline.principle
                           </div>
                         </div>
                       </CardHeader>
-                      <CardContent className="pt-0">
+                      <CardContent className="pt-0 relative z-10">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4 text-sm text-muted-foreground">
                             <div className="flex items-center gap-1">
@@ -609,6 +656,7 @@ ${recipe.ayurvedicGuidelines?.map((guideline: any) => `• ${guideline.principle
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

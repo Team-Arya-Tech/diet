@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
+import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -333,41 +334,55 @@ export default function ReportsPage() {
   const patients = getPatients()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Link href="/" className="flex items-center space-x-2">
-                <Activity className="h-8 w-8 text-primary" />
-                <h1 className="text-2xl font-bold text-primary">AhaarWISE</h1>
-              </Link>
-            </div>
-            <div className="flex items-center space-x-4">
+    <DashboardLayout>
+      <div className="p-6 space-y-6 min-h-screen" style={{
+        backgroundImage: 'url("/main_bg.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}>
+        {/* Header Section */}
+        <div className="mb-6">
+          <div 
+            className="relative rounded-xl overflow-hidden p-6 mb-4 min-h-[120px] border-2"
+            style={{
+              backgroundColor: '#E8E0D0',
+              borderColor: '#D4C4A8',
+              backgroundImage: 'url("/banner_canva.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="relative z-10 flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <div 
+                className="p-3 rounded-xl w-fit border-2"
+                style={{
+                  backgroundColor: '#F0E6D2',
+                  borderColor: '#D4C4A8'
+                }}
+              >
+                <BarChart3 className="h-6 w-6 text-amber-900" />
+              </div>
+              <div className="flex-1">
+                <h1 className={`text-xl sm:text-2xl font-bold text-amber-900 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  {currentContent.title}
+                </h1>
+                <p className={`text-sm sm:text-base text-amber-800 mt-1 ${language === "hi" ? "font-devanagari" : ""}`}>
+                  {currentContent.subtitle}
+                </p>
+              </div>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 bg-white/80"
               >
                 <Languages className="h-4 w-4" />
                 <span>{language === "en" ? "हिंदी" : "English"}</span>
               </Button>
             </div>
           </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-8">
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className={`text-4xl font-bold mb-2 ${language === "hi" ? "font-devanagari" : ""}`}>
-            {currentContent.title}
-          </h1>
-          <p className={`text-muted-foreground text-lg ${language === "hi" ? "font-devanagari" : ""}`}>
-            {currentContent.subtitle}
-          </p>
         </div>
 
         {/* Filters */}
@@ -816,6 +831,6 @@ export default function ReportsPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
