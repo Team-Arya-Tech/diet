@@ -1,0 +1,516 @@
+{
+  "exercises": [
+    {
+      "id": "surya-namaskara",
+      "name": "Surya Namaskara",
+      "englishName": "Sun Salutation",
+      "category": "Asana",
+      "type": "Sequence",
+      "difficulty": "Beginner",
+      "duration": "10-20 minutes",
+      "doshaEffects": {
+        "vata": "Balancing",
+        "pitta": "Moderately Increasing",
+        "kapha": "Reducing"
+      },
+      "primaryBenefits": [
+        "Improves circulation",
+        "Enhances flexibility",
+        "Builds strength",
+        "Balances all doshas when done mindfully"
+      ],
+      "contraindications": [
+        "High blood pressure (modify pace)",
+        "Recent surgery",
+        "Severe back injury",
+        "Pregnancy (modify poses)"
+      ],
+      "bestTimeToPerform": "Morning (sunrise ideal)",
+      "seasonalRecommendations": {
+        "spring": "Energetic pace",
+        "summer": "Moderate pace in cooler hours",
+        "autumn": "Steady, grounding pace",
+        "winter": "Warming, vigorous pace"
+      },
+      "steps": [
+        "Pranamasana (Prayer Pose) - Stand with palms together at heart center",
+        "Hastauttanasana (Raised Arms Pose) - Inhale, sweep arms up overhead",
+        "Uttanasana (Standing Forward Bend) - Exhale, hinge forward from hips",
+        "Ashwa Sanchalanasana (Low Lunge) - Inhale, step right foot back",
+        "Dandasana (Plank Pose) - Step left foot back, hold plank",
+        "Ashtanga Namaskara (Eight-Limbed Pose) - Lower knees, chest, chin",
+        "Bhujangasana (Cobra Pose) - Inhale, open chest forward",
+        "Adho Mukha Svanasana (Downward Dog) - Exhale, tuck toes, lift hips",
+        "Ashwa Sanchalanasana (Low Lunge) - Inhale, step right foot forward",
+        "Uttanasana (Standing Forward Bend) - Exhale, step left foot forward",
+        "Hastauttanasana (Raised Arms Pose) - Inhale, sweep arms up",
+        "Pranamasana (Prayer Pose) - Exhale, hands to heart center"
+      ],
+      "modifications": {
+        "vata": "Move slowly with awareness, hold poses longer",
+        "pitta": "Avoid overheating, practice in cooler environment",
+        "kapha": "Increase pace and repetitions for warmth"
+      }
+    },
+    {
+      "id": "pranayama-nadi-shodhana",
+      "name": "Nadi Shodhana Pranayama",
+      "englishName": "Alternate Nostril Breathing",
+      "category": "Pranayama",
+      "type": "Breathing Exercise",
+      "difficulty": "Beginner",
+      "duration": "5-15 minutes",
+      "doshaEffects": {
+        "vata": "Highly Balancing",
+        "pitta": "Cooling",
+        "kapha": "Mildly Stimulating"
+      },
+      "primaryBenefits": [
+        "Balances nervous system",
+        "Enhances mental clarity",
+        "Improves concentration",
+        "Harmonizes left and right brain hemispheres"
+      ],
+      "contraindications": [
+        "Severe nasal congestion",
+        "Active cold or flu",
+        "Recent nasal surgery"
+      ],
+      "bestTimeToPerform": "Morning or evening, empty stomach",
+      "seasonalRecommendations": {
+        "spring": "Practice to clear seasonal congestion",
+        "summer": "Cooling effect helpful",
+        "autumn": "Balances vata transition",
+        "winter": "Warming and grounding"
+      },
+      "steps": [
+        "Sit comfortably with spine erect",
+        "Use right thumb to close right nostril",
+        "Inhale slowly through left nostril for 4 counts",
+        "Use ring finger to close left nostril, release thumb",
+        "Exhale slowly through right nostril for 4 counts",
+        "Inhale through right nostril for 4 counts",
+        "Close right nostril, release left nostril",
+        "Exhale through left nostril for 4 counts",
+        "This completes one round - repeat 5-10 times"
+      ],
+      "modifications": {
+        "vata": "Keep breath gentle and steady, don't strain",
+        "pitta": "Keep breath cool and calm, avoid forceful breathing",
+        "kapha": "Can increase breath retention slightly"
+      }
+    },
+    {
+      "id": "vrikshasana",
+      "name": "Vrikshasana",
+      "englishName": "Tree Pose",
+      "category": "Asana",
+      "type": "Balance Pose",
+      "difficulty": "Beginner",
+      "duration": "1-3 minutes each side",
+      "doshaEffects": {
+        "vata": "Grounding",
+        "pitta": "Cooling",
+        "kapha": "Energizing"
+      },
+      "primaryBenefits": [
+        "Improves balance and stability",
+        "Strengthens legs and core",
+        "Enhances focus and concentration",
+        "Grounds scattered vata energy"
+      ],
+      "contraindications": [
+        "Severe balance issues",
+        "Recent leg or ankle injury",
+        "Vertigo or dizziness"
+      ],
+      "bestTimeToPerform": "Morning or anytime",
+      "seasonalRecommendations": {
+        "spring": "Practice outdoors for grounding",
+        "summer": "Hold longer for cooling effect",
+        "autumn": "Excellent for vata balance",
+        "winter": "Builds internal stability"
+      },
+      "steps": [
+        "Stand tall with feet hip-width apart",
+        "Shift weight to left foot, ground through all four corners",
+        "Bend right knee, place right foot on inner left thigh",
+        "Avoid placing foot on side of knee joint",
+        "Find steady gaze point (drishti) ahead",
+        "Bring palms together at heart center",
+        "Hold for 5-10 breaths",
+        "Lower right foot slowly and repeat on other side"
+      ],
+      "modifications": {
+        "vata": "Use wall support, focus on steadiness over height",
+        "pitta": "Avoid competitive holding, stay calm",
+        "kapha": "Add arm variations, increase holding time"
+      }
+    },
+    {
+      "id": "bhramari-pranayama",
+      "name": "Bhramari Pranayama",
+      "englishName": "Humming Bee Breath",
+      "category": "Pranayama",
+      "type": "Sound Breathing",
+      "difficulty": "Beginner",
+      "duration": "5-10 minutes",
+      "doshaEffects": {
+        "vata": "Deeply Calming",
+        "pitta": "Cooling",
+        "kapha": "Mildly Stimulating"
+      },
+      "primaryBenefits": [
+        "Calms nervous system",
+        "Reduces stress and anxiety",
+        "Improves concentration",
+        "Enhances memory and focus"
+      ],
+      "contraindications": [
+        "Ear infections",
+        "Severe hearing problems",
+        "Recent ear surgery"
+      ],
+      "bestTimeToPerform": "Evening or before meditation",
+      "seasonalRecommendations": {
+        "spring": "Helps with seasonal allergies",
+        "summer": "Cooling and calming",
+        "autumn": "Soothes vata imbalance",
+        "winter": "Warming internal vibration"
+      },
+      "steps": [
+        "Sit comfortably with spine straight",
+        "Close eyes and take a few natural breaths",
+        "Place thumbs in ears to block external sound",
+        "Place index fingers above eyebrows",
+        "Place remaining fingers over closed eyelids gently",
+        "Inhale normally through nose",
+        "Exhale making a humming sound like a bee",
+        "Feel vibration in head and chest",
+        "Complete 5-10 rounds"
+      ],
+      "modifications": {
+        "vata": "Keep humming gentle and soothing",
+        "pitta": "Avoid forceful humming, keep cool",
+        "kapha": "Can increase intensity slightly for stimulation"
+      }
+    },
+    {
+      "id": "balasana",
+      "name": "Balasana",
+      "englishName": "Child's Pose",
+      "category": "Asana",
+      "type": "Restorative Pose",
+      "difficulty": "Beginner",
+      "duration": "2-5 minutes",
+      "doshaEffects": {
+        "vata": "Deeply Grounding",
+        "pitta": "Cooling",
+        "kapha": "Neutral"
+      },
+      "primaryBenefits": [
+        "Calms nervous system",
+        "Relieves back tension",
+        "Promotes introspection",
+        "Grounds scattered energy"
+      ],
+      "contraindications": [
+        "Knee injuries",
+        "Pregnancy (modify with wide knees)",
+        "Recent abdominal surgery"
+      ],
+      "bestTimeToPerform": "End of practice or when needing rest",
+      "seasonalRecommendations": {
+        "spring": "Grounding after active poses",
+        "summer": "Cooling and restorative",
+        "autumn": "Essential for vata season",
+        "winter": "Introspective and warming"
+      },
+      "steps": [
+        "Kneel on floor with big toes touching",
+        "Separate knees about hip-width apart",
+        "Sit back toward heels",
+        "Fold forward, extending arms in front",
+        "Rest forehead on mat or block",
+        "Breathe deeply and surrender",
+        "Hold for desired duration"
+      ],
+      "modifications": {
+        "vata": "Use props for comfort, stay longer",
+        "pitta": "Avoid overheating, use cooling props",
+        "kapha": "Don't stay too long, use as brief rest"
+      }
+    },
+    {
+      "id": "ujjayi-pranayama",
+      "name": "Ujjayi Pranayama",
+      "englishName": "Victorious Breath",
+      "category": "Pranayama",
+      "type": "Breathing Technique",
+      "difficulty": "Intermediate",
+      "duration": "5-20 minutes",
+      "doshaEffects": {
+        "vata": "Warming and Grounding",
+        "pitta": "Mildly Heating",
+        "kapha": "Warming and Stimulating"
+      },
+      "primaryBenefits": [
+        "Increases internal heat",
+        "Improves concentration",
+        "Calms mind while energizing body",
+        "Enhances oxygen absorption"
+      ],
+      "contraindications": [
+        "High blood pressure",
+        "Heart conditions",
+        "Pregnancy (use gentle version)"
+      ],
+      "bestTimeToPerform": "During asana practice or separately",
+      "seasonalRecommendations": {
+        "spring": "Builds internal fire",
+        "summer": "Practice gently to avoid overheating",
+        "autumn": "Warming for vata season",
+        "winter": "Excellent for building internal heat"
+      },
+      "steps": [
+        "Sit with spine erect or lie down comfortably",
+        "Breathe naturally through nose for a few rounds",
+        "Begin to slightly constrict throat on inhale",
+        "Create soft ocean-like sound on both inhale and exhale",
+        "Keep mouth closed, breathe only through nose",
+        "Maintain smooth, even rhythm",
+        "Continue for desired duration"
+      ],
+      "modifications": {
+        "vata": "Keep breath gentle, avoid strain",
+        "pitta": "Practice in cool environment, don't overheat",
+        "kapha": "Can be more vigorous to increase heat"
+      }
+    },
+    {
+      "id": "paschimottanasana",
+      "name": "Paschimottanasana",
+      "englishName": "Seated Forward Bend",
+      "category": "Asana",
+      "type": "Forward Fold",
+      "difficulty": "Intermediate",
+      "duration": "1-5 minutes",
+      "doshaEffects": {
+        "vata": "Calming when done gently",
+        "pitta": "Cooling",
+        "kapha": "Stimulating when held actively"
+      },
+      "primaryBenefits": [
+        "Stretches entire back body",
+        "Calms nervous system",
+        "Improves digestion",
+        "Introspective and meditative"
+      ],
+      "contraindications": [
+        "Lower back injury",
+        "Recent abdominal surgery",
+        "Severe sciatica"
+      ],
+      "bestTimeToPerform": "Evening or after warming up",
+      "seasonalRecommendations": {
+        "spring": "Gentle approach for liver detox",
+        "summer": "Cooling and calming",
+        "autumn": "Soothing for vata",
+        "winter": "Introspective practice"
+      },
+      "steps": [
+        "Sit with legs extended straight in front",
+        "Ground through sitting bones",
+        "Inhale, lengthen spine and lift chest",
+        "Exhale, hinge forward from hips",
+        "Keep spine long, avoid rounding",
+        "Reach for feet, shins, or use strap",
+        "Breathe deeply and surrender forward",
+        "Hold with awareness and compassion"
+      ],
+      "modifications": {
+        "vata": "Use props, bend knees if needed, go slowly",
+        "pitta": "Avoid forcing, stay cool and patient",
+        "kapha": "Can work more actively, build heat"
+      }
+    },
+    {
+      "id": "meditation-trataka",
+      "name": "Trataka Meditation",
+      "englishName": "Candle Gazing Meditation",
+      "category": "Meditation",
+      "type": "Concentration Practice",
+      "difficulty": "Intermediate",
+      "duration": "10-30 minutes",
+      "doshaEffects": {
+        "vata": "Focusing and Grounding",
+        "pitta": "Neutral (avoid if eye strain)",
+        "kapha": "Stimulating and Clarifying"
+      },
+      "primaryBenefits": [
+        "Improves concentration",
+        "Strengthens eyesight",
+        "Calms mind fluctuations",
+        "Develops inner focus"
+      ],
+      "contraindications": [
+        "Eye infections or inflammation",
+        "Severe vision problems",
+        "Migraine during active episode"
+      ],
+      "bestTimeToPerform": "Evening in dim lighting",
+      "seasonalRecommendations": {
+        "spring": "Clears mental fog",
+        "summer": "Practice in cooler hours",
+        "autumn": "Develops steady focus",
+        "winter": "Warming inner light practice"
+      },
+      "steps": [
+        "Sit comfortably 3-4 feet from candle flame",
+        "Light candle and dim other lights",
+        "Gaze steadily at flame without blinking",
+        "Keep eyes relaxed, don't strain",
+        "When eyes water, close them gently",
+        "Visualize flame in space between eyebrows",
+        "Open eyes and gaze again",
+        "Alternate between external and internal gazing"
+      ],
+      "modifications": {
+        "vata": "Start with shorter sessions, use stable setup",
+        "pitta": "Avoid if eyes are irritated, keep cool",
+        "kapha": "Can practice longer sessions for mental clarity"
+      }
+    },
+    {
+      "id": "marjaryasana-bitilasana",
+      "name": "Marjaryasana-Bitilasana",
+      "englishName": "Cat-Cow Pose",
+      "category": "Asana",
+      "type": "Warm-up Movement",
+      "difficulty": "Beginner",
+      "duration": "2-5 minutes",
+      "doshaEffects": {
+        "vata": "Mobilizing and Warming",
+        "pitta": "Neutral",
+        "kapha": "Energizing"
+      },
+      "primaryBenefits": [
+        "Mobilizes spine",
+        "Improves posture",
+        "Massages internal organs",
+        "Coordinates breath and movement"
+      ],
+      "contraindications": [
+        "Severe neck injury",
+        "Recent spinal surgery",
+        "Severe wrist problems"
+      ],
+      "bestTimeToPerform": "Beginning of practice as warm-up",
+      "seasonalRecommendations": {
+        "spring": "Energizing wake-up movement",
+        "summer": "Gentle mobility practice",
+        "autumn": "Warming and grounding",
+        "winter": "Generates internal heat"
+      },
+      "steps": [
+        "Come to hands and knees (tabletop position)",
+        "Align wrists under shoulders, knees under hips",
+        "Inhale, drop belly, lift chest and tailbone (Cow)",
+        "Exhale, round spine, tuck chin to chest (Cat)",
+        "Move slowly with breath awareness",
+        "Continue flowing between poses",
+        "Complete 5-10 rounds"
+      ],
+      "modifications": {
+        "vata": "Move slowly, avoid jerky movements",
+        "pitta": "Keep movements smooth and controlled",
+        "kapha": "Can increase pace for more energy"
+      }
+    },
+    {
+      "id": "savasana",
+      "name": "Savasana",
+      "englishName": "Corpse Pose",
+      "category": "Asana",
+      "type": "Relaxation Pose",
+      "difficulty": "Beginner",
+      "duration": "5-20 minutes",
+      "doshaEffects": {
+        "vata": "Deeply Grounding",
+        "pitta": "Cooling and Calming",
+        "kapha": "Can be sedating if too long"
+      },
+      "primaryBenefits": [
+        "Complete physical relaxation",
+        "Calms nervous system",
+        "Integrates practice benefits",
+        "Reduces stress and fatigue"
+      ],
+      "contraindications": [
+        "Severe lower back pain (use props)",
+        "Pregnancy after 20 weeks (side-lying)",
+        "Sleep disorders (practice earlier in day)"
+      ],
+      "bestTimeToPerform": "End of every practice",
+      "seasonalRecommendations": {
+        "spring": "Grounding after active practice",
+        "summer": "Essential cooling practice",
+        "autumn": "Deeply grounding for vata",
+        "winter": "Restorative and warming with blankets"
+      },
+      "steps": [
+        "Lie on back with legs slightly apart",
+        "Allow feet to fall open naturally",
+        "Place arms alongside body, palms up",
+        "Close eyes and release all effort",
+        "Systematically relax each body part",
+        "Allow breath to flow naturally",
+        "Rest in complete stillness",
+        "Exit slowly by wiggling fingers and toes"
+      ],
+      "modifications": {
+        "vata": "Use props for comfort, stay warm",
+        "pitta": "Keep cool, avoid overheating",
+        "kapha": "Don't stay too long, set timer"
+      }
+    }
+  ],
+  "categories": {
+    "Asana": {
+      "description": "Physical postures that prepare the body and mind for meditation",
+      "subcategories": ["Standing Poses", "Seated Poses", "Backbends", "Forward Folds", "Twists", "Inversions", "Arm Balances", "Restorative"]
+    },
+    "Pranayama": {
+      "description": "Breathing practices that control and expand life force energy",
+      "subcategories": ["Basic Breathing", "Heating Practices", "Cooling Practices", "Balancing Techniques", "Advanced Practices"]
+    },
+    "Meditation": {
+      "description": "Mental practices for developing awareness and inner peace",
+      "subcategories": ["Concentration", "Mindfulness", "Mantra", "Visualization", "Walking Meditation"]
+    },
+    "Lifestyle": {
+      "description": "Daily practices supporting overall well-being",
+      "subcategories": ["Morning Routines", "Evening Practices", "Seasonal Adjustments", "Detox Practices"]
+    }
+  },
+  "doshaGuidelines": {
+    "vata": {
+      "generalApproach": "Grounding, warming, and stabilizing practices",
+      "idealTiming": "Regular schedule, preferably morning and evening",
+      "seasonalFocus": "Extra attention during autumn and early winter",
+      "avoidances": "Excessive jumping, overstimulation, irregular practice"
+    },
+    "pitta": {
+      "generalApproach": "Cooling, calming, and moderating practices", 
+      "idealTiming": "Early morning or evening, avoid midday heat",
+      "seasonalFocus": "Cooling practices during summer and late spring",
+      "avoidances": "Overheating, competitive attitude, excessive effort"
+    },
+    "kapha": {
+      "generalApproach": "Energizing, warming, and stimulating practices",
+      "idealTiming": "Early morning practice ideal, avoid evening sluggishness",
+      "seasonalFocus": "Invigorating practices during spring and late winter",
+      "avoidances": "Excessive sedentary poses, overly long relaxation"
+    }
+  }
+}

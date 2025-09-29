@@ -89,6 +89,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       current: pathname.startsWith("/foods")
     },
     {
+      name: "Exercises",
+      href: "/exercises",
+      icon: Activity,
+      current: pathname.startsWith("/exercises")
+    },
+    {
       name: "Analytics",
       href: "/reports",
       icon: BarChart3,

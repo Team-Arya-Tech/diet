@@ -6,6 +6,23 @@ import type { EnhancedPatient } from './enhanced-patient-management'
 import type { Recipe, MealPlan } from './recipe-intelligence'
 // Remove unused import for now
 
+// Utility function to load image as base64
+const loadImageAsBase64 = async (imagePath: string): Promise<string | null> => {
+  try {
+    const response = await fetch(imagePath)
+    const blob = await response.blob()
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = () => resolve(null)
+      reader.readAsDataURL(blob)
+    })
+  } catch (error) {
+    console.warn('Failed to load image:', imagePath, error)
+    return null
+  }
+}
+
 // Extend jsPDF interface to include autoTable
 declare module 'jspdf' {
   interface jsPDF {
@@ -104,20 +121,52 @@ export class DietChartPDFExporter {
     this.doc.autoTable = (options: any) => autoTable(this.doc, options)
   }
 
-  private addBrandedHeader(title: string, subtitle?: string, consultationDate?: Date): void {
-    // Branded header background
-    this.doc.setFillColor(this.branding.primaryColor)
-    this.doc.rect(0, 0, this.pageWidth, 35, 'F')
+  private async addBrandedHeader(title: string, subtitle?: string, consultationDate?: Date): Promise<void> {
+    // Try to load and add main page background image
+    const bgImage = await loadImageAsBase64('/main_bg.png')
+    if (bgImage) {
+      try {
+        this.doc.addImage(bgImage, 'PNG', 0, 0, this.pageWidth, 60, '', 'NONE')
+      } catch (error) {
+        // Fallback to beige background
+        this.doc.setFillColor(245, 245, 220)
+        this.doc.rect(0, 0, this.pageWidth, 60, 'F')
+      }
+    } else {
+      // Fallback background
+      this.doc.setFillColor(245, 245, 220)
+      this.doc.rect(0, 0, this.pageWidth, 60, 'F')
+    }
     
-    // Company logo placeholder
-    this.doc.setFillColor(255, 255, 255)
-    this.doc.rect(this.margin, 8, 35, 20, 'F')
+    // Try to load and add banner image
+    const bannerImage = await loadImageAsBase64('/banner_canva.png')
+    if (bannerImage) {
+      try {
+        this.doc.addImage(bannerImage, 'PNG', 0, 0, this.pageWidth, 35, '', 'NONE')
+      } catch (error) {
+        // Fallback to branded header
+        this.doc.setFillColor(this.branding.primaryColor)
+        this.doc.rect(0, 0, this.pageWidth, 35, 'F')
+      }
+    } else {
+      // Fallback branded header
+      this.doc.setFillColor(this.branding.primaryColor)
+      this.doc.rect(0, 0, this.pageWidth, 35, 'F')
+    }
     
-    // Company name in logo area
+    // AhaarWISE logo placeholder (overlay on banner)
+    this.doc.setFillColor(218, 165, 32) // Goldenrod
+    this.doc.circle(this.margin + 15, 18, 10, 'F')
     this.doc.setTextColor(this.branding.primaryColor)
-    this.doc.setFontSize(12)
+    this.doc.setFontSize(10)
     this.doc.setFont('helvetica', 'bold')
-    this.doc.text(this.branding.companyName, this.margin + 2, 18)
+    this.doc.text('A', this.margin + 12, 21)
+    
+    // AhaarWISE company name
+    this.doc.setTextColor(255, 255, 255)
+    this.doc.setFontSize(20)
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text(this.branding.companyName, this.margin + 35, 18)
     
     // Main title
     this.doc.setTextColor(255, 255, 255)
@@ -142,7 +191,7 @@ export class DietChartPDFExporter {
     this.doc.setFontSize(8)
     this.doc.text(this.branding.tagline, this.pageWidth - this.margin - 70, 25)
     
-    this.currentY = 45
+    this.currentY = 55
   }
 
   private addFooter(pageNumber: number, totalPages: number): void {
@@ -168,8 +217,8 @@ export class DietChartPDFExporter {
   }
 
   // Original header method for backward compatibility
-  private addHeader(consultationDate: Date, clinicInfo?: DietChartPDFData['clinicInfo']): void {
-    this.addBrandedHeader('Ayurvedic Diet Chart', undefined, consultationDate)
+  private async addHeader(consultationDate: Date, clinicInfo?: DietChartPDFData['clinicInfo']): Promise<void> {
+    await this.addBrandedHeader('Ayurvedic Diet Chart', undefined, consultationDate)
     // Original header background logic preserved
     this.doc.setFillColor(245, 247, 250)
     this.doc.rect(0, 0, this.pageWidth, this.headerHeight, 'F')
@@ -644,7 +693,7 @@ export class DietChartPDFExporter {
   ): Promise<void> {
     try {
       // Add header
-      this.addHeader(data.consultationDate, data.clinicInfo)
+      await this.addHeader(data.consultationDate, data.clinicInfo)
 
       // Add patient information
       this.addPatientInformation(data.patient)
@@ -813,12 +862,40 @@ export class AnalyticsPDFExporter {
     this.doc.autoTable = (options: any) => autoTable(this.doc, options)
   }
 
-  private addBrandedHeader(title: string, subtitle?: string, date?: Date): void {
-    // Header background
-    this.doc.setFillColor(this.branding.primaryColor)
-    this.doc.rect(0, 0, this.pageWidth, 35, 'F')
+  private async addBrandedHeader(title: string, subtitle?: string, date?: Date): Promise<void> {
+    // Try to load and add main page background image
+    const bgImage = await loadImageAsBase64('/main_bg.png')
+    if (bgImage) {
+      try {
+        this.doc.addImage(bgImage, 'PNG', 0, 0, this.pageWidth, 50, '', 'NONE')
+      } catch (error) {
+        // Fallback to color background
+        this.doc.setFillColor(245, 245, 220)
+        this.doc.rect(0, 0, this.pageWidth, 50, 'F')
+      }
+    } else {
+      // Fallback background
+      this.doc.setFillColor(245, 245, 220)
+      this.doc.rect(0, 0, this.pageWidth, 50, 'F')
+    }
     
-    // Company logo area
+    // Try to load and add banner image
+    const bannerImage = await loadImageAsBase64('/banner_canva.png')
+    if (bannerImage) {
+      try {
+        this.doc.addImage(bannerImage, 'PNG', 0, 0, this.pageWidth, 35, '', 'NONE')
+      } catch (error) {
+        // Fallback to branded header
+        this.doc.setFillColor(this.branding.primaryColor)
+        this.doc.rect(0, 0, this.pageWidth, 35, 'F')
+      }
+    } else {
+      // Fallback header background
+      this.doc.setFillColor(this.branding.primaryColor)
+      this.doc.rect(0, 0, this.pageWidth, 35, 'F')
+    }
+    
+    // Company logo area (overlay)
     this.doc.setFillColor(255, 255, 255)
     this.doc.rect(this.margin, 8, 35, 20, 'F')
     this.doc.setTextColor(this.branding.primaryColor)
@@ -900,7 +977,7 @@ export class AnalyticsPDFExporter {
       language: 'en'
     }
   ): Promise<void> {
-    this.addBrandedHeader(
+    await this.addBrandedHeader(
       'Patient Progress Analytics',
       `Comprehensive Health Analysis for ${patient.name}`,
       new Date()
@@ -972,7 +1049,7 @@ export class AnalyticsPDFExporter {
 
   // Population Health Analytics Report
   async exportPopulationHealthAnalytics(metrics: any, dateRange: { start: Date; end: Date }): Promise<void> {
-    this.addBrandedHeader(
+    await this.addBrandedHeader(
       'Population Health Analytics',
       'Healthcare Insights & Trends Analysis',
       new Date()
@@ -1028,7 +1105,7 @@ export class AnalyticsPDFExporter {
 
   // Meal Plan Analytics Report
   async exportMealPlanAnalytics(mealPlan: any, patient: EnhancedPatient, nutritionalAnalysis: any): Promise<void> {
-    this.addBrandedHeader(
+    await this.addBrandedHeader(
       'Personalized Meal Plan Report',
       `Ayurvedic Nutrition Guide for ${patient.name}`,
       new Date()
@@ -1181,7 +1258,7 @@ export class WeeklyDietChartPDFExporter {
 
   async exportWeeklyDietChart(chartData: WeeklyDietChartData): Promise<void> {
     // Page 1: Header and Patient Info
-    this.addBrandedHeader()
+    await this.addBrandedHeader()
     this.addPatientSummary(chartData.patient)
     
     // Page 2: Weekly Meal Plan
@@ -1206,16 +1283,46 @@ export class WeeklyDietChartPDFExporter {
     this.doc.save(fileName)
   }
 
-  private addBrandedHeader(): void {
-    // AhaarWISE Header with gradient background
-    this.doc.setFillColor(247, 146, 86) // Orange gradient start
-    this.doc.rect(0, 0, this.pageWidth, 40, 'F')
+  private async addBrandedHeader(): Promise<void> {
+    // Try to load and add main page background image
+    const bgImage = await loadImageAsBase64('/main_bg.png')
+    if (bgImage) {
+      try {
+        this.doc.addImage(bgImage, 'PNG', 0, 0, this.pageWidth, 55, '', 'NONE')
+      } catch (error) {
+        // Fallback to beige background
+        this.doc.setFillColor(245, 245, 220)
+        this.doc.rect(0, 0, this.pageWidth, 55, 'F')
+      }
+    } else {
+      // Fallback background
+      this.doc.setFillColor(245, 245, 220)
+      this.doc.rect(0, 0, this.pageWidth, 55, 'F')
+    }
     
-    // Logo area (placeholder)
-    this.doc.setFillColor(255, 255, 255)
-    this.doc.rect(this.margin, 8, 40, 25, 'F')
-    this.doc.setFillColor(247, 146, 86)
-    this.doc.circle(this.margin + 20, 20, 8, 'F')
+    // Try to load and add banner image
+    const bannerImage = await loadImageAsBase64('/banner_canva.png')
+    if (bannerImage) {
+      try {
+        this.doc.addImage(bannerImage, 'PNG', 0, 0, this.pageWidth, 40, '', 'NONE')
+      } catch (error) {
+        // Fallback to orange header
+        this.doc.setFillColor(247, 146, 86)
+        this.doc.rect(0, 0, this.pageWidth, 40, 'F')
+      }
+    } else {
+      // Fallback header
+      this.doc.setFillColor(247, 146, 86)
+      this.doc.rect(0, 0, this.pageWidth, 40, 'F')
+    }
+    
+    // AhaarWISE logo area (placeholder overlay)
+    this.doc.setFillColor(218, 165, 32) // Goldenrod
+    this.doc.circle(this.margin + 20, 20, 10, 'F')
+    this.doc.setTextColor(247, 146, 86)
+    this.doc.setFontSize(12)
+    this.doc.setFont('helvetica', 'bold')
+    this.doc.text('A', this.margin + 17, 24)
     
     // AhaarWISE branding
     this.doc.setTextColor(255, 255, 255)
@@ -1729,17 +1836,29 @@ export async function exportSimpleWeeklyDietChartPDF(
   const doc = new jsPDF('p', 'mm', 'a4')
   let currentY = 20
 
+  // Main page background effect
+  doc.setFillColor(245, 245, 220) // Beige background similar to main page
+  doc.rect(0, 0, 210, 55, 'F')
+  
   // Header
   doc.setFillColor(247, 146, 86) // Orange
   doc.rect(0, 0, 210, 40, 'F')
   
+  // AhaarWISE logo
+  doc.setFillColor(218, 165, 32) // Goldenrod
+  doc.circle(35, 20, 8, 'F')
+  doc.setTextColor(247, 146, 86)
+  doc.setFontSize(10)
+  doc.setFont('helvetica', 'bold')
+  doc.text('A', 32, 24)
+  
   doc.setTextColor(255, 255, 255)
   doc.setFontSize(24)
   doc.setFont('helvetica', 'bold')
-  doc.text('AhaarWISE', 20, 25)
+  doc.text('AhaarWISE', 50, 25)
   
   doc.setFontSize(12)
-  doc.text('Intelligent Ayurvedic Nutrition Management', 20, 32)
+  doc.text('Intelligent Ayurvedic Nutrition Management', 50, 32)
   
   // Document title
   doc.setTextColor(0, 0, 0)
