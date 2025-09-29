@@ -151,13 +151,17 @@ export default function DashboardPage() {
             {/* Content */}
             <div className="relative z-10 flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
               <div 
-                className="p-3 rounded-xl w-fit border-2"
+                className="flex h-14 w-14 items-center justify-center rounded-full border-2 shadow-sm"
                 style={{
                   backgroundColor: '#F0E6D2',
                   borderColor: '#D4C4A8'
                 }}
               >
-                <Heart className="h-6 w-6 text-amber-900" />
+                <img
+                  src="/logo_ahaarwise.png"
+                  alt="AhaarWISE logo"
+                  className="h-9 w-9 object-contain"
+                />
               </div>
               <div className="flex-1">
                 <h1 className="text-xl sm:text-2xl font-bold text-amber-900">
@@ -270,82 +274,7 @@ export default function DashboardPage() {
 
           {/* Ayurvedic Principles, Exercises & System Status */}
           <div className="space-y-6">
-            {/* Quick Exercises */}
-            <Card className="bg-white">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Activity className="h-5 w-5" />
-                  <span>{language === "hi" ? "दैनिक अभ्यास" : "Daily Practices"}</span>
-                </CardTitle>
-                <CardDescription>
-                  {language === "hi" ? "आज के लिए अनुशंसित आयुर्वेदिक व्यायाम" : "Recommended Ayurvedic exercises for today"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="relative overflow-hidden bg-blue-50 rounded-lg border border-blue-200">
-                    {/* Nadi Shodhana Background Image */}
-                    <div className="absolute inset-0 opacity-20">
-                      <img 
-                        src="/nadi.jpeg" 
-                        alt="Nadi Shodhana Pranayama" 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="relative p-3 bg-gradient-to-r from-blue-50/90 to-blue-50/70 backdrop-blur-[1px]">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium text-blue-800">Morning Pranayama</p>
-                          <p className="text-xs text-blue-600">5-10 minutes</p>
-                        </div>
-                        <Button size="sm" variant="outline" asChild>
-                          <Link href="/exercises/pranayama-nadi-shodhana">Try Now</Link>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="relative overflow-hidden bg-green-50 rounded-lg border border-green-200">
-                    {/* Surya Namaskar Background Image */}
-                    <div className="absolute inset-0 opacity-20">
-                      <img 
-                        src="/surya-namaskar.jpeg" 
-                        alt="Surya Namaskar" 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="relative p-3 bg-gradient-to-r from-green-50/90 to-green-50/70 backdrop-blur-[1px]">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium text-green-800">Sun Salutation</p>
-                          <p className="text-xs text-green-600">10-15 minutes</p>
-                        </div>
-                        <Button size="sm" variant="outline" asChild>
-                          <Link href="/exercises/surya-namaskara">Practice</Link>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-purple-800">Evening Meditation</p>
-                        <p className="text-xs text-purple-600">10-20 minutes</p>
-                      </div>
-                      <Button size="sm" variant="outline" asChild>
-                        <Link href="/exercises/meditation-trataka">Start</Link>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-4 pt-3 border-t">
-                  <Link href="/exercises">
-                    <Button variant="outline" className="w-full">
-                      Explore All Exercises
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
+
             {/* Ayurvedic Principles */}
             <Card 
               className="overflow-hidden border-2 border-amber-900/60 shadow-md"

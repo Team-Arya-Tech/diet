@@ -143,8 +143,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Logo */}
           <div className="flex items-center justify-between h-16 px-6 bg-black/30">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-                <Activity className="h-6 w-6 text-white" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg shadow-black/20 ring-1 ring-white/60">
+                <img 
+                  src="/logo_ahaarwise.png" 
+                  alt="AhaarWISE Logo" 
+                  className="h-7 w-7 object-contain" 
+                />
               </div>
               <div>
                 <h1 className="text-white font-bold text-lg">AhaarWISE</h1>
