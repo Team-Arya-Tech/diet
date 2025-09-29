@@ -154,22 +154,38 @@ export class DietChartPDFExporter {
       this.doc.rect(0, 0, this.pageWidth, 35, 'F')
     }
     
-    // AhaarWISE logo placeholder (overlay on banner)
-    this.doc.setFillColor(218, 165, 32) // Goldenrod
-    this.doc.circle(this.margin + 15, 18, 10, 'F')
-    this.doc.setTextColor(this.branding.primaryColor)
-    this.doc.setFontSize(10)
-    this.doc.setFont('helvetica', 'bold')
-    this.doc.text('A', this.margin + 12, 21)
+    // AhaarWISE logo
+    const logoImage = await loadImageAsBase64('/logo_ahaarwise.png')
+    if (logoImage) {
+      try {
+        this.doc.addImage(logoImage, 'PNG', this.margin + 5, 8, 20, 20, '', 'NONE')
+      } catch (error) {
+        // Fallback to placeholder circle
+        this.doc.setFillColor(218, 165, 32) // Goldenrod
+        this.doc.circle(this.margin + 15, 18, 10, 'F')
+        this.doc.setTextColor(247, 115, 22) // Orange-500
+        this.doc.setFontSize(10)
+        this.doc.setFont('helvetica', 'bold')
+        this.doc.text('A', this.margin + 12, 21)
+      }
+    } else {
+      // Fallback to placeholder circle
+      this.doc.setFillColor(218, 165, 32) // Goldenrod
+      this.doc.circle(this.margin + 15, 18, 10, 'F')
+      this.doc.setTextColor(247, 115, 22) // Orange-500
+      this.doc.setFontSize(10)
+      this.doc.setFont('helvetica', 'bold')
+      this.doc.text('A', this.margin + 12, 21)
+    }
     
-    // AhaarWISE company name
-    this.doc.setTextColor(255, 255, 255)
+    // AhaarWISE company name (positioned after logo)
+    this.doc.setTextColor(0, 0, 0) // Black text for visibility
     this.doc.setFontSize(20)
     this.doc.setFont('helvetica', 'bold')
-    this.doc.text(this.branding.companyName, this.margin + 35, 18)
+    this.doc.text(this.branding.companyName, this.margin + 30, 18)
     
     // Main title
-    this.doc.setTextColor(255, 255, 255)
+    this.doc.setTextColor(0, 0, 0) // Black text for visibility
     this.doc.setFontSize(18)
     this.doc.setFont('helvetica', 'bold')
     this.doc.text(title, this.margin + 45, 18)
@@ -204,7 +220,7 @@ export class DietChartPDFExporter {
     
     // Contact info
     this.doc.setFontSize(8)
-    this.doc.setTextColor(100, 100, 100)
+    this.doc.setTextColor(75, 85, 99) // Gray-600
     this.doc.text(`${this.branding.website} | ${this.branding.contactInfo.email} | ${this.branding.contactInfo.phone}`, this.margin, footerY)
     
     // Page number
@@ -272,7 +288,7 @@ export class DietChartPDFExporter {
     // Footer content
     this.doc.setFontSize(8)
     this.doc.setFont('helvetica', 'normal')
-    this.doc.setTextColor(100, 100, 100)
+    this.doc.setTextColor(75, 85, 99) // Gray-600
     
     this.doc.text('This diet chart is prepared based on Ayurvedic principles. Please consult your healthcare provider before making significant dietary changes.', 
       this.pageWidth / 2, footerY + 8, { align: 'center' })
@@ -307,6 +323,7 @@ export class DietChartPDFExporter {
       styles: {
         fontSize: 10,
         cellPadding: 3,
+        textColor: [0, 0, 0],
       },
       columnStyles: {
         0: { fontStyle: 'bold', cellWidth: 25 },
@@ -692,6 +709,9 @@ export class DietChartPDFExporter {
     }
   ): Promise<void> {
     try {
+      // Ensure all text starts with black color
+      this.doc.setTextColor(0, 0, 0)
+      
       // Add header
       await this.addHeader(data.consultationDate, data.clinicInfo)
 
@@ -896,12 +916,28 @@ export class AnalyticsPDFExporter {
     }
     
     // Company logo area (overlay)
-    this.doc.setFillColor(255, 255, 255)
-    this.doc.rect(this.margin, 8, 35, 20, 'F')
-    this.doc.setTextColor(this.branding.primaryColor)
-    this.doc.setFontSize(12)
-    this.doc.setFont('helvetica', 'bold')
-    this.doc.text(this.branding.companyName, this.margin + 2, 18)
+    const logoImage = await loadImageAsBase64('/logo_ahaarwise.png')
+    if (logoImage) {
+      try {
+        this.doc.addImage(logoImage, 'PNG', this.margin, 8, 35, 20, '', 'NONE')
+      } catch (error) {
+        // Fallback to text logo
+        this.doc.setFillColor(255, 255, 255)
+        this.doc.rect(this.margin, 8, 35, 20, 'F')
+        this.doc.setTextColor(247, 115, 22) // Orange-500
+        this.doc.setFontSize(12)
+        this.doc.setFont('helvetica', 'bold')
+        this.doc.text(this.branding.companyName, this.margin + 2, 18)
+      }
+    } else {
+      // Fallback to text logo
+      this.doc.setFillColor(255, 255, 255)
+      this.doc.rect(this.margin, 8, 35, 20, 'F')
+      this.doc.setTextColor(247, 115, 22) // Orange-500
+      this.doc.setFontSize(12)
+      this.doc.setFont('helvetica', 'bold')
+      this.doc.text(this.branding.companyName, this.margin + 2, 18)
+    }
     
     // Title
     this.doc.setTextColor(255, 255, 255)
@@ -933,7 +969,7 @@ export class AnalyticsPDFExporter {
     this.doc.line(this.margin, footerY - 5, this.pageWidth - this.margin, footerY - 5)
     
     this.doc.setFontSize(8)
-    this.doc.setTextColor(100, 100, 100)
+    this.doc.setTextColor(75, 85, 99) // Gray-600
     this.doc.text(`${this.branding.website} | ${this.branding.contactInfo.email}`, this.margin, footerY)
     this.doc.text(`Page ${pageNumber}`, this.pageWidth - this.margin - 20, footerY)
   }
@@ -1254,6 +1290,8 @@ export class WeeklyDietChartPDFExporter {
     this.branding = branding
     // Ensure autoTable is available
     this.doc.autoTable = (options: any) => autoTable(this.doc, options)
+    // Set default text color to black
+    this.doc.setTextColor(0, 0, 0)
   }
 
   async exportWeeklyDietChart(chartData: WeeklyDietChartData): Promise<void> {
@@ -1324,15 +1362,15 @@ export class WeeklyDietChartPDFExporter {
     this.doc.setFont('helvetica', 'bold')
     this.doc.text('A', this.margin + 17, 24)
     
-    // AhaarWISE branding
-    this.doc.setTextColor(255, 255, 255)
+    // AhaarWISE branding (positioned after logo)
+    this.doc.setTextColor(0, 0, 0) // Black text for visibility
     this.doc.setFontSize(24)
     this.doc.setFont('helvetica', 'bold')
-    this.doc.text('AhaarWISE', this.margin + 50, 20)
+    this.doc.text('AhaarWISE', this.margin + 35, 20)
     
     this.doc.setFontSize(12)
     this.doc.setFont('helvetica', 'normal')
-    this.doc.text('Intelligent Ayurvedic Nutrition Management', this.margin + 50, 28)
+    this.doc.text('Intelligent Ayurvedic Nutrition Management', this.margin + 35, 28)
     
     // Document title
     this.doc.setFontSize(16)
@@ -1836,6 +1874,9 @@ export async function exportSimpleWeeklyDietChartPDF(
   const doc = new jsPDF('p', 'mm', 'a4')
   let currentY = 20
 
+  // Ensure all text starts with black color
+  doc.setTextColor(0, 0, 0)
+  
   // Main page background effect
   doc.setFillColor(245, 245, 220) // Beige background similar to main page
   doc.rect(0, 0, 210, 55, 'F')
@@ -1845,14 +1886,30 @@ export async function exportSimpleWeeklyDietChartPDF(
   doc.rect(0, 0, 210, 40, 'F')
   
   // AhaarWISE logo
-  doc.setFillColor(218, 165, 32) // Goldenrod
-  doc.circle(35, 20, 8, 'F')
-  doc.setTextColor(247, 146, 86)
-  doc.setFontSize(10)
-  doc.setFont('helvetica', 'bold')
-  doc.text('A', 32, 24)
+  const logoImage = await loadImageAsBase64('/logo_ahaarwise.png')
+  if (logoImage) {
+    try {
+      doc.addImage(logoImage, 'PNG', 25, 10, 20, 20, '', 'NONE')
+    } catch (error) {
+      // Fallback to placeholder circle
+      doc.setFillColor(218, 165, 32) // Goldenrod
+      doc.circle(35, 20, 8, 'F')
+      doc.setTextColor(247, 115, 22) // Orange-500
+      doc.setFontSize(10)
+      doc.setFont('helvetica', 'bold')
+      doc.text('A', 32, 24)
+    }
+  } else {
+    // Fallback to placeholder circle
+    doc.setFillColor(218, 165, 32) // Goldenrod
+    doc.circle(35, 20, 8, 'F')
+    doc.setTextColor(247, 115, 22) // Orange-500
+    doc.setFontSize(10)
+    doc.setFont('helvetica', 'bold')
+    doc.text('A', 32, 24)
+  }
   
-  doc.setTextColor(255, 255, 255)
+  doc.setTextColor(0, 0, 0) // Black text for visibility
   doc.setFontSize(24)
   doc.setFont('helvetica', 'bold')
   doc.text('AhaarWISE', 50, 25)
