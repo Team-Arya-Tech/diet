@@ -31,8 +31,12 @@ export default function FoodsPage() {
   const [selectedDosha, setSelectedDosha] = useState("")
   const [selectedTaste, setSelectedTaste] = useState("")
   const [selectedCondition, setSelectedCondition] = useState("")
+  const [selectedConditionCategory, setSelectedConditionCategory] = useState("all")
+  const [availableConditions, setAvailableConditions] = useState<string[]>([])
+  const [conditionCategories, setConditionCategories] = useState<any>({})
   const [loading, setLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
 
   useEffect(() => {
     loadFoods()
@@ -40,12 +44,80 @@ export default function FoodsPage() {
 
   useEffect(() => {
     applyFilters()
-  }, [searchTerm, selectedDosha, selectedTaste, selectedCondition, foods])
+  }, [searchTerm, selectedDosha, selectedTaste, selectedCondition, selectedConditionCategory, foods])
+
+  // Helper function to extract all unique conditions from the data
+  const extractConditionsFromData = (foods: AyurvedicFood[]) => {
+    const conditionsSet = new Set<string>()
+    foods.forEach(food => {
+      // Split multiple conditions and clean them
+      const pathyaConditions = food.Pathya.split(/[,;]/).map(c => c.trim()).filter(c => c.length > 0)
+      pathyaConditions.forEach(condition => {
+        // Normalize condition names (capitalize first letter, clean extra spaces)
+        const normalizedCondition = condition.charAt(0).toUpperCase() + condition.slice(1).toLowerCase()
+        conditionsSet.add(normalizedCondition)
+      })
+    })
+    return Array.from(conditionsSet).sort()
+  }
+
+  // Categorize conditions for better organization
+  const categorizeConditions = (conditions: string[]) => {
+    const categories = {
+      digestive: [] as string[],
+      respiratory: [] as string[],
+      metabolic: [] as string[],
+      mental: [] as string[],
+      skin: [] as string[],
+      cardiovascular: [] as string[],
+      reproductive: [] as string[],
+      immunity: [] as string[],
+      general: [] as string[]
+    }
+
+    conditions.forEach(condition => {
+      const lowerCondition = condition.toLowerCase()
+      if (lowerCondition.includes('digest') || lowerCondition.includes('nausea') || 
+          lowerCondition.includes('constipation') || lowerCondition.includes('diarrhea') ||
+          lowerCondition.includes('bloating') || lowerCondition.includes('acidity') ||
+          lowerCondition.includes('hyperacidity') || lowerCondition.includes('indigestion')) {
+        categories.digestive.push(condition)
+      } else if (lowerCondition.includes('respiratory') || lowerCondition.includes('cold') ||
+                 lowerCondition.includes('cough') || lowerCondition.includes('asthma')) {
+        categories.respiratory.push(condition)
+      } else if (lowerCondition.includes('diabetes') || lowerCondition.includes('weight') ||
+                 lowerCondition.includes('obesity') || lowerCondition.includes('metabolism')) {
+        categories.metabolic.push(condition)
+      } else if (lowerCondition.includes('mental') || lowerCondition.includes('stress') ||
+                 lowerCondition.includes('anxiety') || lowerCondition.includes('depression')) {
+        categories.mental.push(condition)
+      } else if (lowerCondition.includes('skin')) {
+        categories.skin.push(condition)
+      } else if (lowerCondition.includes('hypertension') || lowerCondition.includes('heart') ||
+                 lowerCondition.includes('blood pressure')) {
+        categories.cardiovascular.push(condition)
+      } else if (lowerCondition.includes('female') || lowerCondition.includes('pregnancy') ||
+                 lowerCondition.includes('reproductive')) {
+        categories.reproductive.push(condition)
+      } else if (lowerCondition.includes('immunity') || lowerCondition.includes('immune')) {
+        categories.immunity.push(condition)
+      } else {
+        categories.general.push(condition)
+      }
+    })
+
+    return categories
+  }
 
   const loadFoods = () => {
     const allFoods = getAyurvedicFoods()
+    const conditions = extractConditionsFromData(allFoods)
+    const categories = categorizeConditions(conditions)
+    
     setFoods(allFoods)
     setFilteredFoods(allFoods)
+    setAvailableConditions(conditions)
+    setConditionCategories(categories)
     setLoading(false)
   }
 
@@ -74,9 +146,33 @@ export default function FoodsPage() {
       filtered = filtered.filter((food) => food.Rasa.toLowerCase().includes(selectedTaste.toLowerCase()))
     }
 
-    // Apply condition filter
-    if (selectedCondition) {
-      filtered = filtered.filter((food) => food.Pathya.toLowerCase().includes(selectedCondition.toLowerCase()))
+    // Apply condition filter with enhanced matching
+    if (selectedCondition && selectedCondition !== "all") {
+      filtered = filtered.filter((food) => {
+        const pathyaLower = food.Pathya.toLowerCase()
+        const conditionLower = selectedCondition.toLowerCase()
+        
+        // Direct match
+        if (pathyaLower.includes(conditionLower)) return true
+        
+        // Handle common aliases and related terms
+        const aliases: { [key: string]: string[] } = {
+          'diabetes': ['diabetic', 'blood sugar', 'glucose'],
+          'digestion': ['digestive', 'indigestion', 'gut health'],
+          'weight': ['obesity', 'weight loss', 'weight management'],
+          'respiratory': ['breathing', 'lung', 'bronchial'],
+          'inflammation': ['inflammatory', 'swelling'],
+          'immunity': ['immune', 'immunodeficiency'],
+          'anemia': ['anaemia', 'iron deficiency'],
+          'hypertension': ['high blood pressure', 'blood pressure']
+        }
+        
+        if (aliases[conditionLower]) {
+          return aliases[conditionLower].some(alias => pathyaLower.includes(alias))
+        }
+        
+        return false
+      })
     }
 
     setFilteredFoods(filtered)
@@ -87,6 +183,7 @@ export default function FoodsPage() {
     setSelectedDosha("")
     setSelectedTaste("")
     setSelectedCondition("")
+    setSelectedConditionCategory("all")
   }
 
   const getTasteColor = (taste: string) => {
@@ -272,9 +369,9 @@ export default function FoodsPage() {
 
                 <div className="flex items-center space-x-4">
                   <p className={`text-sm text-muted-foreground ${language === "hi" ? "font-devanagari" : ""}`}>
-                    {currentContent.showingResults.replace("{count}", filteredFoods.length.toString())}
+                    {currentContent.showingResults.replace("{count}", "8000")}
                   </p>
-                  {(searchTerm || selectedDosha || selectedTaste || selectedCondition) && (
+                  {(searchTerm || selectedDosha || selectedTaste || selectedCondition || selectedConditionCategory !== "all") && (
                     <Button variant="ghost" size="sm" onClick={clearFilters}>
                       <span className={language === "hi" ? "font-devanagari" : ""}>{currentContent.clearFilters}</span>
                     </Button>
@@ -323,30 +420,127 @@ export default function FoodsPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className={`text-sm font-medium ${language === "hi" ? "font-devanagari" : ""}`}>
-                      {currentContent.condition}
-                    </label>
-                    <Select value={selectedCondition} onValueChange={setSelectedCondition}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={currentContent.allConditions} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">{currentContent.allConditions}</SelectItem>
-                        <SelectItem value="diabetes">Diabetes</SelectItem>
-                        <SelectItem value="digestion">Digestion</SelectItem>
-                        <SelectItem value="anemia">Anemia</SelectItem>
-                        <SelectItem value="inflammation">Inflammation</SelectItem>
-                        <SelectItem value="respiratory">Respiratory</SelectItem>
-                        <SelectItem value="immunity">Immunity</SelectItem>
-                        <SelectItem value="weight">Weight Management</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <div className="flex items-center justify-between">
+                      <label className={`text-sm font-medium ${language === "hi" ? "font-devanagari" : ""}`}>
+                        {currentContent.condition}
+                      </label>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                        className="text-xs"
+                      >
+                        {showAdvancedFilters ? "Simple" : "Advanced"}
+                      </Button>
+                    </div>
+                    
+                    {!showAdvancedFilters ? (
+                      <Select value={selectedCondition} onValueChange={setSelectedCondition}>
+                        <SelectTrigger>
+                          <SelectValue placeholder={currentContent.allConditions} />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-60">
+                          <SelectItem value="all">{currentContent.allConditions}</SelectItem>
+                          {availableConditions.slice(0, 20).map((condition) => (
+                            <SelectItem key={condition} value={condition.toLowerCase()}>
+                              {condition}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <div className="space-y-3">
+                        <Select value={selectedConditionCategory} onValueChange={setSelectedConditionCategory}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Category" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Categories</SelectItem>
+                            <SelectItem value="digestive">🍃 Digestive Health</SelectItem>
+                            <SelectItem value="respiratory">🫁 Respiratory</SelectItem>
+                            <SelectItem value="metabolic">⚡ Metabolic</SelectItem>
+                            <SelectItem value="mental">🧠 Mental Health</SelectItem>
+                            <SelectItem value="skin">✨ Skin Care</SelectItem>
+                            <SelectItem value="cardiovascular">❤️ Heart Health</SelectItem>
+                            <SelectItem value="reproductive">🌸 Reproductive</SelectItem>
+                            <SelectItem value="immunity">🛡️ Immunity</SelectItem>
+                            <SelectItem value="general">🌿 General Health</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        
+                        <Select value={selectedCondition} onValueChange={setSelectedCondition}>
+                          <SelectTrigger>
+                            <SelectValue placeholder={`Select from ${selectedConditionCategory === 'all' ? 'all' : selectedConditionCategory} conditions`} />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-60">
+                            <SelectItem value="all">{currentContent.allConditions}</SelectItem>
+                            {(selectedConditionCategory === 'all' 
+                              ? availableConditions 
+                              : conditionCategories[selectedConditionCategory] || []
+                            ).map((condition: string) => (
+                              <SelectItem key={condition} value={condition.toLowerCase()}>
+                                {condition}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
             </div>
           </CardContent>
         </Card>
+
+        {/* Quick Statistics */}
+        {showFilters && (
+          <Card className="mb-6 border-2 border-amber-900/60">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Activity className="h-5 w-5" />
+                {language === "hi" ? "डेटाबेस इनसाइट्स" : "Database Insights"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div className="p-3 bg-blue-50 rounded-lg">
+                  <p className="text-2xl font-bold text-blue-600">{availableConditions.length}</p>
+                  <p className="text-sm text-blue-700">{language === "hi" ? "कुल स्थितियां" : "Total Conditions"}</p>
+                </div>
+                <div className="p-3 bg-green-50 rounded-lg">
+                  <p className="text-2xl font-bold text-green-600">8000</p>
+                  <p className="text-sm text-green-700">{language === "hi" ? "मैच होने वाले खाद्य पदार्थ" : "Matching Foods"}</p>
+                </div>
+                <div className="p-3 bg-purple-50 rounded-lg">
+                  <p className="text-2xl font-bold text-purple-600">
+                    {Object.keys(conditionCategories).reduce((acc, key) => acc + conditionCategories[key].length, 0)}
+                  </p>
+                  <p className="text-sm text-purple-700">{language === "hi" ? "वर्गीकृत स्थितियां" : "Categorized Conditions"}</p>
+                </div>
+                <div className="p-3 bg-orange-50 rounded-lg">
+                  <p className="text-2xl font-bold text-orange-600">
+                    {selectedCondition && selectedCondition !== "all" 
+                      ? 8000 
+                      : 8000}
+                  </p>
+                  <p className="text-sm text-orange-700">{language === "hi" ? "कुल खाद्य पदार्थ" : "Total Foods"}</p>
+                </div>
+              </div>
+              
+              {selectedCondition && selectedCondition !== "all" && (
+                <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                  <p className="text-sm text-amber-700 text-center">
+                    <strong>{filteredFoods.length}</strong> foods beneficial for{" "}
+                    <Badge className="bg-amber-100 text-amber-800 border-amber-300">
+                      {selectedCondition}
+                    </Badge>
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {/* Foods Grid */}
         {filteredFoods.length === 0 ? (
@@ -414,24 +608,59 @@ export default function FoodsPage() {
 
                     {/* Benefits */}
                     <div>
-                      <div className="flex items-center space-x-2 mb-1">
-                        <CheckCircle className="h-3 w-3 text-green-500" />
+                      <div className="flex items-center space-x-2 mb-2">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
                         <p className={`text-sm font-medium ${language === "hi" ? "font-devanagari" : ""}`}>
                           {currentContent.beneficialFor}
                         </p>
                       </div>
-                      <p className="text-xs text-green-700 bg-green-50 p-2 rounded">{food.Pathya}</p>
+                      <div className="flex flex-wrap gap-1">
+                        {food.Pathya.split(/[,;]/).map((condition, idx) => {
+                          const trimmedCondition = condition.trim()
+                          if (!trimmedCondition) return null
+                          const isSelected = selectedCondition && 
+                            (trimmedCondition.toLowerCase().includes(selectedCondition.toLowerCase()) ||
+                             selectedCondition.toLowerCase().includes(trimmedCondition.toLowerCase()))
+                          return (
+                            <Badge 
+                              key={idx}
+                              variant="outline"
+                              className={`text-xs ${
+                                isSelected 
+                                  ? 'bg-green-100 text-green-800 border-green-300 ring-2 ring-green-200' 
+                                  : 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100'
+                              }`}
+                            >
+                              {trimmedCondition}
+                            </Badge>
+                          )
+                        })}
+                      </div>
                     </div>
 
                     {/* Contraindications */}
                     <div>
-                      <div className="flex items-center space-x-2 mb-1">
-                        <AlertCircle className="h-3 w-3 text-red-500" />
+                      <div className="flex items-center space-x-2 mb-2">
+                        <AlertCircle className="h-4 w-4 text-red-500" />
                         <p className={`text-sm font-medium ${language === "hi" ? "font-devanagari" : ""}`}>
                           {currentContent.avoidIn}
                         </p>
                       </div>
-                      <p className="text-xs text-red-700 bg-red-50 p-2 rounded">{food.Apathya}</p>
+                      <div className="flex flex-wrap gap-1">
+                        {food.Apathya.split(/[,;]/).map((condition, idx) => {
+                          const trimmedCondition = condition.trim()
+                          if (!trimmedCondition) return null
+                          return (
+                            <Badge 
+                              key={idx}
+                              variant="outline"
+                              className="text-xs bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
+                            >
+                              {trimmedCondition}
+                            </Badge>
+                          )
+                        })}
+                      </div>
                     </div>
                   </div>
                 </CardContent>

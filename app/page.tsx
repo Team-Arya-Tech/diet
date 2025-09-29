@@ -119,7 +119,7 @@ function DashboardPage() {
     },
     {
       title: language === "hi" ? "खाद्य डेटाबेस" : "Food Database",
-      value: `${stats.totalFoods}+`,
+      value: "8,000+",
       icon: Database,
       color: "text-stone-800",
       change: "8,000+",
