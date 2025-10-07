@@ -1,4 +1,5 @@
-# 🌿 AhaarWISE - ### 🎯 Key Features
+# 🌿 AhaarWISE 
+### 🎯 Key Features
 
 - **🏥 Patient Management** - Complete patient profiles with constitutional analysis
 - **🤖 AI Assistant** - Intelligent Ayurvedic guidance powered by OpenAI
@@ -11,7 +12,6 @@
 - **📄 PDF Export** - Professional reports with AhaarWISE brandingDiet Management System
 
 <div align="center">
-  <img src="public/logo-white-wo-bg.png" alt="AhaarWISE Logo" width="100" height="100">
   
   **Modern Ayurvedic Intelligence for Personalized Healthcare**
   
