@@ -324,39 +324,6 @@ VAPID_PRIVATE_KEY=your_vapid_private_key
 - **Right to Erasure**: Complete data deletion capabilities
 - **Anonymization**: Statistical analysis without personal identification
 
-## 🌐 Deployment Options
-
-### Cloud Deployment
-```bash
-# Build for production
-npm run build
-
-# Deploy to Vercel (recommended)
-vercel deploy
-
-# Or deploy to other platforms
-# AWS, Azure, Google Cloud, etc.
-```
-
-### Self-Hosted Deployment
-```bash
-# Build static files
-npm run build
-npm run export
-
-# Deploy to your web server
-# Copy 'out' folder to web server root
-```
-
-### Docker Deployment
-```bash
-# Build Docker image
-docker build -t ahaarwise .
-
-# Run container
-docker run -p 3000:3000 ahaarwise
-```
-
 ## 🧪 Testing & Quality Assurance
 
 ### Automated Testing
@@ -364,17 +331,6 @@ docker run -p 3000:3000 ahaarwise
 - **Integration Tests**: Feature workflow validation
 - **E2E Tests**: Complete user journey testing
 - **Performance Tests**: Speed and responsiveness validation
-
-### Manual Testing Checklist
-- [ ] Patient registration and management
-- [ ] Constitutional assessment accuracy
-- [ ] Food database search and filtering
-- [ ] Recipe generation and customization
-- [ ] Mobile food logging and camera
-- [ ] Offline functionality and sync
-- [ ] Hospital integration workflows
-- [ ] Analytics and reporting accuracy
-- [ ] Security and privacy controls
 
 ## 📈 Performance Optimizations
 
@@ -390,20 +346,6 @@ docker run -p 3000:3000 ahaarwise
 - **CDN**: Content delivery network integration
 - **Lazy Loading**: On-demand data fetching
 
-## 🤝 Contributing & Development
-
-### Development Workflow
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push to branch: `git push origin feature/amazing-feature`
-5. Open Pull Request
-
-### Code Standards
-- **TypeScript**: Strict type checking enabled
-- **ESLint**: Code quality and consistency rules
-- **Prettier**: Automated code formatting
-- **Conventional Commits**: Standardized commit messages
 
 ## 🏆 Hackathon Submission Details
 
@@ -442,15 +384,6 @@ docker run -p 3000:3000 ahaarwise
 - **Practitioner Efficiency**: 60% faster meal plan creation
 - **Regulatory Compliance**: 100% HIPAA/GDPR compliance score
 
-## 📞 Support & Documentation
-
-### Quick Links
-- [User Guide](./docs/user-guide.md)
-- [API Documentation](./docs/api-reference.md)
-- [Deployment Guide](./docs/deployment.md)
-- [Security Overview](./docs/security.md)
-- [Troubleshooting](./docs/troubleshooting.md)
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -467,7 +400,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 <div align="center">
-  <p><strong>Built with ❤️ for the future of Ayurvedic healthcare</strong></p>
   <p>🌿 AhaarWISE - Where Ancient Wisdom Meets Modern Technology 🌿</p>
   
   **Bridging 5000+ years of Ayurvedic wisdom with cutting-edge AI technology**
