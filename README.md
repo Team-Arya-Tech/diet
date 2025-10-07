@@ -1,53 +1,161 @@
-# AhaarWISE - Comprehensive Ayurvedic Diet Management System
+# 🌿 AhaarWISE - ### 🎯 Key Features
 
+- **🏥 Patient Management** - Complete patient profiles with constitutional analysis
+- **🤖 AI Assistant** - Intelligent Ayurvedic guidance powered by OpenAI
+- **📊 Diet Planning** - Personalized meal plans based on Prakriti (constitution)
+- **🍽️ Recipe Database** - Extensive collection of Ayurvedic recipes
+- **🧘‍♀️ Yoga & Exercise** - Constitutional yoga routines and exercise recommendations
+- **📈 Reports & Analytics** - Comprehensive health tracking and insights
+- **🌍 Bilingual Support** - Full English/Hindi interface
+- **📱 Responsive Design** - Mobile-first, PWA-ready application
+- **📄 PDF Export** - Professional reports with AhaarWISE brandingDiet Management System
 
+<div align="center">
+  <img src="public/logo-white-wo-bg.png" alt="AhaarWISE Logo" width="100" height="100">
+  
+  **Modern Ayurvedic Intelligence for Personalized Healthcare**
+  
+  [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.0-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
+  [![AI Powered](https://img.shields.io/badge/AI-Powered-FF6B6B?style=flat-square)](https://openai.com/)
+</div>
 
-**AhaarWISE** is a cutting-edge, AI-powered Ayurvedic Diet Management System designed for the Ministry of Ayush's "Comprehensive Cloud-Based Practice Management & Nutrient Analysis Software for Ayurvedic Dietitians" challenge. This system combines traditional Ayurvedic wisdom with modern technology to create a world-class healthcare solution.
+## 📋 Overview
 
-## 🌟 Key Features & Innovations
+AhaarWISE is a comprehensive digital healthcare platform that combines ancient Ayurvedic wisdom with modern AI technology to provide personalized dietary guidance and health management. Built for healthcare practitioners, nutritionists, and individuals seeking constitutional wellness.
 
-### 1. **AI-Powered Personalization**
-- **Constitutional Assessment**: Interactive 10-question assessment determining individual Prakriti (constitution)
-- **AI Recommendations**: OpenAI-powered personalized dietary and lifestyle suggestions
-- **Symptom Analysis**: Intelligent correlation between symptoms and constitutional imbalances
-- **Seasonal Adaptation**: Automatic diet adjustments based on seasonal changes and regional climate
+### � Key Features
 
-### 2. **Comprehensive Food Database (8000+ Items)**
-- **Global Coverage**: Foods from 15+ international cuisines with Ayurvedic properties
-- **Six Taste Analysis**: Complete Rasa (taste) profiling for optimal meal balance
-- **Nutritional Intelligence**: Detailed macro and micronutrient information
-- **Smart Search**: AI-enhanced food discovery with voice and image recognition
+- **🏥 Patient Management** - Complete patient profiles with constitutional analysis
+- **🤖 AI Assistant** - Intelligent Ayurvedic guidance powered by OpenAI
+- **📊 Diet Planning** - Personalized meal plans based on Prakriti (constitution)
+- **🍽️ Recipe Database** - Extensive collection of Ayurvedic recipes
+- **📈 Reports & Analytics** - Comprehensive health tracking and insights
+- **🌍 Bilingual Support** - Full English/Hindi interface
+- **📱 Responsive Design** - Mobile-first, PWA-ready application
+- **📄 PDF Export** - Professional reports with AhaarWISE branding
 
-### 3. **Advanced Patient Management**
-- **Holistic Health Tracking**: Comprehensive vitals, menstrual health, sleep patterns
-- **Constitutional Monitoring**: Real-time dosha balance assessment
-- **Progress Analytics**: Detailed health outcome tracking with visual charts
-- **Consultation Records**: Complete treatment history with searchable notes
+## 🚀 Quick Start
 
-### 4. **Recipe Intelligence System**
-- **Automated Recipe Generation**: AI creates personalized recipes based on constitution and health goals
-- **Meal Planning**: 7-day intelligent meal plans with shopping lists
-- **Nutritional Analysis**: Real-time calculation of meal balance and therapeutic properties
-- **Ayurvedic Cooking Guidelines**: Traditional principles integrated with modern nutrition
+### Prerequisites
 
-### 5. **Hospital Integration & Interoperability**
-- **FHIR/HL7 Compatibility**: Seamless integration with existing hospital systems
-- **EHR Data Exchange**: Import/export patient data from major healthcare platforms
-- **Telemedicine Support**: Built-in video consultation capabilities
-- **Lab Results Integration**: Automatic import and interpretation of laboratory data
+- Node.js 18+ 
+- npm or pnpm
+- Modern web browser
 
-### 6. **Security & Compliance**
-- **HIPAA Compliance**: Full healthcare data protection and privacy
-- **GDPR Compliance**: European data protection standards
-- **End-to-End Encryption**: AES-256 encryption for all sensitive data
-- **Audit Logging**: Complete activity tracking for regulatory compliance
-- **Role-Based Access**: Multi-level user permissions and access controls
+### Installation
 
-### 7. **Mobile-First PWA**
-- **Offline Functionality**: Full app functionality without internet connection
-- **Camera Integration**: Food logging with photo capture and AI recognition
-- **Push Notifications**: Personalized reminders and health tips
-- **Touch-Optimized**: Intuitive mobile interface with gesture support
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Team-Arya-Tech/diet.git
+   cd diet
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   pnpm install
+   ```
+
+3. **Environment Setup**
+   ```bash
+   cp .env.example .env.local
+   ```
+   
+   Configure your environment variables:
+   ```env
+   OPENAI_API_KEY=your_openai_api_key
+   GOOGLE_TRANSLATE_API_KEY=your_google_translate_key
+   AZURE_TRANSLATE_KEY=your_azure_key
+   ```
+
+4. **Start Development Server**
+   ```bash
+   npm run dev
+   # or
+   pnpm dev
+   ```
+
+5. **Open Browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 🏗️ Project Structure
+
+```
+diet/
+├── 📁 app/                    # Next.js App Router
+│   ├── 🔐 auth/              # Authentication pages
+│   ├── 👥 patients/          # Patient management
+│   ├── 🤖 chat/              # AI Assistant
+│   ├── 📊 diet-plans/        # Diet planning
+│   ├── 🍽️ recipes/           # Recipe management
+│   ├── 🧘‍♀️ exercises/          # Yoga & exercise routines
+│   ├── 📈 reports/           # Analytics & reports
+│   └── 🔌 api/               # API routes
+├── 📁 components/            # Reusable UI components
+│   ├── 🎨 ui/                # Base UI components
+│   ├── 🌐 dashboard-layout.tsx
+│   ├── 🔐 auth-context.tsx
+│   └── 🌍 translation-provider.tsx
+├── 📁 lib/                   # Utility libraries
+│   ├── 🔧 utils.ts
+│   ├── 🗄️ database.ts
+│   ├── 🤖 ai-diet-service.ts
+│   ├── 🧘‍♀️ exercise-database.ts
+│   └── 📄 pdf-export.ts
+├── 📁 data/                  # Static data files
+│   ├── 🌿 ayurvedic-foods.json
+│   ├── 🍽️ recipes.json
+│   ├── 🧘‍♀️ yoga-exercises.json
+│   └── 📊 intelligent-diet-plans.json
+├── 📁 public/               # Static assets
+│   ├── 🖼️ logo-white-wo-bg.png
+│   ├── 🌄 banner_canva.png
+│   └── 🎨 bg*.png
+└── 📁 styles/               # Global styles
+```
+
+## 🌟 Core Features
+
+### 👥 Patient Management
+- Complete patient profiles with constitutional analysis
+- Health condition tracking
+- Lifestyle and dietary preference management
+- Progress monitoring and history
+
+### 🤖 AI Assistant
+- Constitutional analysis based on Ayurvedic principles
+- Personalized dietary recommendations
+- Seasonal adaptation suggestions
+- Six tastes (Shad Rasa) balance analysis
+
+### 📊 Diet Planning
+- Constitution-based meal planning
+- Seasonal diet adaptation
+- Food compatibility analysis
+- Nutritional balance optimization
+
+### 🍽️ Recipe Database
+- Extensive Ayurvedic recipe collection
+- Constitutional suitability ratings
+- Ingredient substitution suggestions
+- Preparation time and difficulty levels
+
+### 🧘‍♀️ Yoga & Exercise System
+- Constitutional yoga routines (Vata, Pitta, Kapha specific)
+- Personalized asana recommendations based on health conditions
+- Guided exercise videos with Sanskrit names and instructions
+- Seasonal adaptation of yoga practices
+- Progress tracking and routine customization
+- Integration with diet plans for holistic wellness
+
+### 📈 Reports & Analytics
+- Patient progress tracking
+- Constitutional balance reports
+- Dietary compliance analysis
+- Health trend visualization
 - **Background Sync**: Automatic data synchronization when connection returns
 
 ### 8. **Advanced Analytics & Reporting**
@@ -343,13 +451,25 @@ docker run -p 3000:3000 ahaarwise
 - [Security Overview](./docs/security.md)
 - [Troubleshooting](./docs/troubleshooting.md)
 
-### Contact Information
-- **Project Lead**: Development Team
-- **Technical Support**: support@ahaarwise.com
-- **Documentation**: docs@ahaarwise.com
-- **Security Issues**: security@ahaarwise.com
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Ancient Ayurvedic texts and traditional knowledge systems
+- Modern healthcare research and evidence-based practices
+- Open source community and contributors
+- OpenAI for AI capabilities and intelligent recommendations
+- Radix UI and Next.js teams for excellent development tools
+- Ministry of Ayush for promoting traditional Indian medicine
 
 ---
 
-**AhaarWISE** - Bridging Ancient Wisdom with Modern Technology for Optimal Health
+<div align="center">
+  <p><strong>Built with ❤️ for the future of Ayurvedic healthcare</strong></p>
+  <p>🌿 AhaarWISE - Where Ancient Wisdom Meets Modern Technology 🌿</p>
+  
+  **Bridging 5000+ years of Ayurvedic wisdom with cutting-edge AI technology**
+</div>
 
